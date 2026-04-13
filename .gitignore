@@ -1,0 +1,35 @@
+# Зависимости (во всех папках)
+**/node_modules
+**/.pnp
+**/.pnp.*
+**/.yarn/*
+
+# Сборка клиента (Next.js)
+nextjs-client/.next/
+nextjs-client/out/
+nextjs-client/build
+
+# Сборка сервера (NestJS / Node)
+nestjs-server/dist
+nestjs-server/build
+
+# Переменные окружения (Критически важно!)
+**/.env
+**/.env.*
+!**/.env.example
+
+# Тестирование и логи
+**/coverage
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Специфичные файлы проекта
+# Игнорируем ваш JSON файл для Postman (замените название на точное)
+full-authorization.postman_collection.json
+
+# Системные файлы и настройки IDE
+.DS_Store
+.vscode/
+.idea/
+*.tsbuildinfo

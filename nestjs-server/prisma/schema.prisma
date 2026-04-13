@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "./__generated__"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("MYSQL_URI")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  email String @unique
+  password String
+
+  displayName String
+  picture String?
+
+  role UserRole @default(REGULAR)
+
+  isVerified Boolean @default(false) @map("is_verified")
+  isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
+
+  method AuthMethod
+
+  accounts Account[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAT DateTime @updatedAt @map("updated_at")
+
+  score     Int      @default(0) // Баллы за угаданные бои
+  votes     Vote[]   // Связь с голосами пользователя
+
+  @@map("users")
+}
+
+model Account {
+  id String @id @default(uuid())
+
+  type String
+  provider String
+
+  refreshToken String? @db.Text @map("refresh_token")
+  accessToken String? @db.Text @map("access_token")
+  expiresAt Int @map("expires_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAT DateTime @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
+
+  @@map("accounts")
+  // User User[]
+}
+
+model Token {
+  id String @id @default(uuid())
+
+  email String
+  token String @unique
+  type TokenType
+  expiresIn DateTime @map("expires_in")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("tokens")
+}
+
+// Модель самого Голосования (Боя)
+model Poll {
+  id          String     @id @default(uuid())
+  question    String     // Например: "Кто победит: Боец 1 или Боец 2?"
+  status      PollStatus @default(OPEN)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  expiresAt   DateTime   @map("expires_in") // Когда закрывается голосование
+  
+  options     Option[]   // Варианты ответов
+  votes       Vote[]     // Все голоса в этом опросе
+  
+  winnerOptionId String? @map("winner_option_id") // ID победившего варианта
+
+  @@map("polls")
+}
+
+// Варианты ответа
+model Option {
+  id      String @id @default(uuid())
+  text    String // Имя бойца
+  
+  poll    Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  pollId  String @map("poll_id")
+  
+  votes   Vote[] // Кто проголосовал именно за этот вариант
+
+  @@map("options")
+}
+
+// Факт голосования (чтобы один юзер не голосовал дважды)
+model Vote {
+  id        String   @id @default(uuid())
+  
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  
+  poll      Poll     @relation(fields: [pollId], references: [id])
+  pollId    String   @map("poll_id")
+  
+  option    Option   @relation(fields: [optionId], references: [id])
+  optionId  String   @map("option_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, pollId]) // ОГРАНИЧЕНИЕ: один юзер - один голос в конкретном опросе
+  @@map("votes")
+}
+
+enum UserRole {
+  REGULAR
+  ADMIN
+}
+
+enum AuthMethod {
+  CREDENTIALS
+  GOOGLE
+  YANDEX
+}
+
+enum TokenType {
+  VERIFICATION
+  TWO_FACTOR
+  PASSWORD_RESET
+}
+
+enum PollStatus {
+  OPEN
+  CLOSED
+  FINISHED
+}
