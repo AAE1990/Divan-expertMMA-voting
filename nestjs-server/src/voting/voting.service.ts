@@ -5,9 +5,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class VotingService {
   constructor(private readonly prisma: PrismaService) { }
 
-  async findAll(userId?: string) {
+  async findAll(userId?: string, tournamentId?: string) {
     const polls = await this.prisma.poll.findMany({
-      where: { status: 'OPEN' },
+      where: { 
+        // Если tournamentId передан — фильтруем по нему, если нет — берем все OPEN
+        ...(tournamentId ? { tournamentId } : { status: 'OPEN' })
+      },
       include: {
         options: {
           include: {
@@ -66,6 +69,9 @@ export class VotingService {
       data: {
         question: dto.question,
         expiresAt: new Date(dto.expiresAt),
+        tournament: {
+          connect: { id: dto.tournamentId } // Привязываем к существующему турниру
+        },
         options: {
           create: dto.options.map(text => ({ text }))
         }

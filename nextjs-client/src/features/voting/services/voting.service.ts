@@ -6,13 +6,18 @@ export interface ICreatePollInput {
   question: string;
   options: string[]; // Массив имен бойцов
   expiresAt: string; // Дата в формате ISO
+  tournamentId: string;
 }
 
 export const votingService = {
-  // Твой метод get<T> подхватит IPoll[]
-  async getPolls(): Promise<IPoll[]> {
-    return await api.get<IPoll[]>("polls");
+  // Добавляем tournamentId как необязательный аргумент
+  async getPolls(tournamentId?: string): Promise<IPoll[]> {
+    // Если tournamentId есть, добавляем его в строку запроса
+    const url = tournamentId ? `polls?tournamentId=${tournamentId}` : "polls";
+
+    return await api.get<IPoll[]>(url);
   },
+
 
   // Для POST запроса обычно используется api.post(endpoint, options)
   async submitVote(data: IVoteInput): Promise<{ success: boolean }> {

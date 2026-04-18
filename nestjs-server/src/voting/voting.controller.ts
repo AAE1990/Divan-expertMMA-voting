@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Req, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, UseGuards, Param, Query } from '@nestjs/common';
 import { VotingService } from './voting.service';
 import { CreateVotingDto } from './dto/create-voting.dto';
 import { AuthGuard } from '@/auth/guards/auth.guard';
@@ -11,9 +11,12 @@ export class VotingController {
   constructor(private readonly votingService: VotingService) { }
 
   @Get()
-  async findAll(@Req() req: any) {
+  async findAll(
+    @Req() req: any,
+    @Query('tournamentId') tournamentId?: string // Достаем из URL типа ?tournamentId=...
+  ) {
     const userId = req.user?.id || req.session?.userId;
-    return this.votingService.findAll(userId);
+    return this.votingService.findAll(userId, tournamentId);
   }
 
   // Роут для ОБЫЧНЫХ пользователей (голосование)

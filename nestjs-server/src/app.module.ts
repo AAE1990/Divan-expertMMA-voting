@@ -11,6 +11,7 @@ import { EmailConfirmationModule } from './auth/email-confirmation/email-confirm
 import { PasswordRecoveryModule } from './auth/password-recovery/password-recovery.module';
 import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module';
 import { VotingModule } from './voting/voting.module';
+import { TournamentModule } from './tournament/tournament.module';
 
 
 
@@ -28,7 +29,8 @@ import { VotingModule } from './voting/voting.module';
     EmailConfirmationModule,
     PasswordRecoveryModule,
     TwoFactorAuthModule,
-    VotingModule
+    VotingModule,
+    TournamentModule
   ],
   controllers: [ResponseController]
 })

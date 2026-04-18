@@ -22,6 +22,9 @@ export const createPollSchema = z.object({
   expiresAt: z
     .string()
     .min(1, { message: "Укажите дату и время окончания боя" }),
+  tournamentId: z
+    .string()
+    .min(5 , { message: "Выберете турнир" }),
 });
 
 export type TCreatePollSchema = z.infer<typeof createPollSchema>;
