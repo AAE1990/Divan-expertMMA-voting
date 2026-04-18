@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-    public constructor(private readonly prismaService: PrismaService) {}
+    public constructor(private readonly prismaService: PrismaService) { }
 
     public async findById(id: string) {
         const user = await this.prismaService.user.findUnique({
@@ -18,7 +18,7 @@ export class UserService {
             }
         })
 
-        if(!user) {
+        if (!user) {
             throw new NotFoundException(
                 'Пользователь не найден. Пожалуйтса, проверьте введеныые данные.'
             )
@@ -55,7 +55,9 @@ export class UserService {
                 displayName,
                 picture,
                 method,
-                isVerified
+                isVerified,
+                score: 0,
+                lastScoreAt: new Date()
             },
             include: {
                 accounts: true
@@ -80,5 +82,21 @@ export class UserService {
         })
 
         return updateUser
+    }
+
+    public async getLeaderboard() {
+        return this.prismaService.user.findMany({
+            select: {
+                id: true,
+                displayName: true,
+                picture: true,
+                score: true,
+            },
+            orderBy: [
+                { score: 'desc'},
+                { lastScoreAt: 'asc' }
+            ],
+            take: 50,
+        });
     }
 }

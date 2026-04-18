@@ -4,18 +4,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/shared/components/ui/Button'
 import { cn } from '@/shared/utils/clsx'
-import { Vote, Home, Settings, ShieldAlert } from 'lucide-react' // Добавил ShieldAlert
+import { Vote, Home, Settings, ShieldAlert, Trophy } from 'lucide-react' // Добавил ShieldAlert
 import { useProfile } from '@/shared/hooks'
 
 const MENU_ITEMS = [
   { href: '/', label: 'Главная', icon: Home },
   { href: '/voting', label: 'Голосование', icon: Vote },
   { href: '/dashboard/settings', label: 'Настройки профиля', icon: Settings },
+  { href: '/rating', label: 'Рейтинг', icon: Trophy }
 ]
 
 export const Sidebar = () => {
   const pathname = usePathname()
-  const { user } = useProfile()
+  const { user, isLoading } = useProfile()
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-background p-4 shadow-sm">
@@ -54,7 +55,7 @@ export const Sidebar = () => {
             {/* Ссылка для АДМИНА — появляется под списком с разделителем */}
             {user?.role === 'ADMIN' && (
               <>
-                <div className="my-2 border-t border-border" /> 
+                <div className="my-2 border-t border-border" />
                 <Button
                   asChild
                   variant={pathname === '/admin/voting' ? "secondary" : "outline"}
@@ -75,8 +76,23 @@ export const Sidebar = () => {
           </nav>
         </div>
 
-        <div className="px-3 py-2 text-xs text-muted-foreground italic">
-          v 0.1.0 Alpha
+        {/* Нижний блок (прижат к низу) */}
+        <div className="space-y-2 mb-15">
+          {user && (
+            <div className="px-3 py-2 bg-primary/5 rounded-lg border border-primary/10 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Trophy className="size-3 text-primary" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Score</span>
+              </div>
+              <span className="text-sm font-black text-primary">
+                {isLoading ? "..." : user.score}
+              </span>
+            </div>
+          )}
+
+          {/* <div className="px-3 py-2 text-xs text-muted-foreground italic">
+            v 0.1.0 Alpha
+          </div> */}
         </div>
       </div>
     </aside>

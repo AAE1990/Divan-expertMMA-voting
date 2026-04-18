@@ -31,6 +31,7 @@ model User {
 
   score     Int      @default(0) // Баллы за угаданные бои
   votes     Vote[]   // Связь с голосами пользователя
+  lastScoreAt    DateTime @default(now()) @map("last_score_at")
 
   @@map("users")
 }
@@ -101,18 +102,18 @@ model Option {
 model Vote {
   id        String   @id @default(uuid())
   
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @map("user_id")
   
-  poll      Poll     @relation(fields: [pollId], references: [id])
+  poll      Poll     @relation(fields: [pollId], references: [id], onDelete: Cascade)
   pollId    String   @map("poll_id")
   
-  option    Option   @relation(fields: [optionId], references: [id])
+  option    Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
   optionId  String   @map("option_id")
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([userId, pollId]) // ОГРАНИЧЕНИЕ: один юзер - один голос в конкретном опросе
+  @@unique([userId, pollId])
   @@map("votes")
 }
 

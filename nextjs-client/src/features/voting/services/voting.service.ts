@@ -26,5 +26,12 @@ export const votingService = {
 
   async createPoll(data: ICreatePollInput): Promise<IPoll> {
     return await api.post("polls/create", data);
-  }
+  },
+
+  // Метод для завершения боя (админский)
+  async finishPoll(pollId: string, winnerOptionId: string): Promise<{ winnersCount: number }> {
+    return await api.post(`polls/${pollId}/finish`, {
+      winnerOptionId,
+    });
+  },
 };

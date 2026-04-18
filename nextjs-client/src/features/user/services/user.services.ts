@@ -14,6 +14,13 @@ class UserService {
 
         return response
     }
+
+    public async getLeaderboard() {
+        // Указываем <IUser[]>, так как ждем список
+        const response = await api.get<IUser[]>('users/leaderboard')
+    
+        return response
+    }
 }
 
 export const userService = new UserService()

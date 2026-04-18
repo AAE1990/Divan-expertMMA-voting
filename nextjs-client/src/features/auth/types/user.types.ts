@@ -23,6 +23,7 @@ export interface IAccount {
 
 export interface IUser {
     id: string
+    score: number
     createdAt: string
     updatedAt: string
     email: string

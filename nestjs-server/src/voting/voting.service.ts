@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -73,32 +73,61 @@ export class VotingService {
     });
   }
 
-  // Метод завершения боя и начисления баллов
   async finishPoll(pollId: string, winnerOptionId: string) {
-    // 1. Помечаем опрос как завершенный и ставим победителя
-    const poll = await this.prisma.poll.update({
+    // 1. Проверяем, существует ли опрос и не завершен ли он уже
+    const poll = await this.prisma.poll.findUnique({
       where: { id: pollId },
-      data: {
-        status: 'FINISHED',
-        winnerOptionId
-      },
       include: { votes: true }
     });
 
-    // 2. Ищем всех, кто угадал победителя
-    const winners = poll.votes.filter(vote => vote.optionId === winnerOptionId);
+    if (!poll) throw new NotFoundException('Голосование не найдено');
+    if (poll.status === 'FINISHED') {
+      throw new BadRequestException('Голосование уже было завершено ранее');
+    }
 
-    // 3. Начисляем баллы (например, +1 балл каждому победителю)
-    // Используем transaction, чтобы всё прошло успешно или всё отменилось
-    await this.prisma.$transaction(
-      winners.map(winner =>
-        this.prisma.user.update({
-          where: { id: winner.userId },
-          data: { score: { increment: 1 } }
-        })
-      )
-    );
+    // 2. Проверяем, принадлежит ли winnerOptionId этому опросу
+    const optionExists = await this.prisma.option.findFirst({
+      where: { id: winnerOptionId, pollId: pollId }
+    });
 
-    return { winnersCount: winners.length };
+    if (!optionExists) {
+      throw new BadRequestException('Выбранный вариант не принадлежит этому голосованию');
+    }
+
+    // 3. Запускаем транзакцию
+    return this.prisma.$transaction(async (tx) => {
+      // А) Обновляем статус опроса и записываем победителя
+      await tx.poll.update({
+        where: { id: pollId },
+        data: {
+          status: 'FINISHED',
+          winnerOptionId: winnerOptionId
+        }
+      });
+
+      // Б) Находим всех пользователей, которые угадали
+      const winningVotes = poll.votes.filter(vote => vote.optionId === winnerOptionId);
+
+      // В) Начисляем баллы победителям (+1 балл)
+      // Если победителей много, updateMany эффективнее
+      if (winningVotes.length > 0) {
+        // Вместо updateMany проходим циклом по победителям
+        for (const vote of winningVotes) {
+          await tx.user.update({
+            where: { id: vote.userId },
+            data: {
+              score: { increment: 1 },
+              // Устанавливаем время получения балла равным времени, когда был сделан прогноз!
+              lastScoreAt: vote.createdAt
+            }
+          });
+        }
+      }
+
+      return {
+        message: 'Голосование успешно завершено',
+        winnersCount: winningVotes.length
+      };
+    });
   }
 }

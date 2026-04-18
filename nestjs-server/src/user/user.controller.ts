@@ -7,7 +7,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Authorization()
   @HttpCode(HttpStatus.OK)
@@ -31,5 +31,10 @@ export class UserController {
     @Body() dto: UpdateUserDto
   ) {
     return this.userService.update(userId, dto)
+  }
+
+  @Get('leaderboard') // <-- Этот путь должен совпасть с тем, что в api.get()
+  public async getLeaderboard() {
+    return this.userService.getLeaderboard();
   }
 }

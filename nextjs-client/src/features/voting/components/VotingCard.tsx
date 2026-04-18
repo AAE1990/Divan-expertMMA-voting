@@ -11,12 +11,18 @@ import { Label } from "@/shared/components/ui/Label"
 import { Button } from "@/shared/components/ui/Button"
 import { Progress } from "@/shared/components/ui/progress"
 import { cn } from "@/shared/utils"
+import { useFinishPoll } from "../hooks/useFinishPoll"
+import { useProfile } from "@/shared/hooks/useProfile"
+import { Trophy } from "lucide-react" // Для красоты
 
 interface VotingCardProps {
   poll: IPoll
 }
 
 export const VotingCard = ({ poll }: VotingCardProps) => {
+
+  const { user } = useProfile()
+  const { mutate: finishPoll, isPending: isFinishing } = useFinishPoll()
 
   const { mutate: submitVote, isPending } = useSubmitVote()
 
@@ -39,15 +45,32 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     })
   }
 
+  const isAdmin = user?.role === 'ADMIN'
+  const isFinished = poll.status === 'FINISHED'
+
+  const handleFinish = (optionId: string) => {
+    if (confirm("Вы уверены? Это действие начислит баллы и закроет голосование.")) {
+      finishPoll({ pollId: poll.id, winnerOptionId: optionId })
+    }
+  }
+
   const isExpired = new Date(poll.expiresAt).getTime() < new Date().getTime()
 
   return (
-    <Card className="w-full max-w-md mx-auto mb-6 flex flex-col h-full shadow-lg border-2">
+    <Card className={cn(
+      "w-full max-w-md mx-auto mb-6 flex flex-col h-full shadow-lg border-2",
+      isFinished && "border-yellow-500/50" // Подсветим завершенные бои золотым
+    )}>
       <CardHeader>
-        <CardTitle>{poll.question}</CardTitle>
-        <CardDescription>
-          {hasVoted ? "Результаты боя" : "Выберите победителя"}
-        </CardDescription>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle>{poll.question}</CardTitle>
+            <CardDescription>
+              {isFinished ? "Бой завершен" : "Выберите победителя"}
+            </CardDescription>
+          </div>
+          {isFinished && <Trophy className="text-yellow-500 size-6" />}
+        </div>
       </CardHeader>
 
       <CardContent className="flex-1">
@@ -120,8 +143,31 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
             </RadioGroup>
           </form>
         )}
+        {/* --- ПАНЕЛЬ АДМИНА (Добавляем в самый низ контента) --- */}
+        {isAdmin && !isFinished && (
+          <div className="mt-6 pt-4 border-t border-dashed border-primary/30">
+            <p className="text-[10px] uppercase font-bold text-primary mb-3 text-center tracking-widest">
+              Панель судьи (ADMIN)
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {poll.options.map((option) => (
+                <Button
+                  key={option.id}
+                  size="sm"
+                  variant="outline"
+                  className="text-[10px] border-primary/50 hover:bg-primary hover:text-white"
+                  onClick={() => handleFinish(option.id)}
+                  disabled={isFinishing}
+                >
+                  Победил {option.text.split(' ')[0]} {/* Берем только фамилию/имя */}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
       </CardContent>
 
+      {/* ... CardFooter ... */}
       <CardFooter className="pt-4 border-t">
         {!hasVoted ? (
           <Button
