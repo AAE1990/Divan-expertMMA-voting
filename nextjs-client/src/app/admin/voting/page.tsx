@@ -38,10 +38,16 @@ export default function AdminVotingPage() {
     // 3. И ТОЛЬКО ТЕПЕРЬ условия отрисовки
     if (isProfileLoading) {
         return (
-            <div className="flex h-screen items-center justify-center">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background">
                 <Loading />
             </div>
         )
+    }
+
+    // 3. ЗАЩИТА: Если загрузилось, и это НЕ админ, возвращаем ПУСТОТУ (null), 
+    // пока useEffect делает свою работу по редиректу.
+    if (!user || user.role !== 'ADMIN') {
+        return null 
     }
 
 

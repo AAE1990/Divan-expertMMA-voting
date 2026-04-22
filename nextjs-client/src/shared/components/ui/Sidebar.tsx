@@ -4,14 +4,15 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/shared/components/ui/Button'
 import { cn } from '@/shared/utils/clsx'
-import { Vote, Home, Settings, ShieldAlert, Trophy } from 'lucide-react' // Добавил ShieldAlert
+import { Vote, Home, Settings, ShieldAlert, Trophy, History } from 'lucide-react' // Добавил ShieldAlert
 import { useProfile } from '@/shared/hooks'
 
 const MENU_ITEMS = [
   { href: '/', label: 'Главная', icon: Home },
   { href: '/voting', label: 'Голосование', icon: Vote },
   { href: '/dashboard/settings', label: 'Настройки профиля', icon: Settings },
-  { href: '/rating', label: 'Рейтинг', icon: Trophy }
+  { href: '/rating', label: 'Рейтинг', icon: Trophy },
+  { href: '/archive', label: 'Архив турниров', icon: History }
 ]
 
 export const Sidebar = () => {
