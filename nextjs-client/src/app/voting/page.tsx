@@ -59,7 +59,7 @@ export default function VotingPage() {
             key={t.id}
             variant={selectedTournamentId === t.id ? "default" : "outline"}
             onClick={() => setSelectedTournamentId(t.id)}
-            className="rounded-full transition-all"
+            className="rounded-full transition-all cursor-pointer"
           >
             {t.name}
           </Button>

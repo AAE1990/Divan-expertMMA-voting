@@ -16,9 +16,19 @@ export const createPollSchema = z.object({
   fighter1: z
     .string()
     .min(2, { message: "Введите имя первого бойца" }),
+  fighter1Photo: z
+    .string()
+    .url({ message: "Введите корректный URL-адрес фотографии" })
+    .optional()
+    .or(z.literal('')),
   fighter2: z
     .string()
     .min(2, { message: "Введите имя второго бойца" }),
+  fighter2Photo: z
+    .string()
+    .url({ message: "Введите корректный URL-адрес фотографии" })
+    .optional()
+    .or(z.literal('')),
   expiresAt: z
     .string()
     .min(1, { message: "Укажите дату и время окончания боя" }),

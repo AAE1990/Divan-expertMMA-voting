@@ -85,6 +85,20 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
               return (
                 <div key={option.id} className="group">
+                  {/* Добавляем фото бойца */}
+                  {option.photoUrl && (
+                    <div className="mb-3 w-full h-40 overflow-hidden rounded-lg shadow-md">
+                      <img
+                        src={option.photoUrl}
+                        alt={option.text}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Если изображение не загрузилось, показываем заглушку
+                          e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="flex justify-between mb-2 items-center">
                     <span className={cn(
                       "text-sm font-medium transition-colors",
@@ -124,6 +138,20 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     "dark:bg-slate-900 dark:border-slate-800 dark:hover:bg-slate-800"
                   )}
                 >
+                  {/* Добавляем фото бойца */}
+                  {option.photoUrl && (
+                    <div className="w-full h-40 overflow-hidden">
+                      <img
+                        src={option.photoUrl}
+                        alt={option.text}
+                        className="w-full h-full object-cover shadow-md"
+                        onError={(e) => {
+                          // Если изображение не загрузилось, показываем заглушку
+                          e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                        }}
+                      />
+                    </div>
+                  )}
                   {/* Теперь Label — это ГЛАВНЫЙ контейнер, он занимает всё пространство */}
                   <Label
                     htmlFor={option.id}
@@ -132,7 +160,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     <RadioGroupItem
                       value={option.id}
                       id={option.id}
-                      className="shrink-0" // Чтобы кружочек не сплющивался
+                      className="shrink-0 shadow-[0_0_5px_rgba(0,0,0,0.5)] border-2 border-primary" // Чтобы кружочек не сплющивался
                     />
                     <span className="flex-1 font-semibold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
                       {option.text}
@@ -155,11 +183,11 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                   key={option.id}
                   size="sm"
                   variant="outline"
-                  className="text-[10px] border-primary/50 hover:bg-primary hover:text-white"
+                  className="text-[10px] h-auto py-2 whitespace-normal border-primary/50 hover:bg-primary hover:text-white leading-tight"
                   onClick={() => handleFinish(option.id)}
                   disabled={isFinishing}
                 >
-                  Победил {option.text.split(' ')[0]} {/* Берем только фамилию/имя */}
+                  Победил {option.text}
                 </Button>
               ))}
             </div>

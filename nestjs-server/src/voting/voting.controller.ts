@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Req, UseGuards, Param, Query } from '@nestjs/common';
 import { VotingService } from './voting.service';
 import { CreateVotingDto } from './dto/create-voting.dto';
+import { CreatePollDto } from './dto/create-poll.dto';
 import { AuthGuard } from '@/auth/guards/auth.guard';
 import { RolesGuard } from '@/auth/guards/roles.guard'; // Твой RolesGuard
 import { Roles } from '@/auth/decorators/roles.decorator'; // Твой декоратор
@@ -31,7 +32,7 @@ export class VotingController {
   @Post('create') // Добавили путь 'create', чтобы не конфликтовать с 'vote'
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async createPoll(@Body() dto: any) {
+  async createPoll(@Body() dto: CreatePollDto) {
     return this.votingService.create(dto);
   }
 

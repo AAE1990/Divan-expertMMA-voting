@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreatePollDto } from './dto/create-poll.dto';
 
 @Injectable()
 export class VotingService {
@@ -31,6 +32,7 @@ export class VotingService {
       options: poll.options.map(opt => ({
         id: opt.id,
         text: opt.text,
+        photoUrl: opt.photoUrl, // Добавляем URL фотографии
         votesCount: opt._count.votes // Превращаем счетчик в число
       })),
       // Если в массиве votes есть запись, берем id опции
@@ -64,7 +66,7 @@ export class VotingService {
   }
 
   // Метод создания нового голосования
-  async create(dto: any) { // Потом заменим на CreatePollDto
+  async create(dto: CreatePollDto) {
     return this.prisma.poll.create({
       data: {
         question: dto.question,
@@ -73,7 +75,10 @@ export class VotingService {
           connect: { id: dto.tournamentId } // Привязываем к существующему турниру
         },
         options: {
-          create: dto.options.map(text => ({ text }))
+          create: dto.options.map(option => ({
+            text: option.text,
+            photoUrl: option.photoUrl // Добавляем URL фотографии
+          }))
         }
       }
     });

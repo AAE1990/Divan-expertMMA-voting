@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createPollSchema, TCreatePollSchema } from "@/features/voting/schemes/voting.schema"
 import { useCreatePoll } from "@/features/voting/hooks/useCreatePoll"
@@ -14,6 +14,7 @@ import { useGetTournaments } from "@/features/tournament/hooks/useGetTournaments
 import { useCreateTournament } from "@/features/tournament/hooks/useCreateTournament"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
 import { useEffect } from "react"
+import Image from "next/image"
 
 export default function AdminVotingPage() {
     // 1. Сначала ВСЕ хуки без исключения
@@ -58,11 +59,49 @@ export default function AdminVotingPage() {
         if (name) createTournament({ name, date })
     }
 
+    // Компонент для предпросмотра изображения
+    const PreviewImage = ({ register, name, label }: { register: any, name: string, label: string }) => {
+        const { control } = useForm();
+        const photoUrl = useWatch({
+            control,
+            name: name,
+            defaultValue: ""
+        });
+        
+        if (!photoUrl) return null;
+        
+        return (
+            <div className="mt-3">
+                <p className="text-xs text-gray-500 mb-1">Предпросмотр:</p>
+                <div className="h-40 w-full overflow-hidden rounded-lg shadow-md">
+                    <img
+                        src={photoUrl}
+                        alt={label}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                            // Если изображение не загрузилось, показываем заглушку
+                            e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                        }}
+                    />
+                </div>
+            </div>
+        );
+    };
+
     const onSubmit = (data: TCreatePollSchema & { tournamentId: string }) => {
         createPoll({
             question: data.question,
-            // Массив из двух бойцов, который на бэкенде превратится в Option[]
-            options: [data.fighter1, data.fighter2],
+            // Массив из двух бойцов с фотографиями
+            options: [
+                {
+                    text: data.fighter1,
+                    photoUrl: data.fighter1Photo || undefined
+                },
+                {
+                    text: data.fighter2,
+                    photoUrl: data.fighter2Photo || undefined
+                }
+            ],
             expiresAt: data.expiresAt,
             // ID турнира, который мы получили через Select и setValue
             tournamentId: data.tournamentId
@@ -108,16 +147,37 @@ export default function AdminVotingPage() {
                             {errors.question && <p className="text-red-500 text-xs">{errors.question.message}</p>}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label>Боец 1</Label>
-                                <Input {...register("fighter1")} placeholder="Имя Фамилия" />
-                                {errors.fighter1 && <p className="text-red-500 text-xs">{errors.fighter1.message}</p>}
+                        <div className="space-y-4">
+                            <div className="border p-4 rounded-lg">
+                                <h3 className="font-medium mb-3">Боец 1</h3>
+                                <div className="space-y-2">
+                                    <Label>Имя</Label>
+                                    <Input {...register("fighter1")} placeholder="Имя Фамилия" />
+                                    {errors.fighter1 && <p className="text-red-500 text-xs">{errors.fighter1.message}</p>}
+                                </div>
+                                <div className="space-y-2 mt-3">
+                                    <Label>URL фотографии (опционально)</Label>
+                                    <Input {...register("fighter1Photo")} placeholder="https://example.com/fighter1.jpg" />
+                                    {errors.fighter1Photo && <p className="text-red-500 text-xs">{errors.fighter1Photo.message}</p>}
+                                </div>
+                                {/* Предпросмотр фотографии */}
+                                <PreviewImage register={register} name="fighter1Photo" label="Боец 1" />
                             </div>
-                            <div className="space-y-2">
-                                <Label>Боец 2</Label>
-                                <Input {...register("fighter2")} placeholder="Имя Фамилия" />
-                                {errors.fighter2 && <p className="text-red-500 text-xs">{errors.fighter2.message}</p>}
+                            
+                            <div className="border p-4 rounded-lg">
+                                <h3 className="font-medium mb-3">Боец 2</h3>
+                                <div className="space-y-2">
+                                    <Label>Имя</Label>
+                                    <Input {...register("fighter2")} placeholder="Имя Фамилия" />
+                                    {errors.fighter2 && <p className="text-red-500 text-xs">{errors.fighter2.message}</p>}
+                                </div>
+                                <div className="space-y-2 mt-3">
+                                    <Label>URL фотографии (опционально)</Label>
+                                    <Input {...register("fighter2Photo")} placeholder="https://example.com/fighter2.jpg" />
+                                    {errors.fighter2Photo && <p className="text-red-500 text-xs">{errors.fighter2Photo.message}</p>}
+                                </div>
+                                {/* Предпросмотр фотографии */}
+                                <PreviewImage register={register} name="fighter2Photo" label="Боец 2" />
                             </div>
                         </div>
 

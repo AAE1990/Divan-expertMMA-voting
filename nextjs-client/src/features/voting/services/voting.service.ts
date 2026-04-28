@@ -4,7 +4,10 @@ import { IPoll, IVoteInput } from "../types/voting.types";
 // В интерфейсы или прямо в сервис добавь тип для создания
 export interface ICreatePollInput {
   question: string;
-  options: string[]; // Массив имен бойцов
+  options: Array<{
+    text: string;
+    photoUrl?: string;
+  }>; // Массив бойцов с именами и фото
   expiresAt: string; // Дата в формате ISO
   tournamentId: string;
 }

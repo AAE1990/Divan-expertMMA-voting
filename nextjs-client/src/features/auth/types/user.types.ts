@@ -21,6 +21,27 @@ export interface IAccount {
     userId: string
 }
 
+export interface IUserVote {
+    id: string
+    createdAt: string
+    optionId: string
+    // Тот самый include, который мы добавили на бэкенде:
+    option: {
+      id: string
+      text: string // Имя бойца, на которого поставил
+    }
+    poll: {
+      id: string
+      question: string
+      status: 'OPEN' | 'CLOSED' | 'FINISHED'
+      winnerOptionId: string | null // Кто победил в реальности
+      options: {
+        id: string
+        text: string
+      }[]
+    }
+  }
+
 export interface IUser {
     id: string
     score: number
@@ -35,4 +56,5 @@ export interface IUser {
     isTwoFactorEnabled: boolean
     method: AuthMethod
     accounts: IAccount[]
+    votes: IUserVote[] 
 }

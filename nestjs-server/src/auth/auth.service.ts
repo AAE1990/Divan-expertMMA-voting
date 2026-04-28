@@ -109,11 +109,11 @@ export class AuthService {
         })
 
         let user = account?.userId
-            ? await this.userService.findById(account.userId)
+            ? await this.userService.findById(account.userId) as any
             : null
 
         if (user) {
-            return this.saveSession(req, user)
+            return this.saveSession(req, user as any)
         }
 
         user = await this.userService.create(
@@ -123,12 +123,12 @@ export class AuthService {
             profile.picture,
             AuthMethod[profile.provider.toUpperCase()],
             true
-        )
+        ) as any
 
         if (!account) {
             await this.prismaService.account.create({
                 data: {
-                    userId: user.id,
+                    userId: user?.id,
                     type: 'oauth',
                     provider: profile.provider,
                     accessToken: profile.access_token,
@@ -138,7 +138,7 @@ export class AuthService {
             })
         }
 
-        return this.saveSession(req, user)
+        return this.saveSession(req, user as any)
     }
 
     public async logout(req: Request, res: Response): Promise<void> {

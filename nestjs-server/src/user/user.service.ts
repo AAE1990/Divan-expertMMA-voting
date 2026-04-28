@@ -14,13 +14,27 @@ export class UserService {
                 id,
             },
             include: {
-                accounts: true
+                accounts: true,
+                // Добавляем историю голосов Антона
+                votes: {
+                    orderBy: {
+                        createdAt: 'desc' // Свежие прогнозы будут в начале списка
+                    },
+                    include: {
+                        poll: {
+                            include: {
+                                options: true // Чтобы знать имена обоих бойцов в паре
+                            }
+                        },
+                        option: true // Чтобы знать, на кого именно Антон сделал ставку
+                    }
+                }
             }
         })
 
         if (!user) {
             throw new NotFoundException(
-                'Пользователь не найден. Пожалуйтса, проверьте введеныые данные.'
+                'Пользователь не найден. Пожалуйста, проверьте введенные данные.'
             )
         }
 
@@ -93,7 +107,7 @@ export class UserService {
                 score: true,
             },
             orderBy: [
-                { score: 'desc'},
+                { score: 'desc' },
                 { lastScoreAt: 'asc' }
             ],
             take: 50,

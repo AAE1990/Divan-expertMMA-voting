@@ -33,3 +33,6 @@ full-authorization.postman_collection.json
 .vscode/
 .idea/
 *.tsbuildinfo
+
+# план от Агента AI
+plans
