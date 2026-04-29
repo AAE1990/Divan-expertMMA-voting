@@ -8,29 +8,40 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
     public constructor(private readonly prismaService: PrismaService) { }
 
-    public async findById(id: string) {
-        const user = await this.prismaService.user.findUnique({
-            where: {
-                id,
-            },
-            include: {
-                accounts: true,
-                // Добавляем историю голосов Антона
-                votes: {
-                    orderBy: {
-                        createdAt: 'desc' // Свежие прогнозы будут в начале списка
-                    },
-                    include: {
-                        poll: {
-                            include: {
-                                options: true // Чтобы знать имена обоих бойцов в паре
-                            }
+    public async findById(id: string, page?: number, limit?: number) {
+        const pageNumber = page ?? 1;
+        const limitNumber = limit ?? 5;
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const [user, totalVotes] = await Promise.all([
+            this.prismaService.user.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    accounts: true,
+                    // Добавляем историю голосов Антона
+                    votes: {
+                        orderBy: {
+                            createdAt: 'desc' // Свежие прогнозы будут в начале списка
                         },
-                        option: true // Чтобы знать, на кого именно Антон сделал ставку
+                        skip,
+                        take: limitNumber,
+                        include: {
+                            poll: {
+                                include: {
+                                    options: true // Чтобы знать имена обоих бойцов в паре
+                                }
+                            },
+                            option: true // Чтобы знать, на кого именно Антон сделал ставку
+                        }
                     }
                 }
-            }
-        })
+            }),
+            this.prismaService.vote.count({
+                where: { userId: id }
+            })
+        ])
 
         if (!user) {
             throw new NotFoundException(
@@ -38,7 +49,12 @@ export class UserService {
             )
         }
 
-        return user
+        return {
+            ...user,
+            totalVotes,
+            page: pageNumber,
+            limit: limitNumber
+        }
     }
 
     public async findByEmail(email: string) {
@@ -98,19 +114,34 @@ export class UserService {
         return updateUser
     }
 
-    public async getLeaderboard() {
-        return this.prismaService.user.findMany({
-            select: {
-                id: true,
-                displayName: true,
-                picture: true,
-                score: true,
-            },
-            orderBy: [
-                { score: 'desc' },
-                { lastScoreAt: 'asc' }
-            ],
-            take: 50,
-        });
+    public async getLeaderboard(page?: number, limit?: number) {
+        const pageNumber = page ?? 1;
+        const limitNumber = limit ?? 20;
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const [users, totalUsers] = await Promise.all([
+            this.prismaService.user.findMany({
+                select: {
+                    id: true,
+                    displayName: true,
+                    picture: true,
+                    score: true,
+                },
+                orderBy: [
+                    { score: 'desc' },
+                    { lastScoreAt: 'asc' }
+                ],
+                skip,
+                take: limitNumber,
+            }),
+            this.prismaService.user.count()
+        ]);
+
+        return {
+            users,
+            totalUsers,
+            page: pageNumber,
+            limit: limitNumber
+        };
     }
 }

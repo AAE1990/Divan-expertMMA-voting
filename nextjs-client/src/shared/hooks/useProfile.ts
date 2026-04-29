@@ -1,10 +1,10 @@
 import { userService } from "@/features/user/services";
 import { useQuery } from "@tanstack/react-query";
 
-export function useProfile() {
+export function useProfile(page?: number, limit?: number) {
     const { data: user, isLoading } = useQuery({
-        queryKey: ['profile'],
-        queryFn: () => userService.findProfile()
+        queryKey: ['profile', page, limit],
+        queryFn: () => userService.findProfile(page, limit)
     })
 
     return {

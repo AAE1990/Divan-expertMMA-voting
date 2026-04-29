@@ -133,7 +133,7 @@ export default function AdminVotingPage() {
                                     <SelectValue placeholder={isTournamentsLoading ? "Загрузка..." : "Выберите ивент"} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {tournaments?.map((t) => (
+                                    {tournaments?.tournaments?.map((t) => (
                                         <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
                                     ))}
                                 </SelectContent>

@@ -56,5 +56,15 @@ export interface IUser {
     isTwoFactorEnabled: boolean
     method: AuthMethod
     accounts: IAccount[]
-    votes: IUserVote[] 
+    votes: IUserVote[]
+    totalVotes?: number
+    page?: number
+    limit?: number
+}
+
+export interface ILeaderboardResponse {
+    users: IUser[]
+    totalUsers: number
+    page: number
+    limit: number
 }

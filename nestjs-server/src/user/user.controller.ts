@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Authorized } from '@/auth/decorators/authorized.decorator';
 import { Authorization } from '@/auth/decorators/auth.decorator';
@@ -12,8 +12,14 @@ export class UserController {
   @Authorization()
   @HttpCode(HttpStatus.OK)
   @Get('profile')
-  public async findProfile(@Authorized('id') userId: string) {
-    return this.userService.findById(userId)
+  public async findProfile(
+    @Authorized('id') userId: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const pageNumber = page ? parseInt(page, 10) : undefined;
+    const limitNumber = limit ? parseInt(limit, 10) : undefined;
+    return this.userService.findById(userId, pageNumber, limitNumber)
   }
 
   @Authorization(UserRole.ADMIN)
@@ -34,7 +40,12 @@ export class UserController {
   }
 
   @Get('leaderboard') // <-- Этот путь должен совпасть с тем, что в api.get()
-  public async getLeaderboard() {
-    return this.userService.getLeaderboard();
+  public async getLeaderboard(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const pageNumber = page ? parseInt(page, 10) : undefined;
+    const limitNumber = limit ? parseInt(limit, 10) : undefined;
+    return this.userService.getLeaderboard(pageNumber, limitNumber);
   }
 }

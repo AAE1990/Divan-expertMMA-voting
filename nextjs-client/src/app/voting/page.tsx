@@ -22,9 +22,9 @@ export default function VotingPage() {
   const { data: tournaments, isLoading: isTournamentsLoading } = useGetTournaments()
   const { data: polls, isLoading: isPollsLoading } = useGetPolls(selectedTournamentId)
   // Оставляем только 5 последних турниров для верхней панели
-  const activeTournaments = tournaments?.slice(0, 5) || [];
+  const activeTournaments = tournaments?.tournaments?.slice(0, 5) || [];
   // Находим объект выбранного турнира, чтобы вытащить его название
-  const currentTournament = tournaments?.find(t => t.id === selectedTournamentId)
+  const currentTournament = tournaments?.tournaments?.find(t => t.id === selectedTournamentId)
 
   // 2. Создаем функцию для смены турнира
   const handleTournamentChange = (id: string) => {
@@ -36,8 +36,8 @@ export default function VotingPage() {
   // 3. Упрощаем useEffect
   useEffect(() => {
     // Если в URL пусто, но турниры загрузились — выбираем первый
-    if (!urlTournamentId && tournaments?.length && !selectedTournamentId) {
-      handleTournamentChange(tournaments[0].id)
+    if (!urlTournamentId && tournaments?.tournaments?.length && !selectedTournamentId) {
+      handleTournamentChange(tournaments.tournaments[0].id)
     }
   }, [urlTournamentId, tournaments])
 

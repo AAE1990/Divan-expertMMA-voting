@@ -1,10 +1,14 @@
-import { IUser } from "@/features/auth/types"
+import { IUser, ILeaderboardResponse } from "@/features/auth/types"
 import { api } from "@/shared/api"
 import { TypeSettingsSchema } from "../schemes"
 
 class UserService {
-    public async findProfile() {
-        const response = await api.get<IUser>('users/profile')
+    public async findProfile(page?: number, limit?: number) {
+        const params = new URLSearchParams();
+        if (page !== undefined) params.append('page', page.toString());
+        if (limit !== undefined) params.append('limit', limit.toString());
+        const query = params.toString() ? `?${params.toString()}` : '';
+        const response = await api.get<IUser>(`users/profile${query}`)
 
         return response
     }
@@ -15,9 +19,12 @@ class UserService {
         return response
     }
 
-    public async getLeaderboard() {
-        // Указываем <IUser[]>, так как ждем список
-        const response = await api.get<IUser[]>('users/leaderboard')
+    public async getLeaderboard(page?: number, limit?: number) {
+        const params = new URLSearchParams();
+        if (page !== undefined) params.append('page', page.toString());
+        if (limit !== undefined) params.append('limit', limit.toString());
+        const query = params.toString() ? `?${params.toString()}` : '';
+        const response = await api.get<ILeaderboardResponse>(`users/leaderboard${query}`)
     
         return response
     }

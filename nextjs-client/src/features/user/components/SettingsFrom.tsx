@@ -12,9 +12,12 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { useUpdateProfileMutation } from "@/features/auth/hooks/useUpdateProfileMutation";
 import { Trophy } from "lucide-react";
 import { PredictionsHistory } from "./PredictionsHistory";
+import { useState } from "react";
 
 export function SettingsFrom() {
-    const { user, isLoading } = useProfile()
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
+    const { user, isLoading } = useProfile(page, limit)
     const { update, isLoadingUpdate } = useUpdateProfileMutation()
 
     const form = useForm<TypeSettingsSchema>({
@@ -31,6 +34,9 @@ export function SettingsFrom() {
     }
 
     if (!user) return null
+
+    const totalVotes = user.totalVotes || 0
+    const totalPages = Math.ceil(totalVotes / limit)
 
     return (
         <div className="max-w-6xl mx-auto p-4 lg:p-8 space-y-8">
@@ -119,6 +125,31 @@ export function SettingsFrom() {
                     <div className="rounded-2xl border bg-secondary/5 p-2 min-h-[300px]">
                         <PredictionsHistory votes={user?.votes || []} />
                     </div>
+                    {totalVotes > 0 && (
+                        <div className="flex items-center justify-between px-2">
+                            <div className="text-sm text-muted-foreground">
+                                Страница {page} из {totalPages}
+                            </div>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                                    disabled={page <= 1}
+                                >
+                                    Назад
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+                                    disabled={page >= totalPages}
+                                >
+                                    Вперед
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

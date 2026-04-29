@@ -1,20 +1,34 @@
 'use client'
 
 import { useGetTournaments } from "@/features/tournament/hooks/useGetTournaments";
-import { Card, CardHeader, CardTitle, CardDescription, Input } from "@/shared/components/ui";
+import { Card, CardHeader, CardTitle, CardDescription, Input, Button } from "@/shared/components/ui";
 import { Loading } from "@/shared/components/ui";
 import Link from "next/link";
-import { CalendarDays, Search } from "lucide-react";
+import { CalendarDays, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 export default function ArchivePage() {
-  const { data: tournaments, isLoading } = useGetTournaments();
+  const [page, setPage] = useState(1);
+  const limit = 10; // Количество турниров на странице
+  const { data: tournamentsData, isLoading } = useGetTournaments(page, limit);
   const [searchTerm, setSearchTerm] = useState("") // Состояние для текста поиска
 
-  // Фильтруем турниры "на лету"
-  const filteredTournaments = tournaments?.filter(t =>
+  // Фильтруем турниры "на лету" из текущей страницы
+  const filteredTournaments = tournamentsData?.tournaments?.filter(t =>
     t.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const totalPages = tournamentsData?.totalTournaments
+    ? Math.ceil(tournamentsData.totalTournaments / limit)
+    : 0;
+
+  const handlePrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
 
   if (isLoading) return <div className="flex h-screen items-center justify-center"><Loading /></div>;
 
@@ -63,6 +77,31 @@ export default function ArchivePage() {
           </p>
         )}
       </div>
+
+      {/* ПАГИНАЦИЯ */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handlePrevPage}
+            disabled={page <= 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium">
+            Страница {page} из {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleNextPage}
+            disabled={page >= totalPages}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

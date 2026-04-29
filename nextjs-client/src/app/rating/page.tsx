@@ -1,14 +1,21 @@
 'use client'
 
+import { useState } from "react";
 import { useLeaderboard } from "@/features/user/hooks/useLeaderboard";
-import { Card, CardContent, Loading } from "@/shared/components/ui";
+import { Card, CardContent, Loading, Button } from "@/shared/components/ui";
 import { Trophy, Medal } from "lucide-react";
 import { cn } from "@/shared/utils/clsx";
 
 export default function RatingPage() {
-  const { data: leaders, isLoading } = useLeaderboard();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const { data: leaderboardData, isLoading } = useLeaderboard(page, limit);
 
   if (isLoading) return <div className="flex h-screen items-center justify-center"><Loading /></div>;
+
+  const users = leaderboardData?.users || [];
+  const totalUsers = leaderboardData?.totalUsers || 0;
+  const totalPages = Math.ceil(totalUsers / limit);
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
@@ -29,7 +36,7 @@ export default function RatingPage() {
                 </tr>
               </thead>
               <tbody>
-                {leaders?.map((user, index) => {
+                {users.map((user, index) => {
                   const isTop3 = index < 3;
                   return (
                     <tr key={user.id} className={cn(
@@ -55,6 +62,32 @@ export default function RatingPage() {
           </div>
         </CardContent>
       </Card>
+
+      {totalUsers > 0 && (
+        <div className="flex items-center justify-between mt-6 px-2">
+          <div className="text-sm text-muted-foreground">
+            Страница {page} из {totalPages} (всего {totalUsers} участников)
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+              disabled={page <= 1}
+            >
+              Назад
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={page >= totalPages}
+            >
+              Вперед
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -16,11 +16,22 @@ export class TournamentService {
     });
   }
 
-  // Получить список всех турниров (для админки и архива)
-  public async findAll() {
-    return this.prisma.tournament.findMany({
-      orderBy: { date: 'desc' },
-    });
+  // Получить список всех турниров (для админки и архива) с пагинацией
+  public async findAll(page?: number, limit?: number) {
+    const pageNumber = page ?? 1;
+    const limitNumber = limit ?? 10;
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const [tournaments, totalTournaments] = await Promise.all([
+      this.prisma.tournament.findMany({
+        orderBy: { date: 'desc' },
+        skip,
+        take: limitNumber,
+      }),
+      this.prisma.tournament.count(),
+    ]);
+
+    return { tournaments, totalTournaments, page: pageNumber, limit: limitNumber };
   }
 
   // Получить конкретный турнир со всеми его боями (для страницы турнира)
