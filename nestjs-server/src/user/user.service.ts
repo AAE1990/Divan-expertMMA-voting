@@ -13,7 +13,7 @@ export class UserService {
         const limitNumber = limit ?? 5;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const [user, totalVotes] = await Promise.all([
+        const [user, totalVotes, correctVotesResult] = await Promise.all([
             this.prismaService.user.findUnique({
                 where: {
                     id,
@@ -40,7 +40,13 @@ export class UserService {
             }),
             this.prismaService.vote.count({
                 where: { userId: id }
-            })
+            }),
+            this.prismaService.$queryRaw<Array<{ count: bigint }>>`
+                SELECT COUNT(*) as count
+                FROM votes v
+                INNER JOIN polls p ON v.poll_id = p.id
+                WHERE v.user_id = ${id} AND v.option_id = p.winner_option_id
+            `
         ])
 
         if (!user) {
@@ -49,9 +55,12 @@ export class UserService {
             )
         }
 
+        const correctVotes = Number(correctVotesResult[0]?.count ?? 0);
+
         return {
             ...user,
             totalVotes,
+            correctVotes,
             page: pageNumber,
             limit: limitNumber
         }
@@ -107,11 +116,84 @@ export class UserService {
             data: {
                 email: dto.email,
                 displayName: dto.name,
-                isTwoFactorEnabled: dto.isTwoFactorEnabled
+                isTwoFactorEnabled: dto.isTwoFactorEnabled,
+                bio: dto.bio,
+                city: dto.city,
+                country: dto.country,
+                youtube: dto.youtube,
+                telegram: dto.telegram,
+                vk: dto.vk,
+                twitter: dto.twitter,
+                instagram: dto.instagram
             }
         })
 
         return updateUser
+    }
+
+    public async findPublicProfile(id: string, page?: number, limit?: number) {
+        const pageNumber = page ?? 1;
+        const limitNumber = limit ?? 5;
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const [user, correctVotesResult] = await Promise.all([
+            this.prismaService.user.findUnique({
+                where: { id },
+                select: {
+                    id: true,
+                    displayName: true,
+                    picture: true,
+                    createdAt: true,
+                    bio: true,
+                    city: true,
+                    country: true,
+                    youtube: true,
+                    telegram: true,
+                    vk: true,
+                    twitter: true,
+                    instagram: true,
+                    score: true,
+                    lastScoreAt: true,
+                    votes: {
+                        orderBy: { createdAt: 'desc' },
+                        skip,
+                        take: limitNumber,
+                        include: {
+                            poll: {
+                                include: {
+                                    options: true,
+                                    tournament: true
+                                }
+                            },
+                            option: true
+                        }
+                    },
+                    _count: {
+                        select: { votes: true }
+                    }
+                }
+            }),
+            this.prismaService.$queryRaw<Array<{ count: bigint }>>`
+                SELECT COUNT(*) as count
+                FROM votes v
+                INNER JOIN polls p ON v.poll_id = p.id
+                WHERE v.user_id = ${id} AND v.option_id = p.winner_option_id
+            `
+        ]);
+
+        if (!user) {
+            throw new NotFoundException('Пользователь не найден');
+        }
+
+        const correctVotes = Number(correctVotesResult[0]?.count || 0);
+
+        return {
+            ...user,
+            totalVotes: user._count.votes,
+            correctVotes,
+            page: pageNumber,
+            limit: limitNumber
+        };
     }
 
     public async getLeaderboard(page?: number, limit?: number) {

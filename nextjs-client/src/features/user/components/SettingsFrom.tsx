@@ -25,7 +25,15 @@ export function SettingsFrom() {
         values: {
             name: user?.displayName || '',
             email: user?.email || '',
-            isTwoFactorEnabled: user?.isTwoFactorEnabled || false
+            isTwoFactorEnabled: user?.isTwoFactorEnabled || false,
+            bio: user?.bio || '',
+            city: user?.city || '',
+            country: user?.country || '',
+            youtube: user?.youtube || '',
+            telegram: user?.telegram || '',
+            vk: user?.vk || '',
+            twitter: user?.twitter || '',
+            instagram: user?.instagram || ''
         }
     })
 
@@ -109,6 +117,131 @@ export function SettingsFrom() {
                                                 </FormItem>
                                             )}
                                         />
+
+                                        {/* Биография, город, страна */}
+                                        <div className="space-y-4 pt-4 border-t">
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Дополнительная информация</h3>
+                                            <FormField
+                                                control={form.control}
+                                                name='bio'
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Биография (макс. 100 символов)</FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Расскажите о себе..."
+                                                                disabled={isLoadingUpdate}
+                                                                {...field}
+                                                                className="bg-background"
+                                                                maxLength={100}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <FormField
+                                                    control={form.control}
+                                                    name='city'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Город</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="Москва" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={form.control}
+                                                    name='country'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Страна</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="Россия" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Социальные сети */}
+                                        <div className="space-y-4 pt-4 border-t">
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Социальные сети</h3>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <FormField
+                                                    control={form.control}
+                                                    name='youtube'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">YouTube</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={form.control}
+                                                    name='telegram'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Telegram</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={form.control}
+                                                    name='vk'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">VK</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={form.control}
+                                                    name='twitter'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">X (Twitter)</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                                <FormField
+                                                    control={form.control}
+                                                    name='instagram'
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Instagram</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+
                                         <Button type='submit' disabled={isLoadingUpdate} className="w-full font-bold uppercase tracking-widest">
                                             {isLoadingUpdate ? "Сохранение..." : "Сохранить профиль"}
                                         </Button>
@@ -121,6 +254,24 @@ export function SettingsFrom() {
 
                 {/* ПРАВАЯ КОЛОНКА: ИСТОРИЯ (5 из 12 колонок) */}
                 <div className="lg:col-span-5 space-y-4">
+                    {/* БЛОК СТАТИСТИКИ */}
+                    <div className="rounded-2xl border bg-secondary/5 p-4">
+                        <h3 className="text-lg font-bold uppercase tracking-wider text-center mb-4">Статистика</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="rounded-xl border bg-secondary/5 p-4">
+                                <p className="text-xs uppercase font-bold text-muted-foreground">Всего прогнозов</p>
+                                <p className="text-2xl font-black mt-2">{totalVotes}</p>
+                            </div>
+                            <div className="rounded-xl border bg-secondary/5 p-4">
+                                <p className="text-xs uppercase font-bold text-muted-foreground">Точность</p>
+                                <p className="text-2xl font-black mt-2">
+                                    {user.correctVotes ?? 0}
+                                    <span className="text-sm text-muted-foreground"> / {totalVotes}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <h2 className="text-lg font-bold uppercase tracking-wider text-center mb-4">История прогнозов</h2>
                     <div className="rounded-2xl border bg-secondary/5 p-2 min-h-[300px]">
                         <PredictionsHistory votes={user?.votes || []} />

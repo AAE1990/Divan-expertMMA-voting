@@ -58,8 +58,18 @@ export interface IUser {
     accounts: IAccount[]
     votes: IUserVote[]
     totalVotes?: number
+    correctVotes?: number
     page?: number
     limit?: number
+    bio?: string
+    city?: string
+    country?: string
+    youtube?: string
+    telegram?: string
+    vk?: string
+    twitter?: string
+    instagram?: string
+    lastScoreAt?: string
 }
 
 export interface ILeaderboardResponse {

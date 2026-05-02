@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useLeaderboard } from "@/features/user/hooks/useLeaderboard";
-import { Card, CardContent, Loading, Button } from "@/shared/components/ui";
+import { Card, CardContent, Loading, Button, Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui";
 import { Trophy, Medal } from "lucide-react";
 import { cn } from "@/shared/utils/clsx";
+import Link from "next/link";
 
 export default function RatingPage() {
   const [page, setPage] = useState(1);
@@ -24,12 +25,12 @@ export default function RatingPage() {
         <h1 className="text-4xl font-black uppercase tracking-tighter">Топ прогнозистов</h1>
       </div>
 
-      <Card className="border-2">
-        <CardContent className="p-0">
-          <div className="overflow-hidden rounded-lg">
+      <Card className="border-2 shadow-lg">
+        <CardContent className="p-6">
+          <div className="overflow-hidden rounded-xl border border-border/50">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-muted/50 border-b">
+                <tr className="bg-muted/30 border-b">
                   <th className="p-4 font-bold uppercase text-xs">Место</th>
                   <th className="p-4 font-bold uppercase text-xs">Участник</th>
                   <th className="p-4 font-bold uppercase text-xs text-right">Баллы</th>
@@ -48,8 +49,16 @@ export default function RatingPage() {
                           {index === 0 ? <Medal className="text-yellow-500 size-5" /> : index + 1}
                         </div>
                       </td>
-                      <td className="p-4 font-semibold">
-                        {user.displayName || "Аноним"}
+                      <td className="p-4">
+                        <Link href={`/profile/${user.id}`} className="flex items-center gap-3 hover:underline">
+                          <Avatar className="size-8">
+                            <AvatarImage src={user.picture || ''} alt={user.displayName} />
+                            <AvatarFallback className="text-xs">
+                              {user.displayName?.charAt(0).toUpperCase() || '?'}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-semibold">{user.displayName || "Аноним"}</span>
+                        </Link>
                       </td>
                       <td className="p-4 text-right">
                         <span className="text-xl font-black text-primary">{user.score}</span>

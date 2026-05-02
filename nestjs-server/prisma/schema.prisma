@@ -17,6 +17,15 @@ model User {
   displayName String
   picture String?
 
+  bio String? @db.VarChar(100)
+  city String?
+  country String?
+  youtube String?
+  telegram String?
+  vk String?
+  twitter String?
+  instagram String?
+
   role UserRole @default(REGULAR)
 
   isVerified Boolean @default(false) @map("is_verified")

@@ -19,6 +19,16 @@ class UserService {
         return response
     }
 
+    public async getPublicProfile(id: string, page?: number, limit?: number) {
+        const params = new URLSearchParams();
+        if (page !== undefined) params.append('page', page.toString());
+        if (limit !== undefined) params.append('limit', limit.toString());
+        const query = params.toString() ? `?${params.toString()}` : '';
+        const response = await api.get<IUser>(`users/public/${id}${query}`)
+    
+        return response
+    }
+
     public async getLeaderboard(page?: number, limit?: number) {
         const params = new URLSearchParams();
         if (page !== undefined) params.append('page', page.toString());

@@ -48,4 +48,15 @@ export class UserController {
     const limitNumber = limit ? parseInt(limit, 10) : undefined;
     return this.userService.getLeaderboard(pageNumber, limitNumber);
   }
+
+  @Get('public/:id')
+  public async getPublicProfile(
+    @Param('id') id: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const pageNumber = page ? parseInt(page, 10) : undefined;
+    const limitNumber = limit ? parseInt(limit, 10) : undefined;
+    return this.userService.findPublicProfile(id, pageNumber, limitNumber);
+  }
 }
