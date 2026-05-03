@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../shared/styles/globals.css";
 import { MainProvider } from "../shared/providers";
-import { Sidebar, ToggleTheme } from "../shared/components/ui";
+import { Footer, Sidebar, ToggleTheme } from "../shared/components/ui";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,13 +34,14 @@ export default function RootLayout({
           <Sidebar />
 
           {/* Основной контейнер контента */}
-          <div className="flex-1 pl-64">
+          <div className="flex-1 pl-64 flex flex-col">
             <div className="flex justify-end p-4"> 
               <ToggleTheme />
             </div>
-            <main className="container mx-auto p-6">
+            <main className="container mx-auto p-6 flex-1">
               {children}
               </main>
+              <Footer />
             </div>
           </div>
         </MainProvider>
