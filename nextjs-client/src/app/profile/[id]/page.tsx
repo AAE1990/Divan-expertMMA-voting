@@ -110,11 +110,11 @@ export default function PublicProfilePage() {
                     </div>
                 </div>
                 
-                {/* БАЛЛЫ */}
+                {/* МЕСТО В РЕЙТИНГЕ */}
                 <div className="flex items-center gap-6 px-6 py-3 bg-background/50 rounded-xl border border-primary/20 shadow-sm">
                     <div className="text-right">
-                        <p className="text-[10px] font-bold uppercase text-primary tracking-widest">Рейтинг</p>
-                        <p className="text-3xl font-black">{user.score || 0}</p>
+                        <p className="text-[10px] font-bold uppercase text-primary tracking-widest">Место в рейтинге</p>
+                        <p className="text-3xl font-black">{user.rank || 1}</p>
                     </div>
                     <Trophy className="text-primary size-10" />
                 </div>

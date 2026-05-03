@@ -29,10 +29,11 @@ class UserService {
         return response
     }
 
-    public async getLeaderboard(page?: number, limit?: number) {
+    public async getLeaderboard(page?: number, limit?: number, period?: 'all' | 'month' | 'week') {
         const params = new URLSearchParams();
         if (page !== undefined) params.append('page', page.toString());
         if (limit !== undefined) params.append('limit', limit.toString());
+        if (period !== undefined) params.append('period', period);
         const query = params.toString() ? `?${params.toString()}` : '';
         const response = await api.get<ILeaderboardResponse>(`users/leaderboard${query}`)
     

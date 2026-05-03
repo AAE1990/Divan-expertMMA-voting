@@ -42,11 +42,17 @@ export class UserController {
   @Get('leaderboard') // <-- Этот путь должен совпасть с тем, что в api.get()
   public async getLeaderboard(
     @Query('page') page?: string,
-    @Query('limit') limit?: string
+    @Query('limit') limit?: string,
+    @Query('period') period?: string
   ) {
     const pageNumber = page ? parseInt(page, 10) : undefined;
     const limitNumber = limit ? parseInt(limit, 10) : undefined;
-    return this.userService.getLeaderboard(pageNumber, limitNumber);
+    // Валидация периода
+    let periodValue: 'all' | 'month' | 'week' = 'all';
+    if (period === 'month' || period === 'week') {
+      periodValue = period;
+    }
+    return this.userService.getLeaderboard(pageNumber, limitNumber, periodValue);
   }
 
   @Get('public/:id')

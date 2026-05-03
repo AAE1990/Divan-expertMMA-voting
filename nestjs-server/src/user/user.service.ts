@@ -13,7 +13,7 @@ export class UserService {
         const limitNumber = limit ?? 5;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const [user, totalVotes, correctVotesResult] = await Promise.all([
+        const [user, totalVotes, correctVotesResult, rankResult] = await Promise.all([
             this.prismaService.user.findUnique({
                 where: {
                     id,
@@ -46,6 +46,11 @@ export class UserService {
                 FROM votes v
                 INNER JOIN polls p ON v.poll_id = p.id
                 WHERE v.user_id = ${id} AND v.option_id = p.winner_option_id
+            `,
+            this.prismaService.$queryRaw<Array<{ rank: bigint }>>`
+                SELECT COUNT(*) + 1 as rank
+                FROM users u2
+                WHERE u2.score > (SELECT score FROM users WHERE id = ${id})
             `
         ])
 
@@ -56,11 +61,13 @@ export class UserService {
         }
 
         const correctVotes = Number(correctVotesResult[0]?.count ?? 0);
+        const rank = Number(rankResult[0]?.rank ?? 0);
 
         return {
             ...user,
             totalVotes,
             correctVotes,
+            rank,
             page: pageNumber,
             limit: limitNumber
         }
@@ -136,7 +143,7 @@ export class UserService {
         const limitNumber = limit ?? 5;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const [user, correctVotesResult] = await Promise.all([
+        const [user, correctVotesResult, rankResult] = await Promise.all([
             this.prismaService.user.findUnique({
                 where: { id },
                 select: {
@@ -178,6 +185,11 @@ export class UserService {
                 FROM votes v
                 INNER JOIN polls p ON v.poll_id = p.id
                 WHERE v.user_id = ${id} AND v.option_id = p.winner_option_id
+            `,
+            this.prismaService.$queryRaw<Array<{ rank: bigint }>>`
+                SELECT COUNT(*) + 1 as rank
+                FROM users u2
+                WHERE u2.score > (SELECT score FROM users WHERE id = ${id})
             `
         ]);
 
@@ -186,44 +198,99 @@ export class UserService {
         }
 
         const correctVotes = Number(correctVotesResult[0]?.count || 0);
+        const rank = Number(rankResult[0]?.rank || 0);
 
         return {
             ...user,
             totalVotes: user._count.votes,
             correctVotes,
+            rank,
             page: pageNumber,
             limit: limitNumber
         };
     }
 
-    public async getLeaderboard(page?: number, limit?: number) {
+    public async getLeaderboard(page?: number, limit?: number, period: 'all' | 'month' | 'week' = 'all') {
         const pageNumber = page ?? 1;
         const limitNumber = limit ?? 20;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const [users, totalUsers] = await Promise.all([
-            this.prismaService.user.findMany({
-                select: {
-                    id: true,
-                    displayName: true,
-                    picture: true,
-                    score: true,
-                },
-                orderBy: [
-                    { score: 'desc' },
-                    { lastScoreAt: 'asc' }
-                ],
-                skip,
-                take: limitNumber,
-            }),
-            this.prismaService.user.count()
-        ]);
+        // Определяем дату начала периода (начало дня)
+        let startDate: Date | null = null;
+        if (period === 'week') {
+            startDate = new Date();
+            startDate.setDate(startDate.getDate() - 7);
+            startDate.setHours(0, 0, 0, 0);
+        } else if (period === 'month') {
+            startDate = new Date();
+            startDate.setDate(startDate.getDate() - 30);
+            startDate.setHours(0, 0, 0, 0);
+        }
 
-        return {
-            users,
-            totalUsers,
-            page: pageNumber,
-            limit: limitNumber
-        };
+        if (period === 'all') {
+            // Используем быстрое поле user.score
+            const [users, totalUsers] = await Promise.all([
+                this.prismaService.user.findMany({
+                    select: {
+                        id: true,
+                        displayName: true,
+                        picture: true,
+                        score: true,
+                    },
+                    orderBy: [
+                        { score: 'desc' },
+                        { lastScoreAt: 'asc' }
+                    ],
+                    skip,
+                    take: limitNumber,
+                }),
+                this.prismaService.user.count()
+            ]);
+
+            return {
+                users,
+                totalUsers,
+                page: pageNumber,
+                limit: limitNumber,
+                period,
+            };
+        } else {
+            // Агрегируем правильные голоса за период
+            // Используем raw query для производительности
+            const usersWithScore = await this.prismaService.$queryRaw<Array<{
+                id: string;
+                displayName: string;
+                picture: string | null;
+                score: bigint;
+            }>>`
+                SELECT
+                    u.id,
+                    u."displayName" as "displayName",
+                    u.picture,
+                    COALESCE(SUM(CASE WHEN v.created_at >= ${startDate} AND p.winner_option_id = v.option_id THEN 1 ELSE 0 END), 0) as score
+                FROM users u
+                LEFT JOIN votes v ON u.id = v.user_id
+                LEFT JOIN polls p ON v.poll_id = p.id
+                GROUP BY u.id, u."displayName", u.picture, u.last_score_at
+                ORDER BY score DESC, u.last_score_at ASC
+                LIMIT ${limitNumber} OFFSET ${skip}
+            `;
+
+            const totalUsers = await this.prismaService.user.count();
+
+            // Преобразуем bigint в number
+            const users = usersWithScore.map(user => ({
+                ...user,
+                score: Number(user.score),
+            }));
+
+            return {
+                users,
+                totalUsers,
+                page: pageNumber,
+                limit: limitNumber,
+                period,
+            };
+        }
     }
 }

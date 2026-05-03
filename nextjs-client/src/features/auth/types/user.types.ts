@@ -45,6 +45,7 @@ export interface IUserVote {
 export interface IUser {
     id: string
     score: number
+    rank?: number
     createdAt: string
     updatedAt: string
     email: string

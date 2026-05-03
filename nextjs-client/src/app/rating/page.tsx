@@ -3,14 +3,21 @@
 import { useState } from "react";
 import { useLeaderboard } from "@/features/user/hooks/useLeaderboard";
 import { Card, CardContent, Loading, Button, Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui";
-import { Trophy, Medal } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Trophy, Medal, Calendar } from "lucide-react";
 import { cn } from "@/shared/utils/clsx";
 import Link from "next/link";
 
 export default function RatingPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const { data: leaderboardData, isLoading } = useLeaderboard(page, limit);
+  const [period, setPeriod] = useState<'all' | 'month' | 'week'>('all');
+  const { data: leaderboardData, isLoading } = useLeaderboard(page, limit, period);
+
+  const handlePeriodChange = (value: 'all' | 'month' | 'week') => {
+    setPeriod(value);
+    setPage(1); // Сбрасываем на первую страницу при смене периода
+  };
 
   if (isLoading) return <div className="flex h-screen items-center justify-center"><Loading /></div>;
 
@@ -20,9 +27,24 @@ export default function RatingPage() {
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
-      <div className="flex items-center gap-4 mb-8">
-        <Trophy className="size-10 text-yellow-500" />
-        <h1 className="text-4xl font-black uppercase tracking-tighter">Топ прогнозистов</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="flex items-center gap-4">
+          <Trophy className="size-10 text-yellow-500" />
+          <h1 className="text-4xl font-black uppercase tracking-tighter">Топ прогнозистов</h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <Calendar className="size-5 text-muted-foreground" />
+          <Select value={period} onValueChange={handlePeriodChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Период" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Всё время</SelectItem>
+              <SelectItem value="month">За месяц</SelectItem>
+              <SelectItem value="week">За неделю</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <Card className="border-2 shadow-lg">

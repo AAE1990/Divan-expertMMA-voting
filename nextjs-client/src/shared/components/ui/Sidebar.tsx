@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/shared/components/ui/Button'
 import { cn } from '@/shared/utils/clsx'
-import { Vote, Home, Settings, ShieldAlert, Trophy, History } from 'lucide-react' // Добавил ShieldAlert
+import { Vote, Home, Settings, ShieldAlert, Trophy, History, LogOut } from 'lucide-react' // Добавил ShieldAlert
 import { useProfile } from '@/shared/hooks'
+import { useLogoutMutation } from '@/features/user/hooks'
 
 const MENU_ITEMS = [
   { href: '/', label: 'Главная', icon: Home },
@@ -18,6 +19,7 @@ const MENU_ITEMS = [
 export const Sidebar = () => {
   const pathname = usePathname()
   const { user, isLoading } = useProfile()
+  const { logout, isLoadingLogout } = useLogoutMutation()
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-background p-4 shadow-sm">
@@ -80,15 +82,26 @@ export const Sidebar = () => {
         {/* Нижний блок (прижат к низу) */}
         <div className="space-y-2 mb-15">
           {user && (
-            <div className="px-3 py-2 bg-primary/5 rounded-lg border border-primary/10 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Trophy className="size-3 text-primary" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Score</span>
+            <>
+              <div className="px-3 py-2 bg-primary/5 rounded-lg border border-primary/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Trophy className="size-3 text-primary" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Место</span>
+                </div>
+                <span className="text-sm font-black text-primary">
+                  {isLoading ? "..." : (user.rank ? user.rank : "—")}
+                </span>
               </div>
-              <span className="text-sm font-black text-primary">
-                {isLoading ? "..." : user.score}
-              </span>
-            </div>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-3 border-1 border-transparent hover:border-primary/30"
+                onClick={() => logout()}
+                disabled={isLoadingLogout}
+              >
+                <LogOut className="size-5 text-primary shrink-0" />
+                <span className="truncate">Выйти</span>
+              </Button>
+            </>
           )}
 
           {/* <div className="px-3 py-2 text-xs text-muted-foreground italic">
