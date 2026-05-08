@@ -1,4 +1,5 @@
 export * from "./Avatar"
+export * from "./AuthButtons"
 export * from "./Button"
 export * from "./DropdownMenu"
 export * from "./ToggleTheme"

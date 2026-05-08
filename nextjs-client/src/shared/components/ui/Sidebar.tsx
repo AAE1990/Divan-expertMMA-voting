@@ -21,6 +21,14 @@ export const Sidebar = () => {
   const { user, isLoading } = useProfile()
   const { logout, isLoadingLogout } = useLogoutMutation()
 
+  // Фильтруем пункты меню: для анонимов скрываем "Настройки профиля"
+  const filteredMenuItems = MENU_ITEMS.filter(item => {
+    if (item.href === '/dashboard/settings') {
+      return !!user // показываем только авторизованным
+    }
+    return true
+  })
+
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-background p-4 shadow-sm">
       <div className="flex h-full flex-col justify-between overflow-hidden">
@@ -31,7 +39,7 @@ export const Sidebar = () => {
 
           <nav className="flex flex-col gap-2">
             {/* Рендерим основные пункты меню */}
-            {MENU_ITEMS.map((item) => {
+            {filteredMenuItems.map((item) => {
               const isActive = pathname === item.href
               const Icon = item.icon
 

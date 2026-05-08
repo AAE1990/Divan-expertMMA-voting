@@ -19,10 +19,11 @@ export const tournamentService = {
     return await api.post("tournaments", data);
   },
 
-  async getAll(page?: number, limit?: number): Promise<ITournamentsResponse> {
+  async getAll(page?: number, limit?: number, search?: string): Promise<ITournamentsResponse> {
     const params = new URLSearchParams();
     if (page !== undefined) params.append('page', page.toString());
     if (limit !== undefined) params.append('limit', limit.toString());
+    if (search !== undefined && search.trim() !== '') params.append('search', search);
     const query = params.toString() ? `?${params.toString()}` : '';
     return await api.get<ITournamentsResponse>(`tournaments${query}`);
   },

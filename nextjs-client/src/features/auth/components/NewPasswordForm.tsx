@@ -12,10 +12,13 @@ import ReCAPTCHA from "react-google-recaptcha"
 import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { PasswordInput } from "@/shared/components/ui";
+import { useSearchParams } from "next/navigation";
 
 export function NewPasswordForm() {
     const { theme } = useTheme()
     const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
+    const searchParams = useSearchParams()
+    const token = searchParams.get('token')
 
     const form = useForm<TypeNewPasswordSchema>({
         resolver: zodResolver(NewPasswordSchema),
@@ -27,11 +30,33 @@ export function NewPasswordForm() {
     const { newPassword, isLoadingNew } = useNewPasswordMutation()
 
     const onSubmit = (values: TypeNewPasswordSchema) => {
+        if (!token) {
+            toast.error('Ссылка недействительна')
+            return
+        }
         if (recaptchaValue) {
             newPassword({ values, recaptcha: recaptchaValue })
         } else {
             toast.error('Пожалуйста, подтвердите, что вы не робот.')
         }
+    }
+
+    // Если токена нет, показываем сообщение
+    if (!token) {
+        return (
+            <AuthWrapper
+                heading="Ссылка недействительна"
+                description="Проверьте правильность ссылки для восстановления пароля"
+                backButtonLabel="Вернуться на главную"
+                backButtonHref="/"
+            >
+                <div className="text-left space-y-2">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                        Возможно, ссылка устарела или была использована ранее.
+                    </p>
+                </div>
+            </AuthWrapper>
+        )
     }
 
     return (

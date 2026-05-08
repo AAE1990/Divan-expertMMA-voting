@@ -17,10 +17,14 @@ export class TournamentController {
   }
 
   @Get()
-  findAll(@Query('page') page?: string, @Query('limit') limit?: string) {
+  findAll(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+  ) {
     const pageNumber = page ? parseInt(page, 10) : undefined;
     const limitNumber = limit ? parseInt(limit, 10) : undefined;
-    return this.tournamentService.findAll(pageNumber, limitNumber);
+    return this.tournamentService.findAll(pageNumber, limitNumber, search);
   }
 
   @Get(':id')

@@ -16,19 +16,29 @@ export class TournamentService {
     });
   }
 
-  // Получить список всех турниров (для админки и архива) с пагинацией
-  public async findAll(page?: number, limit?: number) {
+  // Получить список всех турниров (для админки и архива) с пагинацией и поиском
+  public async findAll(page?: number, limit?: number, search?: string) {
     const pageNumber = page ?? 1;
     const limitNumber = limit ?? 10;
     const skip = (pageNumber - 1) * limitNumber;
 
+    const where = search
+      ? {
+          name: {
+            contains: search,
+            mode: 'insensitive' as const,
+          },
+        }
+      : undefined;
+
     const [tournaments, totalTournaments] = await Promise.all([
       this.prisma.tournament.findMany({
+        where,
         orderBy: { date: 'desc' },
         skip,
         take: limitNumber,
       }),
-      this.prisma.tournament.count(),
+      this.prisma.tournament.count({ where }),
     ]);
 
     return { tournaments, totalTournaments, page: pageNumber, limit: limitNumber };

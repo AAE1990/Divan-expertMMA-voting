@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../shared/styles/globals.css";
 import { MainProvider } from "../shared/providers";
-import { Footer, Sidebar, ToggleTheme } from "../shared/components/ui";
+import { AuthButtons, Footer, Sidebar, ToggleTheme } from "../shared/components/ui";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +35,8 @@ export default function RootLayout({
 
           {/* Основной контейнер контента */}
           <div className="flex-1 pl-64 flex flex-col">
-            <div className="flex justify-end p-4"> 
+            <div className="flex items-center justify-end gap-4 p-4">
+              <AuthButtons />
               <ToggleTheme />
             </div>
             <main className="container mx-auto p-6 flex-1">

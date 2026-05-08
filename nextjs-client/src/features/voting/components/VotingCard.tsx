@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
 import { votingSchema, TVotingSchema } from "../schemes/voting.schema"
 import { IPoll } from "../types/voting.types"
 import { useSubmitVote } from "../hooks/useSubmitVote"
@@ -121,8 +122,8 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
               )
             })}
           </div>
-        ) : (
-          /* --- РЕЖИМ ГОЛОСОВАНИЯ --- */
+        ) : user ? (
+          /* --- РЕЖИМ ГОЛОСОВАНИЯ (только для авторизованных) --- */
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`}>
             <RadioGroup
               value={selectedValue}
@@ -170,6 +171,55 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
               ))}
             </RadioGroup>
           </form>
+        ) : (
+          /* --- РЕЖИМ ПРОСМОТРА ДЛЯ АНОНИМОВ --- */
+          <div className="relative">
+            <div className="space-y-4 opacity-50">
+              {poll.options.map((option) => (
+                <div
+                  key={option.id}
+                  className={cn(
+                    "relative overflow-hidden border rounded-lg",
+                    "bg-sky-50 border-sky-200",
+                    "dark:bg-slate-900 dark:border-slate-800"
+                  )}
+                >
+                  {/* Добавляем фото бойца */}
+                  {option.photoUrl && (
+                    <div className="w-full h-40 overflow-hidden">
+                      <img
+                        src={option.photoUrl}
+                        alt={option.text}
+                        className="w-full h-full object-cover shadow-md"
+                        onError={(e) => {
+                          // Если изображение не загрузилось, показываем заглушку
+                          e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <span className="font-semibold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
+                      {option.text}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-lg p-6">
+              <p className="text-lg font-medium text-foreground mb-4 text-center">
+                Чтобы проголосовать, войдите в аккаунт
+              </p>
+              <div className="flex gap-4">
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/auth/login">Вход</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link href="/auth/register">Регистрация</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
         {/* --- ПАНЕЛЬ АДМИНА (Добавляем в самый низ контента) --- */}
         {isAdmin && !isFinished && (
@@ -196,22 +246,24 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       </CardContent>
 
       {/* ... CardFooter ... */}
-      <CardFooter className="pt-4 border-t">
-        {!hasVoted ? (
-          <Button
-            form={`form-${poll.id}`}
-            type="submit"
-            className="w-full font-bold uppercase"
-            disabled={isPending || poll.status === 'CLOSED' || isExpired}
-          >
-            {isExpired ? "Голосование завершено" : isPending ? "Отправка..." : "Сделать прогноз"}
-          </Button>
-        ) : (
-          <div className="w-full text-center text-sm font-medium text-muted-foreground">
-            Вы уже сделали свой выбор
-          </div>
-        )}
-      </CardFooter>
+      {user && (
+        <CardFooter className="pt-4 border-t">
+          {!hasVoted ? (
+            <Button
+              form={`form-${poll.id}`}
+              type="submit"
+              className="w-full font-bold uppercase"
+              disabled={isPending || poll.status === 'CLOSED' || isExpired}
+            >
+              {isExpired ? "Голосование завершено" : isPending ? "Отправка..." : "Сделать прогноз"}
+            </Button>
+          ) : (
+            <div className="w-full text-center text-sm font-medium text-muted-foreground">
+              Вы уже сделали свой выбор
+            </div>
+          )}
+        </CardFooter>
+      )}
     </Card>
   )
 }

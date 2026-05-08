@@ -287,6 +287,7 @@ export function SettingsFrom() {
                                     size="sm"
                                     onClick={() => setPage(prev => Math.max(prev - 1, 1))}
                                     disabled={page <= 1}
+                                    className="cursor-pointer"
                                 >
                                     Назад
                                 </Button>
@@ -295,6 +296,7 @@ export function SettingsFrom() {
                                     size="sm"
                                     onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
                                     disabled={page >= totalPages}
+                                    className="cursor-pointer"
                                 >
                                     Вперед
                                 </Button>

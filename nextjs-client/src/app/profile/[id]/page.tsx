@@ -9,6 +9,7 @@ import { PredictionsHistory } from "@/features/user/components/PredictionsHistor
 import { Button } from "@/shared/components/ui/Button"
 import { useState } from "react"
 import Link from "next/link"
+import { useProfile } from "@/shared/hooks"
 
 export default function PublicProfilePage() {
     const params = useParams()
@@ -20,6 +21,8 @@ export default function PublicProfilePage() {
         queryKey: ['publicProfile', id, page, limit],
         queryFn: () => userService.getPublicProfile(id, page, limit),
     })
+
+    const { user: currentUser } = useProfile()
 
     if (isLoading) {
         return (
@@ -90,8 +93,8 @@ export default function PublicProfilePage() {
                             </div>
                         )}
 
-                        {/* Социальные сети */}
-                        {socialLinks.length > 0 && (
+                        {/* Социальные сети (только для авторизованных пользователей) */}
+                        {currentUser?.id && socialLinks.length > 0 && (
                             <div className="flex items-center gap-3 mt-4">
                                 {socialLinks.map((link) => (
                                     <a
@@ -144,8 +147,8 @@ export default function PublicProfilePage() {
                         </CardContent>
                     </Card>
 
-                    {/* Дополнительная информация (если есть) */}
-                    {(user.youtube || user.telegram || user.vk || user.twitter || user.instagram) && (
+                    {/* Дополнительная информация (только для авторизованных пользователей) */}
+                    {currentUser?.id && (user.youtube || user.telegram || user.vk || user.twitter || user.instagram) && (
                         <Card className="shadow-none border-none bg-transparent">
                             <CardHeader className="px-0 pt-0">
                                 <CardTitle className="text-lg font-bold uppercase tracking-wider text-left pl-4 border-l-4 border-primary">Социальные сети</CardTitle>
@@ -187,6 +190,7 @@ export default function PublicProfilePage() {
                                     size="sm"
                                     onClick={() => setPage(prev => Math.max(prev - 1, 1))}
                                     disabled={page <= 1}
+                                    className="cursor-pointer"
                                 >
                                     Назад
                                 </Button>
@@ -195,6 +199,7 @@ export default function PublicProfilePage() {
                                     size="sm"
                                     onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
                                     disabled={page >= totalPages}
+                                    className="cursor-pointer"
                                 >
                                     Вперед
                                 </Button>

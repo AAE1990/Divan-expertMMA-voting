@@ -18,7 +18,7 @@ export default function middleware(request: NextRequest) {
     }
 
     // 2. Если сессии нет, а пользователь ломится в защищенные разделы
-    if (!session && (isAdminPage || isDashboardPage || pathname.startsWith('/voting'))) {
+    if (!session && (isAdminPage || isDashboardPage)) {
         return NextResponse.redirect(new URL('/auth/login', url))
     }
 
