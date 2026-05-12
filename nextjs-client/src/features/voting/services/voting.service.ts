@@ -10,6 +10,7 @@ export interface ICreatePollInput {
   }>; // Массив бойцов с именами и фото
   expiresAt: string; // Дата в формате ISO
   tournamentId: string;
+  isPeopleChamp?: boolean;
 }
 
 export const votingService = {
@@ -41,5 +42,18 @@ export const votingService = {
     return await api.post(`polls/${pollId}/finish`, {
       winnerOptionId,
     });
+  },
+
+  // Метод для получения опросов "Народный чемпион" с пагинацией
+  async getPeopleChampPolls(page: number = 1, limit: number = 10): Promise<{
+    polls: IPoll[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+    };
+  }> {
+    return await api.get(`polls/people-champ?page=${page}&limit=${limit}`);
   },
 };

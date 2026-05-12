@@ -86,13 +86,14 @@ model Poll {
   createdAt   DateTime   @default(now()) @map("created_at")
   expiresAt   DateTime   @map("expires_in") // Когда закрывается голосование
 
-  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  tournamentId String     @map("tournament_id")
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  tournamentId String?     @map("tournament_id")
   
   options     Option[]   // Варианты ответов
   votes       Vote[]     // Все голоса в этом опросе
   
   winnerOptionId String? @map("winner_option_id") // ID победившего варианта
+  isPeopleChamp  Boolean  @default(false) @map("is_people_champ") // Флаг "Народный чемпион"
 
   @@map("polls")
 }

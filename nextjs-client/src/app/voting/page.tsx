@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useGetPolls } from "@/features/voting/hooks/useGetPolls"
 import { useGetTournaments } from "@/features/tournament/hooks/useGetTournaments"
+import { tournamentService } from "@/features/tournament/services/tournament.service"
 import { VotingCard } from "@/features/voting/components/VotingCard"
 import { Button } from "@/shared/components/ui/Button"
 import { Loading } from "@/shared/components/ui"
@@ -11,7 +13,7 @@ import Link from "next/link"
 import { History } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 
-export default function VotingPage() {
+function VotingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const urlTournamentId = searchParams.get('tournamentId') // Берем ID из ссылки типа ?tournamentId=...
@@ -25,6 +27,15 @@ export default function VotingPage() {
   const activeTournaments = tournaments?.tournaments?.slice(0, 5) || [];
   // Находим объект выбранного турнира, чтобы вытащить его название
   const currentTournament = tournaments?.tournaments?.find(t => t.id === selectedTournamentId)
+
+  // Запрос отдельного турнира, если его нет в общем списке
+  const { data: singleTournament, isLoading: isSingleLoading } = useQuery({
+    queryKey: ['tournament', selectedTournamentId],
+    queryFn: () => tournamentService.getById(selectedTournamentId!),
+    enabled: !!selectedTournamentId && !currentTournament,
+  })
+
+  const finalTournament = currentTournament || singleTournament
 
   // 2. Создаем функцию для смены турнира
   const handleTournamentChange = (id: string) => {
@@ -46,10 +57,10 @@ export default function VotingPage() {
   return (
     <div className="container mx-auto py-10 px-4">
       <h1 className="text-4xl font-black mb-2 text-center uppercase tracking-tighter italic italic">
-        {currentTournament?.name || "Линия прогнозов"}
+        {finalTournament?.name || "Линия прогнозов"}
       </h1>
       <p className="text-center text-muted-foreground mb-8 text-xs uppercase tracking-[0.3em]">
-        {currentTournament ? new Date(currentTournament.date).toLocaleDateString() : "Загрузка..."}
+        {finalTournament ? new Date(finalTournament.date).toLocaleDateString() : "Загрузка..."}
       </p>
 
       {/* Панель выбора турнира */}
@@ -58,7 +69,7 @@ export default function VotingPage() {
           <Button
             key={t.id}
             variant={selectedTournamentId === t.id ? "default" : "outline"}
-            onClick={() => setSelectedTournamentId(t.id)}
+            onClick={() => handleTournamentChange(t.id)}
             className="rounded-full transition-all cursor-pointer"
           >
             {t.name}
@@ -88,5 +99,13 @@ export default function VotingPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function VotingPage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loading /></div>}>
+      <VotingContent />
+    </Suspense>
   )
 }

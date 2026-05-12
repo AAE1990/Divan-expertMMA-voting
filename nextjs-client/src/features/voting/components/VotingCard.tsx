@@ -55,7 +55,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     }
   }
 
-  const isExpired = new Date(poll.expiresAt).getTime() < new Date().getTime()
+  const isExpired = poll.isPeopleChamp ? false : new Date(poll.expiresAt).getTime() < new Date().getTime()
 
   return (
     <Card className={cn(
@@ -83,6 +83,8 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                 ? Math.round((option.votesCount / totalVotes) * 100)
                 : 0
               const isUserChoice = option.id === poll.userVoteOptionId
+              // Победитель определяется только для обычных опросов (не People's Champion)
+              const isWinner = !poll.isPeopleChamp && option.id === poll.winnerOptionId
 
               return (
                 <div key={option.id} className="group">
@@ -103,17 +105,26 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                   <div className="flex justify-between mb-2 items-center">
                     <span className={cn(
                       "text-sm font-medium transition-colors",
-                      isUserChoice && "text-primary font-bold"
+                      isUserChoice && "text-primary font-bold",
+                      isWinner && "text-green-600 font-bold"
                     )}>
-                      {option.text} {isUserChoice && "✅"}
+                      {option.text}
+                      {isUserChoice && " ✅"}
+                      {isWinner && " 🏆"}
                     </span>
-                    <span className="text-xs font-bold bg-muted px-2 py-1 rounded">
+                    <span className={cn(
+                      "text-xs font-bold px-2 py-1 rounded",
+                      isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
+                    )}>
                       {percentage}%
                     </span>
                   </div>
                   <Progress
                     value={percentage}
-                    className={cn("h-3", isUserChoice ? "bg-secondary" : "bg-muted")}
+                    className={cn(
+                      "h-3",
+                      isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
+                    )}
                   />
                   <p className="text-[10px] text-muted-foreground mt-1 text-right italic">
                     Всего голосов: {option.votesCount}
@@ -222,7 +233,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           </div>
         )}
         {/* --- ПАНЕЛЬ АДМИНА (Добавляем в самый низ контента) --- */}
-        {isAdmin && !isFinished && (
+        {isAdmin && !isFinished && !poll.isPeopleChamp && (
           <div className="mt-6 pt-4 border-t border-dashed border-primary/30">
             <p className="text-[10px] uppercase font-bold text-primary mb-3 text-center tracking-widest">
               Панель судьи (ADMIN)

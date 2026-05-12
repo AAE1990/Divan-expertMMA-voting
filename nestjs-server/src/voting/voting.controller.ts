@@ -14,10 +14,26 @@ export class VotingController {
   @Get()
   async findAll(
     @Req() req: any,
-    @Query('tournamentId') tournamentId?: string // Достаем из URL типа ?tournamentId=...
+    @Query('tournamentId') tournamentId?: string, // Достаем из URL типа ?tournamentId=...
+    @Query('includePeopleChamp') includePeopleChamp?: string
   ) {
     const userId = req.user?.id || req.session?.userId;
-    return this.votingService.findAll(userId, tournamentId);
+    const includePeopleChampBool = includePeopleChamp === 'true';
+    return this.votingService.findAll(userId, tournamentId, includePeopleChampBool);
+  }
+
+  // Роут для получения опросов "Народный чемпион" (только для авторизованных)
+  @UseGuards(AuthGuard)
+  @Get('people-champ')
+  async findPeopleChampPolls(
+    @Req() req: any,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const userId = req.user.id;
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 10;
+    return this.votingService.findPeopleChampPolls(userId, pageNum, limitNum);
   }
 
   // Роут для ОБЫЧНЫХ пользователей (голосование)

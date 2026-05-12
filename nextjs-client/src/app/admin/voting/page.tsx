@@ -25,8 +25,11 @@ export default function AdminVotingPage() {
     const router = useRouter()
 
     // Форма боя теперь должна включать tournamentId
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<TCreatePollSchema & { tournamentId: string }>({
-        resolver: zodResolver(createPollSchema), // Не забудь добавить tournamentId в Zod схему!
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<TCreatePollSchema>({
+        resolver: zodResolver(createPollSchema),
+        defaultValues: {
+            isPeopleChamp: false
+        }
     })
 
     // 2. useEffect для редиректа тоже здесь
@@ -104,7 +107,8 @@ export default function AdminVotingPage() {
             ],
             expiresAt: data.expiresAt,
             // ID турнира, который мы получили через Select и setValue
-            tournamentId: data.tournamentId
+            tournamentId: data.tournamentId,
+            isPeopleChamp: data.isPeopleChamp
         })
     }
 
@@ -186,6 +190,19 @@ export default function AdminVotingPage() {
                             <Input type="datetime-local" {...register("expiresAt")} />
                             {errors.expiresAt && <p className="text-red-500 text-xs">{errors.expiresAt.message}</p>}
                         </div>
+
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="isPeopleChamp"
+                                {...register("isPeopleChamp")}
+                                className="h-4 w-4 rounded border-gray-300"
+                            />
+                            <Label htmlFor="isPeopleChamp" className="text-sm font-medium leading-none">
+                                Народный чемпион (не влияет на рейтинг)
+                            </Label>
+                        </div>
+                        {errors.isPeopleChamp && <p className="text-red-500 text-xs">{errors.isPeopleChamp.message}</p>}
 
                         <Button type="submit" className="w-full" disabled={isPending}>Опубликовать</Button>
                     </form>

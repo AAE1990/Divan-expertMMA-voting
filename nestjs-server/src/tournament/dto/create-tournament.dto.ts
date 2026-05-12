@@ -3,11 +3,11 @@ import { IsNotEmpty, IsString, IsOptional, IsDateString } from 'class-validator'
 export class CreateTournamentDto {
   @IsString()
   @IsNotEmpty({ message: 'Название турнира обязательно' })
-  name: string;
+  name!: string;
 
   @IsDateString({}, { message: 'Некорректный формат даты' })
   @IsNotEmpty()
-  date: string;
+  date!: string;
 
   @IsString()
   @IsOptional()

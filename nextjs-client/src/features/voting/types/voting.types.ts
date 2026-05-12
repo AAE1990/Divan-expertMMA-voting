@@ -18,7 +18,10 @@ export enum PollStatus {
     status: PollStatus;
     createdAt: string;
     expiresAt: string; // время закрытия голосования
-    userVoteOptionId?: string | null; // ID победителя, заполнится при закрытии
+    userVoteOptionId?: string | null; // ID выбора пользователя
+    winnerOptionId?: string | null; // ID победившего варианта (заполняется при закрытии)
+    isPeopleChamp?: boolean; // Флаг "Народный чемпион"
+    tournamentId?: string | null; // ID турнира (может отсутствовать)
   }
   
   export interface IVoteInput {

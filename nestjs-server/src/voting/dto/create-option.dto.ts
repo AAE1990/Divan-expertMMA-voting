@@ -3,7 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 export class CreateOptionDto {
   @IsString()
   @IsNotEmpty()
-  text: string;
+  text!: string;
 
   @IsString()
   @IsOptional()

@@ -6,11 +6,13 @@ import { CreatePollDto } from './dto/create-poll.dto';
 export class VotingService {
   constructor(private readonly prisma: PrismaService) { }
 
-  async findAll(userId?: string, tournamentId?: string) {
+  async findAll(userId?: string, tournamentId?: string, includePeopleChamp?: boolean) {
     const polls = await this.prisma.poll.findMany({
-      where: { 
+      where: {
         // Если tournamentId передан — фильтруем по нему, если нет — берем все OPEN
-        ...(tournamentId ? { tournamentId } : { status: 'OPEN' })
+        ...(tournamentId ? { tournamentId } : { status: 'OPEN' }),
+        // Исключаем опросы "Народный чемпион", если не указано иное
+        ...(includePeopleChamp !== true ? { isPeopleChamp: false } : {})
       },
       include: {
         options: {
@@ -40,6 +42,52 @@ export class VotingService {
     }));
   }
 
+  async findPeopleChampPolls(userId?: string, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const polls = await this.prisma.poll.findMany({
+      where: {
+        isPeopleChamp: true,
+        status: 'OPEN' // возможно, показывать только открытые? Или все? Покажем все
+      },
+      include: {
+        options: {
+          include: {
+            _count: {
+              select: { votes: true }
+            }
+          }
+        },
+        votes: userId ? { where: { userId } } : false
+      },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+    });
+
+    const total = await this.prisma.poll.count({
+      where: { isPeopleChamp: true }
+    });
+
+    return {
+      polls: polls.map(poll => ({
+        ...poll,
+        options: poll.options.map(opt => ({
+          id: opt.id,
+          text: opt.text,
+          photoUrl: opt.photoUrl,
+          votesCount: opt._count.votes
+        })),
+        userVoteOptionId: poll.votes?.[0]?.optionId || null
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    };
+  }
+
   async vote(userId: string, dto: { pollId: string; optionId: string }) {
     if (!userId) {
       throw new BadRequestException('Вы должны быть авторизованы');
@@ -67,21 +115,26 @@ export class VotingService {
 
   // Метод создания нового голосования
   async create(dto: CreatePollDto) {
-    return this.prisma.poll.create({
-      data: {
-        question: dto.question,
-        expiresAt: new Date(dto.expiresAt),
-        tournament: {
-          connect: { id: dto.tournamentId } // Привязываем к существующему турниру
-        },
-        options: {
-          create: dto.options.map(option => ({
-            text: option.text,
-            photoUrl: option.photoUrl // Добавляем URL фотографии
-          }))
-        }
-      }
-    });
+    const data: any = {
+      question: dto.question,
+      expiresAt: new Date(dto.expiresAt),
+      options: {
+        create: dto.options.map(option => ({
+          text: option.text,
+          photoUrl: option.photoUrl // Добавляем URL фотографии
+        }))
+      },
+      isPeopleChamp: dto.isPeopleChamp ?? false
+    };
+
+    // Если передан tournamentId, привязываем турнир, иначе оставляем null
+    if (dto.tournamentId) {
+      data.tournament = {
+        connect: { id: dto.tournamentId }
+      };
+    }
+
+    return this.prisma.poll.create({ data });
   }
 
   async finishPoll(pollId: string, winnerOptionId: string) {
@@ -119,9 +172,9 @@ export class VotingService {
       // Б) Находим всех пользователей, которые угадали
       const winningVotes = poll.votes.filter(vote => vote.optionId === winnerOptionId);
 
-      // В) Начисляем баллы победителям (+1 балл)
+      // В) Начисляем баллы победителям (+1 балл) только если НЕ народный чемпион
       // Если победителей много, updateMany эффективнее
-      if (winningVotes.length > 0) {
+      if (winningVotes.length > 0 && !poll.isPeopleChamp) {
         // Вместо updateMany проходим циклом по победителям
         for (const vote of winningVotes) {
           await tx.user.update({
@@ -137,7 +190,9 @@ export class VotingService {
 
       return {
         message: 'Голосование успешно завершено',
-        winnersCount: winningVotes.length
+        winnersCount: winningVotes.length,
+        isPeopleChamp: poll.isPeopleChamp,
+        pointsAwarded: !poll.isPeopleChamp && winningVotes.length > 0
       };
     });
   }

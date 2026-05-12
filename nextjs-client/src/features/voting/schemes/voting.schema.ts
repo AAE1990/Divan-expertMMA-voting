@@ -34,7 +34,17 @@ export const createPollSchema = z.object({
     .min(1, { message: "Укажите дату и время окончания боя" }),
   tournamentId: z
     .string()
-    .min(5 , { message: "Выберете турнир" }),
+    .optional(),
+  isPeopleChamp: z.boolean(),
+}).refine((data) => {
+  // Если isPeopleChamp === false, то tournamentId обязателен
+  if (data.isPeopleChamp === false && !data.tournamentId) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Выберите турнир для обычного боя",
+  path: ["tournamentId"],
 });
 
 export type TCreatePollSchema = z.infer<typeof createPollSchema>;
