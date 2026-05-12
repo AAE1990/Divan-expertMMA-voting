@@ -12,6 +12,7 @@ import { PasswordRecoveryModule } from './auth/password-recovery/password-recove
 import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module';
 import { VotingModule } from './voting/voting.module';
 import { TournamentModule } from './tournament/tournament.module';
+import { NewsModule } from './news/news.module';
 
 
 
@@ -30,7 +31,8 @@ import { TournamentModule } from './tournament/tournament.module';
     PasswordRecoveryModule,
     TwoFactorAuthModule,
     VotingModule,
-    TournamentModule
+    TournamentModule,
+    NewsModule
   ],
   controllers: [ResponseController]
 })

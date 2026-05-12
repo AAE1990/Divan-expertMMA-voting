@@ -142,6 +142,16 @@ model Tournament {
   @@map("tournaments")
 }
 
+model News {
+  id        String   @id @default(uuid())
+  title     String   // Заголовок новости
+  content   String   // Текст новости
+  imageUrl  String?  // URL изображения (опционально)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("news")
+}
+
 enum UserRole {
   REGULAR
   ADMIN

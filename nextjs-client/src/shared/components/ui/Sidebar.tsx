@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/shared/components/ui/Button'
 import { cn } from '@/shared/utils/clsx'
-import { Vote, Home, Settings, ShieldAlert, Trophy, History, LogOut } from 'lucide-react' // Добавил ShieldAlert
+import { Vote, Home, Settings, ShieldAlert, Trophy, History, LogOut, Newspaper } from 'lucide-react' // Добавил ShieldAlert
 import { useProfile } from '@/shared/hooks'
 import { useLogoutMutation } from '@/features/user/hooks'
 
@@ -13,7 +13,8 @@ const MENU_ITEMS = [
   { href: '/voting', label: 'Голосование', icon: Vote },
   { href: '/dashboard/settings', label: 'Настройки профиля', icon: Settings },
   { href: '/rating', label: 'Рейтинг', icon: Trophy },
-  { href: '/archive', label: 'Архив турниров', icon: History }
+  { href: '/archive', label: 'Архив турниров', icon: History },
+  { href: '/news', label: 'Новости', icon: Newspaper }
 ]
 
 export const Sidebar = () => {
@@ -78,7 +79,22 @@ export const Sidebar = () => {
                   <Link href="/admin/voting" className="flex items-center gap-3 w-full min-w-0">
                     <ShieldAlert className="size-5 text-red-500 shrink-0" />
                     <span className={cn("truncate", pathname === '/admin/voting' && "font-bold text-red-500")}>
-                      Админ-панель
+                      Админка голосований
+                    </span>
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant={pathname === '/admin/news' ? "secondary" : "outline"}
+                  className={cn(
+                    "w-full justify-start overflow-hidden gap-3 transition-all border-1 border-blue-500/20 hover:border-blue-500/50 mt-2",
+                    pathname === '/admin/news' ? "border-blue-500 bg-blue-500/10" : "border-transparent"
+                  )}
+                >
+                  <Link href="/admin/news" className="flex items-center gap-3 w-full min-w-0">
+                    <Newspaper className="size-5 text-blue-500 shrink-0" />
+                    <span className={cn("truncate", pathname === '/admin/news' && "font-bold text-blue-500")}>
+                      Админка новостей
                     </span>
                   </Link>
                 </Button>

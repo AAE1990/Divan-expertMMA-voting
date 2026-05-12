@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { buttonVariants } from "@/shared/components/ui"; // Импорт стилей для кнопок
-import { Trophy, CheckCircle2, BarChart3, Users } from "lucide-react"; // Иконки для фишек
+import { Trophy, CheckCircle2, BarChart3, Users, Newspaper } from "lucide-react"; // Иконки для фишек
 import { cn } from "@/shared/utils/clsx";
+import { NewsBlock } from "./components/NewsBlock";
 
 export default function Home() {
   return (
@@ -70,6 +71,22 @@ export default function Home() {
 
         </div>
       </section>
-    </div>
-  );
+
+      {/* NEWS SECTION */}
+      <section className="w-full py-20 px-4 max-w-6xl mx-auto border-t border-white/5">
+        <div className="flex flex-col items-center text-center space-y-6">
+          <div className="flex items-center gap-3">
+            <Newspaper className="size-8 text-primary" />
+            <h2 className="text-3xl md:text-4xl font-black uppercase italic">Новости</h2>
+          </div>
+          <p className="text-muted-foreground text-lg max-w-2xl">
+            Следите за последними событиями и анонсами турниров.
+          </p>
+          
+          <NewsBlock />
+        </div>
+      </section>
+   </div>
+ );
 }
+
