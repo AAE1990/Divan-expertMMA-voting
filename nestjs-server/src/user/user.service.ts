@@ -20,8 +20,13 @@ export class UserService {
                 },
                 include: {
                     accounts: true,
-                    // Добавляем историю голосов Антона
+                    // Добавляем историю голосов Антона, исключая голоса "Народный чемпион"
                     votes: {
+                        where: {
+                            poll: {
+                                isPeopleChamp: false
+                            }
+                        },
                         orderBy: {
                             createdAt: 'desc' // Свежие прогнозы будут в начале списка
                         },
@@ -39,18 +44,25 @@ export class UserService {
                 }
             }),
             this.prismaService.vote.count({
-                where: { userId: id }
+                where: {
+                    userId: id,
+                    poll: {
+                        isPeopleChamp: false
+                    }
+                }
             }),
             this.prismaService.$queryRaw<Array<{ count: bigint }>>`
                 SELECT COUNT(*) as count
                 FROM votes v
                 INNER JOIN polls p ON v.poll_id = p.id
                 WHERE v.user_id = ${id} AND v.option_id = p.winner_option_id
+                AND p.is_people_champ = FALSE
             `,
             this.prismaService.$queryRaw<Array<{ rank: bigint }>>`
-                SELECT COUNT(*) + 1 as rank
-                FROM users u2
-                WHERE u2.score > (SELECT score FROM users WHERE id = ${id})
+                SELECT rn as rank FROM (
+                    SELECT id, ROW_NUMBER() OVER (ORDER BY score DESC, last_score_at ASC NULLS LAST) as rn
+                    FROM users
+                ) ranked WHERE id = ${id}
             `
         ])
 
@@ -143,7 +155,7 @@ export class UserService {
         const limitNumber = limit ?? 5;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const [user, correctVotesResult, rankResult] = await Promise.all([
+        const [user, correctVotesResult, rankResult, totalVotesResult] = await Promise.all([
             this.prismaService.user.findUnique({
                 where: { id },
                 select: {
@@ -162,6 +174,11 @@ export class UserService {
                     score: true,
                     lastScoreAt: true,
                     votes: {
+                        where: {
+                            poll: {
+                                isPeopleChamp: false
+                            }
+                        },
                         orderBy: { createdAt: 'desc' },
                         skip,
                         take: limitNumber,
@@ -174,9 +191,6 @@ export class UserService {
                             },
                             option: true
                         }
-                    },
-                    _count: {
-                        select: { votes: true }
                     }
                 }
             }),
@@ -185,12 +199,22 @@ export class UserService {
                 FROM votes v
                 INNER JOIN polls p ON v.poll_id = p.id
                 WHERE v.user_id = ${id} AND v.option_id = p.winner_option_id
+                AND p.is_people_champ = FALSE
             `,
             this.prismaService.$queryRaw<Array<{ rank: bigint }>>`
-                SELECT COUNT(*) + 1 as rank
-                FROM users u2
-                WHERE u2.score > (SELECT score FROM users WHERE id = ${id})
-            `
+                SELECT rn as rank FROM (
+                    SELECT id, ROW_NUMBER() OVER (ORDER BY score DESC, last_score_at ASC NULLS LAST) as rn
+                    FROM users
+                ) ranked WHERE id = ${id}
+            `,
+            this.prismaService.vote.count({
+                where: {
+                    userId: id,
+                    poll: {
+                        isPeopleChamp: false
+                    }
+                }
+            })
         ]);
 
         if (!user) {
@@ -202,7 +226,7 @@ export class UserService {
 
         return {
             ...user,
-            totalVotes: user._count.votes,
+            totalVotes: totalVotesResult,
             correctVotes,
             rank,
             page: pageNumber,
@@ -228,24 +252,35 @@ export class UserService {
         }
 
         if (period === 'all') {
-            // Используем быстрое поле user.score
-            const [users, totalUsers] = await Promise.all([
-                this.prismaService.user.findMany({
-                    select: {
-                        id: true,
-                        displayName: true,
-                        picture: true,
-                        score: true,
-                    },
-                    orderBy: [
-                        { score: 'desc' },
-                        { lastScoreAt: 'asc' }
-                    ],
-                    skip,
-                    take: limitNumber,
-                }),
-                this.prismaService.user.count()
-            ]);
+            // Используем raw query с оконной функцией для получения глобального ранга
+            const usersWithRank = await this.prismaService.$queryRaw<Array<{
+                id: string;
+                displayName: string;
+                picture: string | null;
+                score: number;
+                rank: bigint;
+            }>>`
+                SELECT
+                    u.id,
+                    u."displayName" as "displayName",
+                    u.picture,
+                    u.score,
+                    ROW_NUMBER() OVER (ORDER BY u.score DESC, u.last_score_at ASC NULLS LAST) as rank
+                FROM users u
+                ORDER BY u.score DESC, u.last_score_at ASC NULLS LAST
+                LIMIT ${limitNumber} OFFSET ${skip}
+            `;
+
+            const totalUsers = await this.prismaService.user.count();
+
+            // Преобразуем bigint rank в number
+            const users = usersWithRank.map(user => ({
+                id: user.id,
+                displayName: user.displayName,
+                picture: user.picture,
+                score: user.score,
+                rank: Number(user.rank),
+            }));
 
             return {
                 users,
@@ -256,23 +291,25 @@ export class UserService {
             };
         } else {
             // Агрегируем правильные голоса за период
-            // Используем raw query для производительности
+            // Используем raw query для производительности с рангами
             const usersWithScore = await this.prismaService.$queryRaw<Array<{
                 id: string;
                 displayName: string;
                 picture: string | null;
                 score: bigint;
+                rank: bigint;
             }>>`
                 SELECT
                     u.id,
                     u."displayName" as "displayName",
                     u.picture,
-                    COALESCE(SUM(CASE WHEN v.created_at >= ${startDate} AND p.winner_option_id = v.option_id THEN 1 ELSE 0 END), 0) as score
+                    COALESCE(SUM(CASE WHEN v.created_at >= ${startDate} AND p.winner_option_id = v.option_id THEN 1 ELSE 0 END), 0) as score,
+                    ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(CASE WHEN v.created_at >= ${startDate} AND p.winner_option_id = v.option_id THEN 1 ELSE 0 END), 0) DESC, u.last_score_at ASC NULLS LAST) as rank
                 FROM users u
                 LEFT JOIN votes v ON u.id = v.user_id
                 LEFT JOIN polls p ON v.poll_id = p.id
                 GROUP BY u.id, u."displayName", u.picture, u.last_score_at
-                ORDER BY score DESC, u.last_score_at ASC
+                ORDER BY score DESC, u.last_score_at ASC NULLS LAST
                 LIMIT ${limitNumber} OFFSET ${skip}
             `;
 
@@ -280,8 +317,11 @@ export class UserService {
 
             // Преобразуем bigint в number
             const users = usersWithScore.map(user => ({
-                ...user,
+                id: user.id,
+                displayName: user.displayName,
+                picture: user.picture,
                 score: Number(user.score),
+                rank: Number(user.rank),
             }));
 
             return {

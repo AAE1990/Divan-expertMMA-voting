@@ -91,7 +91,7 @@ export default function AdminVotingPage() {
         );
     };
 
-    const onSubmit = (data: TCreatePollSchema & { tournamentId: string }) => {
+    const onSubmit = (data: TCreatePollSchema) => {
         createPoll({
             question: data.question,
             // Массив из двух бойцов с фотографиями
@@ -142,6 +142,7 @@ export default function AdminVotingPage() {
                                     ))}
                                 </SelectContent>
                             </Select>
+                            {errors.tournamentId && <p className="text-red-500 text-xs">{errors.tournamentId.message}</p>}
                         </div>
 
                         {/* ... твои старые поля fighter1, fighter2, expiresAt ... */}

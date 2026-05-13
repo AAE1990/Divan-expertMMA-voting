@@ -43,7 +43,7 @@ export const createPollSchema = z.object({
   }
   return true;
 }, {
-  message: "Выберите турнир для обычного боя",
+  message: "Выберите турнир или отметьте 'Народный чемпион'",
   path: ["tournamentId"],
 });
 

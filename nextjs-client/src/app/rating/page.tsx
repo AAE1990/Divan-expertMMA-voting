@@ -60,7 +60,8 @@ export default function RatingPage() {
               </thead>
               <tbody>
                 {users.map((user, index) => {
-                  const isTop3 = index < 3;
+                  const rank = user.rank ?? index + 1;
+                  const isTop3 = rank <= 3;
                   return (
                     <tr key={user.id} className={cn(
                       "border-b last:border-0 hover:bg-primary/5 transition-colors",
@@ -68,7 +69,7 @@ export default function RatingPage() {
                     )}>
                       <td className="p-4">
                         <div className="flex items-center justify-center size-8 rounded-full font-bold bg-muted">
-                          {index === 0 ? <Medal className="text-yellow-500 size-5" /> : index + 1}
+                          {rank === 1 ? <Medal className="text-yellow-500 size-5" /> : rank}
                         </div>
                       </td>
                       <td className="p-4">

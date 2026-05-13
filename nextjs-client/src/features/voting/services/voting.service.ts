@@ -9,7 +9,7 @@ export interface ICreatePollInput {
     photoUrl?: string;
   }>; // Массив бойцов с именами и фото
   expiresAt: string; // Дата в формате ISO
-  tournamentId: string;
+  tournamentId?: string;
   isPeopleChamp?: boolean;
 }
 
