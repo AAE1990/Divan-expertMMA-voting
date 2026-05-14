@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { TypeLoginSchema } from "../schemes";
 import { authService } from "../services";
@@ -11,6 +11,7 @@ export function useLoginMutation(
     setIsShowFactor: Dispatch<SetStateAction<boolean>>
 ) {
     const router = useRouter()
+    const queryClient = useQueryClient()
     
     const  { mutate: login, isPending: isLoadingLogin} = useMutation({
         mutationKey: ['login user'],
@@ -27,6 +28,8 @@ export function useLoginMutation(
                 setIsShowFactor(true)
             } else {
                 toast.success('Успешное авторизация')
+                // Сбрасываем все запросы профиля, чтобы немедленно обновить интерфейс
+                queryClient.resetQueries({ queryKey: ['profile'], exact: false })
                 router.push('/dashboard/settings')
             }
         },

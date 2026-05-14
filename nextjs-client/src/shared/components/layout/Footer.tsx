@@ -1,4 +1,4 @@
-import { Send, MessageCircle, Mail } from "lucide-react";
+import { Send, MessageCircle, Mail, Scale } from "lucide-react";
 import Link from "next/link";
 
 export const Footer = () => {
@@ -32,6 +32,9 @@ export const Footer = () => {
             </Link>
             <Link href="mailto:loonyp2010@gmail.com" className="hover:text-primary transition-colors flex items-center gap-2">
               <Mail className="size-4" /> Написать нам
+            </Link>
+            <Link href="/rules" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Scale className="size-4" /> Правила сайта
             </Link>
           </div>
         </div>

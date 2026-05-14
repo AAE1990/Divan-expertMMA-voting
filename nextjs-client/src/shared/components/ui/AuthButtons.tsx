@@ -4,10 +4,12 @@ import Link from "next/link"
 import { Button } from "./Button"
 import { Skeleton } from "./Skeleton"
 import { useProfile } from "@/shared/hooks"
+import { usePathname } from "next/navigation"; // 1. Импортируем хук пути
 import { LogIn, UserPlus } from "lucide-react"
 
 export function AuthButtons() {
   const { user, isLoading } = useProfile()
+  const pathname = usePathname()
 
   if (isLoading) {
     return (
@@ -16,6 +18,11 @@ export function AuthButtons() {
         <Skeleton className="h-9 w-28" />
       </div>
     )
+  }
+
+   // 3. Если мы находимся на страницах логина/регистрации/сброса — скрываем кнопки
+  if (pathname?.startsWith("/auth")) {
+    return null
   }
 
   // Если пользователь авторизован, не показываем кнопки

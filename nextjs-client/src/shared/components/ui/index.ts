@@ -1,6 +1,7 @@
 export * from "./Avatar"
 export * from "./AuthButtons"
 export * from "./Button"
+export * from "./CookieConsent"
 export * from "./DropdownMenu"
 export * from "./ToggleTheme"
 export * from "./Card"
