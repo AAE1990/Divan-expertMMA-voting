@@ -89,7 +89,7 @@ export function NewPasswordForm() {
                         )}
                     />
 
-                    <div className="flex justify-center">
+                    <div className="w-full flex justify-center mx-auto">
                         <ReCAPTCHA
                             sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY as string}
                             onChange={setRecaptchaValue}

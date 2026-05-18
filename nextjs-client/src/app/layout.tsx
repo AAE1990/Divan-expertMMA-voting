@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../shared/styles/globals.css";
 import { MainProvider } from "../shared/providers";
-import { AuthButtons, CookieConsent, Footer, Sidebar, ToggleTheme } from "../shared/components/ui";
+import { CookieConsent, Footer, Sidebar } from "../shared/components/ui";
+import { MobileHeader } from "../shared/components/layout/MobileHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,16 +32,15 @@ export default function RootLayout({
       >
         <MainProvider>
           <div className="relative flex min-h-screen">
-          <Sidebar />
-
-          {/* Основной контейнер контента */}
-          <div className="flex-1 pl-64 flex flex-col">
-            <div className="flex items-center justify-end gap-4 p-4">
-              <AuthButtons />
-              <ToggleTheme />
+            <div className="hidden md:block">
+              <Sidebar />
             </div>
-            <main className="container mx-auto p-6 flex-1">
-              {children}
+
+            {/* Основной контейнер контента */}
+            <div className="flex-1 pl-0 md:pl-64 flex flex-col">
+              <MobileHeader />
+              <main className="container mx-auto p-6 flex-1">
+                {children}
               </main>
               <Footer />
             </div>

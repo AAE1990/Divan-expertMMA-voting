@@ -27,12 +27,12 @@ export function AuthSocial() {
 
     return (
         <>
-           <div className="grid grid-cols-2 gap-6">
-            <Button onClick={() => onClick('google')} variant="outline">
+           <div className="flex flex-col md:flex-row gap-4 w-full">
+            <Button onClick={() => onClick('google')} variant="outline" className="w-full md:w-auto">
                 <FaGoogle className="mr-2 size-4" />
                 Google
             </Button>
-            <Button onClick={() => onClick('yandex')} variant="outline">
+            <Button onClick={() => onClick('yandex')} variant="outline" className="w-full md:w-auto">
                 <FaYandex className="mr-2 size-4" />
                 Яндекс
             </Button>

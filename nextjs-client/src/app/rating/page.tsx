@@ -30,7 +30,7 @@ export default function RatingPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
           <Trophy className="size-10 text-yellow-500" />
-          <h1 className="text-4xl font-black uppercase tracking-tighter">Топ прогнозистов</h1>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter break-words">Топ прогнозистов</h1>
         </div>
         <div className="flex items-center gap-3">
           <Calendar className="size-5 text-muted-foreground" />
@@ -47,15 +47,15 @@ export default function RatingPage() {
         </div>
       </div>
 
-      <Card className="border-2 shadow-lg">
-        <CardContent className="p-6">
+      <Card className="border-2 shadow-lg w-full">
+        <CardContent className="p-4 md:p-8">
           <div className="overflow-hidden rounded-xl border border-border/50">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-muted/30 border-b">
-                  <th className="p-4 font-bold uppercase text-xs">Место</th>
-                  <th className="p-4 font-bold uppercase text-xs">Участник</th>
-                  <th className="p-4 font-bold uppercase text-xs text-right">Баллы</th>
+                  <th className="p-2 md:p-4 font-bold uppercase text-xs">Место</th>
+                  <th className="p-2 md:p-4 font-bold uppercase text-xs">Участник</th>
+                  <th className="p-2 md:p-4 font-bold uppercase text-xs text-right">Баллы</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,12 +67,12 @@ export default function RatingPage() {
                       "border-b last:border-0 hover:bg-primary/5 transition-colors",
                       isTop3 && "bg-yellow-500/5 dark:bg-yellow-500/10"
                     )}>
-                      <td className="p-4">
+                      <td className="p-2 md:p-4">
                         <div className="flex items-center justify-center size-8 rounded-full font-bold bg-muted">
                           {rank === 1 ? <Medal className="text-yellow-500 size-5" /> : rank}
                         </div>
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 md:p-4">
                         <Link href={`/profile/${user.id}`} className="flex items-center gap-3 hover:underline">
                           <Avatar className="size-8">
                             <AvatarImage src={user.picture || ''} alt={user.displayName} />
@@ -83,7 +83,7 @@ export default function RatingPage() {
                           <span className="font-semibold">{user.displayName || "Аноним"}</span>
                         </Link>
                       </td>
-                      <td className="p-4 text-right">
+                      <td className="p-2 md:p-4 text-right">
                         <span className="text-xl font-black text-primary">{user.score}</span>
                       </td>
                     </tr>

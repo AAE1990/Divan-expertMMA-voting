@@ -32,16 +32,16 @@ export function AuthButtons() {
 
   return (
     <div className="flex items-center gap-2">
-      <Button asChild variant="outline" size="sm" className="gap-2">
+      <Button asChild variant="outline" size="sm" className="sm:gap-2 gap-1 sm:px-3 px-2">
         <Link href="/auth/login">
           <LogIn className="size-4" />
-          Вход
+          <span className="hidden sm:inline">Вход</span>
         </Link>
       </Button>
-      <Button asChild size="sm" className="gap-2">
+      <Button asChild size="sm" className="sm:gap-2 gap-1 sm:px-3 px-2">
         <Link href="/auth/register">
           <UserPlus className="size-4" />
-          Регистрация
+          <span className="hidden sm:inline">Регистрация</span>
         </Link>
       </Button>
     </div>
