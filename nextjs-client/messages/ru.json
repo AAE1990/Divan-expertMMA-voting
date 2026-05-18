@@ -1,0 +1,15 @@
+{
+  "Sidebar": {
+    "home": "Главная",
+    "voting": "Голосование",
+    "peopleChamp": "Народный чемпион",
+    "profileSettings": "Настройки профиля",
+    "leaderboard": "Рейтинг",
+    "tournamentArchive": "Архив турниров",
+    "news": "Новости",
+    "pollsManagement": "Админка голосований",
+    "newsManagement": "Админка новостей",
+    "logOut": "Выйти",
+    "rankLabel": "Место"
+  }
+}

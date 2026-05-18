@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, Loading } from "@/shared/comp
 import { Input } from "@/shared/components/ui"
 import { Label } from "@/shared/components/ui"
 import { Button } from "@/shared/components/ui"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import { useProfile } from "@/shared/hooks"
 import { useEffect } from "react"
 

@@ -13,7 +13,7 @@ import { useLoginMutation } from "../hooks"
 import { Input, PasswordInput } from "@/shared/components/ui"
 import { Button } from "@/shared/components/ui"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui";
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 
 export function LoginForm() {
   const {theme} = useTheme()

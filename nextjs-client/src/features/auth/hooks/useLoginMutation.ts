@@ -4,7 +4,7 @@ import { TypeLoginSchema } from "../schemes";
 import { authService } from "../services";
 import { toastMessageHandler } from "@/shared/utils";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Dispatch, SetStateAction } from "react";
 
 export function useLoginMutation(

@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui"
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 import { FaGoogle, FaYandex } from "react-icons/fa";
 import { authService } from "../services";

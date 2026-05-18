@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { passwordRecoveryService } from "../services";
 import { TypeNewPasswordSchema } from "../schemes";
 import { toast } from "sonner";

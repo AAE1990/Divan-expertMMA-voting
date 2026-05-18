@@ -9,9 +9,9 @@ import { VotingCard } from "@/features/voting/components/VotingCard"
 import { Button } from "@/shared/components/ui/Button"
 import { Loading } from "@/shared/components/ui"
 import { cn } from "@/shared/utils/clsx"
-import Link from "next/link"
+import { Link, useRouter } from "@/i18n/routing"
+import { useSearchParams } from "next/navigation"
 import { History } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
 
 function VotingContent() {
   const router = useRouter()

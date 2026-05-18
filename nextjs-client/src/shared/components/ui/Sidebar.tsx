@@ -1,7 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { Link, usePathname } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/shared/components/ui/Button'
 import { cn } from '@/shared/utils/clsx'
 import { Vote, Home, Settings, ShieldAlert, Trophy, History, LogOut, Newspaper, Scale } from 'lucide-react' // Добавил Scale
@@ -9,19 +9,20 @@ import { useProfile } from '@/shared/hooks'
 import { useLogoutMutation } from '@/features/user/hooks'
 
 const MENU_ITEMS = [
-  { href: '/', label: 'Главная', icon: Home },
-  { href: '/voting', label: 'Голосование', icon: Vote },
-  { href: '/people-champ', label: 'Народный чемпион', icon: Scale },
-  { href: '/dashboard/settings', label: 'Настройки профиля', icon: Settings },
-  { href: '/rating', label: 'Рейтинг', icon: Trophy },
-  { href: '/archive', label: 'Архив турниров', icon: History },
-  { href: '/news', label: 'Новости', icon: Newspaper }
+  { href: '/', labelKey: 'home', icon: Home },
+  { href: '/voting', labelKey: 'voting', icon: Vote },
+  { href: '/people-champ', labelKey: 'peopleChamp', icon: Scale },
+  { href: '/dashboard/settings', labelKey: 'profileSettings', icon: Settings },
+  { href: '/rating', labelKey: 'leaderboard', icon: Trophy },
+  { href: '/archive', labelKey: 'tournamentArchive', icon: History },
+  { href: '/news', labelKey: 'news', icon: Newspaper }
 ]
 
 export const Sidebar = () => {
   const pathname = usePathname()
   const { user, isLoading } = useProfile()
   const { logout, isLoadingLogout } = useLogoutMutation()
+  const t = useTranslations('Sidebar')
 
   // Фильтруем пункты меню: для анонимов скрываем "Настройки профиля"
   const filteredMenuItems = MENU_ITEMS.filter(item => {
@@ -58,7 +59,7 @@ export const Sidebar = () => {
                   <Link href={item.href} className="flex items-center gap-3 w-full min-w-0">
                     <Icon className="size-5 text-primary shrink-0" />
                     <span className={cn("truncate", isActive && "font-bold")}>
-                      {item.label}
+                      {t(item.labelKey)}
                     </span>
                   </Link>
                 </Button>
@@ -80,7 +81,7 @@ export const Sidebar = () => {
                   <Link href="/admin/voting" className="flex items-center gap-3 w-full min-w-0">
                     <ShieldAlert className="size-5 text-red-500 shrink-0" />
                     <span className={cn("truncate", pathname === '/admin/voting' && "font-bold text-red-500")}>
-                      Админка голосований
+                      {t('pollsManagement')}
                     </span>
                   </Link>
                 </Button>
@@ -95,7 +96,7 @@ export const Sidebar = () => {
                   <Link href="/admin/news" className="flex items-center gap-3 w-full min-w-0">
                     <Newspaper className="size-5 text-blue-500 shrink-0" />
                     <span className={cn("truncate", pathname === '/admin/news' && "font-bold text-blue-500")}>
-                      Админка новостей
+                      {t('newsManagement')}
                     </span>
                   </Link>
                 </Button>
@@ -111,7 +112,9 @@ export const Sidebar = () => {
               <div className="px-3 py-2 bg-primary/5 rounded-lg border border-primary/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Trophy className="size-3 text-primary" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Место</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider">
+                    {t('rankLabel')}
+                  </span>
                 </div>
                 <span className="text-sm font-black text-primary">
                   {isLoading ? "..." : (user.rank ? user.rank : "—")}
@@ -124,7 +127,7 @@ export const Sidebar = () => {
                 disabled={isLoadingLogout}
               >
                 <LogOut className="size-5 text-primary shrink-0" />
-                <span className="truncate">Выйти</span>
+                <span className="truncate">{t('logOut')}</span>
               </Button>
             </>
           )}

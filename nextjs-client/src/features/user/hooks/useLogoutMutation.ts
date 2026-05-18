@@ -1,7 +1,7 @@
 import { authService } from "@/features/auth/services";
 import { toastMessageHandler } from "@/shared/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 
 export function useLogoutMutation() {

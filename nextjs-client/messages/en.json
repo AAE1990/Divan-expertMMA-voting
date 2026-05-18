@@ -1,0 +1,15 @@
+{
+  "Sidebar": {
+    "home": "Home",
+    "voting": "Voting",
+    "peopleChamp": "People's Champ",
+    "profileSettings": "Profile Settings",
+    "leaderboard": "Leaderboard",
+    "tournamentArchive": "Tournament Archive",
+    "news": "News",
+    "pollsManagement": "Polls Management",
+    "newsManagement": "News Management",
+    "logOut": "Log Out",
+    "rankLabel": "Rank"
+  }
+}

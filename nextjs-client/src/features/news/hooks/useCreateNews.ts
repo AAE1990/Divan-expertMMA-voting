@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { newsService } from "../services/news.service";
 import { TCreateNewsSchema } from "../schemes/news.schema";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 export const useCreateNews = () => {
   const queryClient = useQueryClient();

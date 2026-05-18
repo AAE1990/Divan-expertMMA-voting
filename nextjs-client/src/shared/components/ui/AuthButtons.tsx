@@ -1,10 +1,9 @@
 "use client"
 
-import Link from "next/link"
+import { Link, usePathname } from "@/i18n/routing"
 import { Button } from "./Button"
 import { Skeleton } from "./Skeleton"
 import { useProfile } from "@/shared/hooks"
-import { usePathname } from "next/navigation"; // 1. Импортируем хук пути
 import { LogIn, UserPlus } from "lucide-react"
 
 export function AuthButtons() {

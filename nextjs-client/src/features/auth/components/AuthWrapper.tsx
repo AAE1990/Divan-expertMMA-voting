@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { type  PropsWithChildren } from "react"
 import { AuthSocial } from "./AuthSocial"
 import { cn } from "@/shared/utils/clsx"

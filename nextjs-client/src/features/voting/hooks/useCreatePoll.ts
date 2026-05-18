@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { votingService, ICreatePollInput } from "../services/voting.service";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 export const useCreatePoll = () => {
   const queryClient = useQueryClient();
