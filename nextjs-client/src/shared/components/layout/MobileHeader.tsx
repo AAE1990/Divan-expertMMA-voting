@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { Sidebar } from '@/shared/components/ui/Sidebar'
 import { ToggleTheme } from '@/shared/components/ui/ToggleTheme'
 import { AuthButtons } from '@/shared/components/ui/AuthButtons'
+import { LocaleSwitcher } from '@/shared/components/ui/LocaleSwitcher'
 import { cn } from '@/shared/utils/clsx'
 
 export const MobileHeader = () => {
@@ -15,7 +16,7 @@ export const MobileHeader = () => {
     <>
       {/* Мобильная верхняя панель */}
       <div className="sticky top-0 z-50 flex md:hidden items-center justify-between w-full h-16 px-4 border-b bg-background shadow-sm">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 pr-2">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <button
@@ -40,10 +41,11 @@ export const MobileHeader = () => {
               </div>
             </SheetContent>
           </Sheet>
-          <h1 className="text-lg sm:text-xl font-bold text-primary truncate">Диванный эксперт</h1>
+          <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary truncate">Диванный эксперт</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <AuthButtons />
+          <LocaleSwitcher />
           <ToggleTheme />
         </div>
       </div>
@@ -51,6 +53,7 @@ export const MobileHeader = () => {
       {/* Десктопная шапка (скрыта на мобилках) */}
       <div className="hidden md:flex items-center justify-end gap-4 p-4">
         <AuthButtons />
+        <LocaleSwitcher />
         <ToggleTheme />
       </div>
     </>
