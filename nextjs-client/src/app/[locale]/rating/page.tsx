@@ -6,7 +6,7 @@ import { Card, CardContent, Loading, Button, Avatar, AvatarFallback, AvatarImage
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Trophy, Medal, Calendar } from "lucide-react";
 import { cn } from "@/shared/utils/clsx";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 export default function RatingPage() {
   const [page, setPage] = useState(1);

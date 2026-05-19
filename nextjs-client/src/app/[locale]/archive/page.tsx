@@ -4,7 +4,7 @@ import { useGetTournaments } from "@/features/tournament/hooks/useGetTournaments
 import { Card, CardHeader, CardTitle, CardDescription, Input, Button, Skeleton } from "@/shared/components/ui";
 import { Loading } from "@/shared/components/ui";
 import { useProfile, useDebounce } from "@/shared/hooks";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { CalendarDays, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
