@@ -2,10 +2,12 @@
 
 import { useGetLatestNews } from "@/features/news/hooks/useGetLatestNews";
 import { Loading } from "@/shared/components/ui";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function NewsBlock() {
   const { data: news, isLoading, error } = useGetLatestNews();
+  const t = useTranslations('NewsBlock');
 
   if (isLoading) {
     return (
@@ -18,7 +20,7 @@ export function NewsBlock() {
   if (error || !news) {
     return (
       <div className="w-full max-w-3xl mx-auto p-8 rounded-2xl bg-secondary/5 border border-white/5 text-center">
-        <p className="text-muted-foreground">Новости пока отсутствуют.</p>
+        <p className="text-muted-foreground">{t('noNews')}</p>
       </div>
     );
   }
@@ -53,7 +55,7 @@ export function NewsBlock() {
             href="/news"
             className="text-primary hover:underline font-bold inline-flex items-center gap-2"
           >
-            Остальные новости смотрите на странице «Новости»
+            {t('seeAll')}
             <span>→</span>
           </Link>
         </div>

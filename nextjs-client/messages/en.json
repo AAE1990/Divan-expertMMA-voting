@@ -11,5 +11,24 @@
     "newsManagement": "News Management",
     "logOut": "Log Out",
     "rankLabel": "Rank"
+  },
+  "Home": {
+    "title": "Couch Expert",
+    "subtitle": "Main MMA predictions league",
+    "description": "Your voice decides who becomes a legend. Make predictions on UFC and other tournaments, earn points and top our rating in the world of MMA enthusiasts.",
+    "ctaPredict": "Make a prediction",
+    "ctaRating": "View rating",
+    "feature1Title": "All participants' votes",
+    "feature1Description": "We don't just collect predictions, we show the real opinion of the community. Find out who hundreds of other \"couch experts\" are betting on.",
+    "feature2Title": "Accuracy rating",
+    "feature2Description": "Luck won't help here. The system takes into account every correct and incorrect prediction, forming an honest coefficient of your expertise.",
+    "feature3Title": "Fair calculation",
+    "feature3Description": "Points are awarded automatically immediately after the tournament ends. No rigging — only facts and fight results.",
+    "newsTitle": "News",
+    "newsSubtitle": "Follow the latest events and tournament announcements."
+  },
+  "NewsBlock": {
+    "noNews": "No news yet.",
+    "seeAll": "See all news on the News page"
   }
 }
