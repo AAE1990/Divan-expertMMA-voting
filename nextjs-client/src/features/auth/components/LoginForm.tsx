@@ -14,11 +14,13 @@ import { Input, PasswordInput } from "@/shared/components/ui"
 import { Button } from "@/shared/components/ui"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui";
 import { Link } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 export function LoginForm() {
   const {theme} = useTheme()
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
   const [isShowTwoFactor, setIsShowFactor] = useState(false)
+  const t = useTranslations('Auth')
 
   const form = useForm<TypeLoginSchema>({
     resolver: zodResolver(LoginSchema),
@@ -35,35 +37,35 @@ export function LoginForm() {
     if (recaptchaValue) {
       login({ values, recaptcha: recaptchaValue })
     } else {
-      toast.error('Пожалуйста, подтвердите, что вы не робот')
+      toast.error(t('pleaseConfirmCaptcha'))
     }
   }
 
   return (
     <AuthWrapper
-      heading="Войти"
-      description="Чтобы войти на сайт введите ваш email и пароль"
-      backButtonLabel="Еще нет аккаунта? Зарегистрироваться"
+      heading={t('loginTitle')}
+      description={t('loginDescription')}
+      backButtonLabel={t('backButtonLabelRegister')}
       backButtonHref="/auth/register"
       isShowSocial
     >
       <Form {...form}>
-        <form 
-          onSubmit={form.handleSubmit(onSubmit)} 
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-2"
         >
           {isShowTwoFactor && (
-              <FormField 
+              <FormField
                 control={form.control}
                 name='code'
                 render={({ field}) => (
                   <FormItem>
-                    <FormLabel>Код</FormLabel>
+                    <FormLabel>{t('twoFactorCode')}</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="123456"
+                      <Input
+                        placeholder={t('twoFactorPlaceholder')}
                         disabled={isLoadingLogin}
-                        {...field} 
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -73,43 +75,43 @@ export function LoginForm() {
           )}
           {!isShowTwoFactor && (
             <>
-              <FormField 
+              <FormField
                 control={form.control}
                 name='email'
                 render={({ field}) => (
                   <FormItem>
-                    <FormLabel>Почта</FormLabel>
+                    <FormLabel>{t('email')}</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="your@example.com"
+                        <Input
+                          placeholder={t('emailPlaceholder')}
                           disabled={isLoadingLogin}
                           type="email"
-                          {...field} 
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField 
+              <FormField
                 control={form.control}
                 name='password'
                 render={({ field}) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
-                      <FormLabel>Пароль</FormLabel>
+                      <FormLabel>{t('password')}</FormLabel>
                       <Link
                         href='/auth/reset-password'
                         className="ml-auto inline-block text-sm underline"
                       >
-                        Забыли пароль
+                        {t('forgotPassword')}
                       </Link>
                     </div>
                       <FormControl>
-                        <PasswordInput 
-                          placeholder="********"
+                        <PasswordInput
+                          placeholder={t('passwordPlaceholder')}
                           disabled={isLoadingLogin}
-                          {...field} 
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -127,8 +129,8 @@ export function LoginForm() {
               />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoadingLogin || !recaptchaValue}>
-            Войти
+          <Button type="submit" className="w-full px-4" disabled={isLoadingLogin || !recaptchaValue}>
+            {t('signIn')}
           </Button>
         </form>
       </Form>

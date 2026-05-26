@@ -12,10 +12,12 @@ import ReCAPTCHA from "react-google-recaptcha"
 import { Input } from "@/shared/components/ui/Input"
 import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
+import { useTranslations } from "next-intl";
 
 export function ResetPasswordFrom() {
     const { theme } = useTheme()
     const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
+    const t = useTranslations('Auth')
 
     const form = useForm<TypeResetPasswordSchema>({
         resolver: zodResolver(ResetPasswordSchema),
@@ -30,15 +32,15 @@ export function ResetPasswordFrom() {
         if (recaptchaValue) {
             reset({ values, recaptcha: recaptchaValue })
         } else {
-            toast.error('Пожалуйста, подтвердите, что вы не робот.')
+            toast.error(t('pleaseConfirmCaptcha'))
         }
     }
 
     return (
         <AuthWrapper
-            heading="Сброс пароля"
-            description="Для сброса пароля введите свою почту"
-            backButtonLabel="Войти в аккаунт"
+            heading={t('resetPasswordTitle')}
+            description={t('resetPasswordDescription')}
+            backButtonLabel={t('backToLogin')}
             backButtonHref="/auth/login"
         >
             <Form {...form}>
@@ -51,10 +53,10 @@ export function ResetPasswordFrom() {
                         name='email'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Почта</FormLabel>
+                                <FormLabel>{t('email')}</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="your@example.com"
+                                        placeholder={t('emailPlaceholder')}
                                         disabled={isLoadingReset}
                                         type="email"
                                         {...field}
@@ -73,8 +75,8 @@ export function ResetPasswordFrom() {
                         />
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoadingReset || !recaptchaValue}>
-                        Сбросить
+                    <Button type="submit" className="w-full px-4" disabled={isLoadingReset || !recaptchaValue}>
+                        {t('resetButton')}
                     </Button>
                 </form>
             </Form>

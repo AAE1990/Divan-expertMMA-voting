@@ -13,12 +13,14 @@ import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { PasswordInput } from "@/shared/components/ui";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export function NewPasswordForm() {
     const { theme } = useTheme()
     const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
+    const t = useTranslations('Auth')
 
     const form = useForm<TypeNewPasswordSchema>({
         resolver: zodResolver(NewPasswordSchema),
@@ -31,13 +33,13 @@ export function NewPasswordForm() {
 
     const onSubmit = (values: TypeNewPasswordSchema) => {
         if (!token) {
-            toast.error('Ссылка недействительна')
+            toast.error(t('invalidLink'))
             return
         }
         if (recaptchaValue) {
             newPassword({ values, recaptcha: recaptchaValue })
         } else {
-            toast.error('Пожалуйста, подтвердите, что вы не робот.')
+            toast.error(t('pleaseConfirmCaptcha'))
         }
     }
 
@@ -45,14 +47,14 @@ export function NewPasswordForm() {
     if (!token) {
         return (
             <AuthWrapper
-                heading="Ссылка недействительна"
-                description="Проверьте правильность ссылки для восстановления пароля"
-                backButtonLabel="Вернуться на главную"
+                heading={t('invalidLinkTitle')}
+                description={t('invalidLinkDescription')}
+                backButtonLabel={t('backToHome')}
                 backButtonHref="/"
             >
                 <div className="text-left space-y-2">
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                        Возможно, ссылка устарела или была использована ранее.
+                        {t('linkExpiredMessage')}
                     </p>
                 </div>
             </AuthWrapper>
@@ -61,9 +63,9 @@ export function NewPasswordForm() {
 
     return (
         <AuthWrapper
-            heading="Новый пароль"
-            description="Придумайте новый пароль для вашего аккаунта"
-            backButtonLabel="Войти в аккаунт"
+            heading={t('newPasswordTitle')}
+            description={t('newPasswordDescription')}
+            backButtonLabel={t('backToLogin')}
             backButtonHref="/auth/login"
         >
             <Form {...form}>
@@ -76,10 +78,10 @@ export function NewPasswordForm() {
                         name='password'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Пароль</FormLabel>
+                                <FormLabel>{t('password')}</FormLabel>
                                 <FormControl>
                                     <PasswordInput
-                                        placeholder="********"
+                                        placeholder={t('passwordPlaceholder')}
                                         disabled={isLoadingNew}
                                         {...field}
                                     />
@@ -97,8 +99,8 @@ export function NewPasswordForm() {
                         />
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoadingNew || !recaptchaValue}>
-                        Продолжить
+                    <Button type="submit" className="w-full px-4" disabled={isLoadingNew || !recaptchaValue}>
+                        {t('continueButton')}
                     </Button>
                 </form>
             </Form>

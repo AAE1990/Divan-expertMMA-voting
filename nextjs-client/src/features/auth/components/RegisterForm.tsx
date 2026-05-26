@@ -14,10 +14,12 @@ import { Input } from "@/shared/components/ui/Input"
 import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { PasswordInput } from "@/shared/components/ui"
+import { useTranslations } from "next-intl"
 
 export function RegisterForm() {
   const {theme} = useTheme()
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
+  const t = useTranslations('Auth')
 
   const form = useForm<TypeRegisterSchema>({
     resolver: zodResolver(RegisterSchema),
@@ -35,84 +37,84 @@ export function RegisterForm() {
     if (recaptchaValue) {
         registerMutation({ values, recaptcha: recaptchaValue })
     } else {
-      toast.error('Пожалуйста, подтвердите, что вы не робот')
+      toast.error(t('pleaseConfirmCaptcha'))
     }
   }
 
   return (
     <AuthWrapper
-      heading="Регистрация"
-      description="Чтобы войти на сайт введите ваш email и пароль"
-      backButtonLabel="Уже есть аккаунт? Войти"
+      heading={t('registerTitle')}
+      description={t('registerDescription')}
+      backButtonLabel={t('backButtonLabelLogin')}
       backButtonHref="/auth/login"
       isShowSocial
     >
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <FormField 
+          <FormField
             control={form.control}
             name='name'
             render={({ field}) => (
               <FormItem>
-                <FormLabel>Имя</FormLabel>
+                <FormLabel>{t('name')}</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Иван"
+                    <Input
+                      placeholder={t('namePlaceholder')}
                       disabled={isLoadingRegister}
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
               </FormItem>
             )}
           />
-          <FormField 
+          <FormField
             control={form.control}
             name='email'
             render={({ field}) => (
               <FormItem>
-                <FormLabel>Почта</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="your@example.com"
+                    <Input
+                      placeholder={t('emailPlaceholder')}
                       disabled={isLoadingRegister}
                       type="email"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
               </FormItem>
             )}
           />
-          <FormField 
+          <FormField
             control={form.control}
             name='password'
             render={({ field}) => (
               <FormItem>
-                <FormLabel>Пароль</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="********"
+                      placeholder={t('passwordPlaceholder')}
                       disabled={isLoadingRegister}
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
               </FormItem>
             )}
           />
-          <FormField 
+          <FormField
             control={form.control}
             name='passwordRepeat'
             render={({ field}) => (
               <FormItem>
-                <FormLabel>Повторите пароль</FormLabel>
+                <FormLabel>{t('confirmPassword')}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="********" 
+                      placeholder={t('passwordPlaceholder')}
                       disabled={isLoadingRegister}
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -128,8 +130,8 @@ export function RegisterForm() {
               />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoadingRegister || !recaptchaValue}>
-            Создать аккаунт
+          <Button type="submit" className="w-full px-4" disabled={isLoadingRegister || !recaptchaValue}>
+            {t('createAccount')}
           </Button>
         </form>
       </Form>

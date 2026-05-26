@@ -5,10 +5,12 @@ import { Button } from "./Button"
 import { Skeleton } from "./Skeleton"
 import { useProfile } from "@/shared/hooks"
 import { LogIn, UserPlus } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export function AuthButtons() {
   const { user, isLoading } = useProfile()
   const pathname = usePathname()
+  const t = useTranslations('Auth')
 
   if (isLoading) {
     return (
@@ -34,13 +36,13 @@ export function AuthButtons() {
       <Button asChild variant="outline" size="sm" className="sm:gap-2 gap-1 sm:px-3 px-2">
         <Link href="/auth/login">
           <LogIn className="size-4" />
-          <span className="hidden sm:inline">Вход</span>
+          <span className="hidden sm:inline">{t('loginTitle')}</span>
         </Link>
       </Button>
       <Button asChild size="sm" className="sm:gap-2 gap-1 sm:px-3 px-2">
         <Link href="/auth/register">
           <UserPlus className="size-4" />
-          <span className="hidden sm:inline">Регистрация</span>
+          <span className="hidden sm:inline">{t('registerTitle')}</span>
         </Link>
       </Button>
     </div>

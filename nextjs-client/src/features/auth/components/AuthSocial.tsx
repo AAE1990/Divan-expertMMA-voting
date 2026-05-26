@@ -3,50 +3,61 @@
 import { Button } from "@/shared/components/ui"
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "@/i18n/routing";
-
+import { useTranslations } from "next-intl";
 import { FaGoogle, FaYandex } from "react-icons/fa";
 import { authService } from "../services";
 
 
 export function AuthSocial() {
     const router = useRouter()
+    const t = useTranslations('Auth')
 
-    const { mutateAsync} = useMutation({
+    const { mutateAsync } = useMutation({
         mutationKey: ['oauth by provider'],
-        mutationFn: async (provider: 'google' | 'yandex') => 
+        mutationFn: async (provider: 'google' | 'yandex') =>
             await authService.oauthByProvider(provider)
     })
 
     const onClick = async (provider: 'google' | 'yandex') => {
         const response = await mutateAsync(provider)
 
-        if(response) {
+        if (response) {
             router.push(response.url)
         }
     }
 
     return (
         <>
-           <div className="flex flex-col md:flex-row gap-4 w-full">
-            <Button onClick={() => onClick('google')} variant="outline" className="w-full md:w-auto">
-                <FaGoogle className="mr-2 size-4" />
-                Google
-            </Button>
-            <Button onClick={() => onClick('yandex')} variant="outline" className="w-full md:w-auto">
-                <FaYandex className="mr-2 size-4" />
-                Яндекс
-            </Button>
-           </div>
-           <div className='relative mb-2 space-y-4'>
-               <div className='absolute inset-0 flex items-center'>
-                   <span className='w-full border-t border-[#00000000]'/>
-               </div>
-               <div className='relative flex justify-center text-xs uppercase'>
-                   <span className='bg-background px-2 text-muted-foreground'>
-                       Или
-                   </span>
-               </div>
-           </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+                <Button
+                    onClick={() => onClick('google')}
+                    variant="outline"
+                    className="w-full cursor-pointer flex items-center justify-center font-medium text-sm transition-colors hover:bg-white/5"
+                    style={{ paddingLeft: '16px', paddingRight: '16px' }}
+                >
+                    <FaGoogle className="mr-2 size-4 shrink-0 text-black dark:text-white" />
+                    <span>Google</span> {/* Короткий лаконичный текст */}
+                </Button>
+
+                <Button
+                    onClick={() => onClick('yandex')}
+                    variant="outline"
+                    className="w-full cursor-pointer flex items-center justify-center font-medium text-sm transition-colors hover:bg-white/5"
+                    style={{ paddingLeft: '16px', paddingRight: '16px' }}
+                >
+                    <FaYandex className="mr-2 size-4 shrink-0 text-red-500" />
+                    <span>Яндекс</span> {/* Короткий лаконичный текст */}
+                </Button>
+            </div>
+
+            {/* Исправленный адаптивный разделитель без использования фонового bg */}
+            <div className='flex items-center my-5 w-full select-none gap-4'>
+                <div className='flex-1 border-t border-solid border-border/60' />
+                <span className='text-[10px] uppercase font-black tracking-widest text-muted-foreground shrink-0'>
+                    {t('or')}
+                </span>
+                <div className='flex-1 border-t border-solid border-border/60' />
+            </div>
         </>
     )
 }

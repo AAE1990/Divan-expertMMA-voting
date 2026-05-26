@@ -21,24 +21,26 @@ export function AuthWrapper({
     isShowSocial = false
 }: PropsWithChildren<AuthWrapperProps>) {
     return (
-        <Card className='w-full max-w-[400px] sm:p-6 p-3 sm:px-6 px-2'>
-            <CardHeader className='space-y-2 sm:p-0'>
-                <CardTitle>{heading}</CardTitle>
+        <Card className='w-full max-w-[400px] p-4 sm:p-6 pb-6 sm:pb-8 flex flex-col gap-4 shadow-md'>
+            <CardHeader className='p-0 space-y-1'>
+                <CardTitle className="text-2xl font-black uppercase italic tracking-tight">{heading}</CardTitle>
                 {description && (
-                    <CardDescription>{description}</CardDescription>
+                    <CardDescription className="text-xs">{description}</CardDescription>
                 )}
             </CardHeader>
-            <CardContent className='sm:p-0 pt-4'>
+            <CardContent className='p-0 flex flex-col gap-4'>
                 {isShowSocial && <AuthSocial />}
                 {children}
             </CardContent>
-            <CardFooter className='sm:p-0 pt-4'>
-                {backButtonLabel && backButtonHref && (
-                    <Button variant='link' className='w-full font normal'>
-                        <Link href={backButtonHref}>{backButtonLabel}</Link>
+            {backButtonLabel && backButtonHref && (
+                <CardFooter className='!bg-transparent !border-t-0 !p-0 !pt-4 !pb-2'>
+                    <Button variant='outline' className='w-full rounded-xl py-5 font-normal flex items-center justify-center text-sm cursor-pointer !mb-4' asChild>
+                        <Link href={backButtonHref}>
+                            {backButtonLabel}
+                        </Link>
                     </Button>
-                )}
-            </CardFooter>
+                </CardFooter>
+            )}
         </Card>
     );
 }
