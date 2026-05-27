@@ -15,12 +15,14 @@ import { cn } from "@/shared/utils"
 import { useFinishPoll } from "../hooks/useFinishPoll"
 import { useProfile } from "@/shared/hooks/useProfile"
 import { Trophy } from "lucide-react" // Для красоты
+import { useTranslations } from "next-intl"
 
 interface VotingCardProps {
   poll: IPoll
 }
 
 export const VotingCard = ({ poll }: VotingCardProps) => {
+  const t = useTranslations('Voting')
 
   const { user } = useProfile()
   const { mutate: finishPoll, isPending: isFinishing } = useFinishPoll()
@@ -50,7 +52,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
   const isFinished = poll.status === 'FINISHED'
 
   const handleFinish = (optionId: string) => {
-    if (confirm("Вы уверены? Это действие начислит баллы и закроет голосование.")) {
+    if (confirm(t('confirmFinish'))) {
       finishPoll({ pollId: poll.id, winnerOptionId: optionId })
     }
   }
@@ -67,7 +69,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           <div>
             <CardTitle>{poll.question}</CardTitle>
             <CardDescription>
-              {isFinished ? "Бой завершен" : "Выберите победителя"}
+              {isFinished ? t('fightFinished') : t('chooseWinner')}
             </CardDescription>
           </div>
           {isFinished && <Trophy className="text-yellow-500 size-6" />}
@@ -127,7 +129,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     )}
                   />
                   <p className="text-[10px] text-muted-foreground mt-1 text-right italic">
-                    Всего голосов: {option.votesCount}
+                    {t('totalVotes')} {option.votesCount}
                   </p>
                 </div>
               )
@@ -219,14 +221,14 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
             </div>
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-lg p-6">
               <p className="text-lg font-medium text-foreground mb-4 text-center">
-                Чтобы проголосовать, войдите в аккаунт
+                {t('loginToVote')}
               </p>
               <div className="flex gap-4">
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/auth/login">Вход</Link>
+                  <Link href="/auth/login">{t('login')}</Link>
                 </Button>
                 <Button asChild size="sm">
-                  <Link href="/auth/register">Регистрация</Link>
+                  <Link href="/auth/register">{t('register')}</Link>
                 </Button>
               </div>
             </div>
@@ -236,7 +238,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         {isAdmin && !isFinished && !poll.isPeopleChamp && (
           <div className="mt-6 pt-4 border-t border-dashed border-primary/30">
             <p className="text-[10px] uppercase font-bold text-primary mb-3 text-center tracking-widest">
-              Панель судьи (ADMIN)
+              {t('judgePanel')}
             </p>
             <div className="grid grid-cols-2 gap-2">
               {poll.options.map((option) => (
@@ -248,7 +250,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                   onClick={() => handleFinish(option.id)}
                   disabled={isFinishing}
                 >
-                  Победил {option.text}
+                  {t('wonBy', { fighter: option.text })}
                 </Button>
               ))}
             </div>
@@ -266,11 +268,11 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
               className="w-full font-bold uppercase"
               disabled={isPending || poll.status === 'CLOSED' || isExpired}
             >
-              {isExpired ? "Голосование завершено" : isPending ? "Отправка..." : "Сделать прогноз"}
+              {isExpired ? t('votingEnded') : isPending ? t('submitting') : t('makePrediction')}
             </Button>
           ) : (
             <div className="w-full text-center text-sm font-medium text-muted-foreground">
-              Вы уже сделали свой выбор
+              {t('alreadyVoted')}
             </div>
           )}
         </CardFooter>

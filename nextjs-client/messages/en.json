@@ -72,5 +72,36 @@
     "resetPasswordDescription": "To reset your password, enter your email",
     "resetButton": "Reset",
     "or": "Or"
+  },
+  "Voting": {
+    "voteButton": "Vote",
+    "yourChoice": "Your Choice",
+    "votingEnded": "Voting Ended",
+    "loadingTournaments": "Loading tournaments...",
+    "noActivePolls": "No active polls available",
+    "noFightsInTournament": "No active fights available in this tournament.",
+    "predictionSaved": "Prediction successfully saved!",
+    "votingError": "Voting error",
+    "voteCounted": "Your vote has been counted!",
+    "voteFailed": "Failed to submit vote",
+    "linePredictions": "Prediction Line",
+    "loading": "Loading...",
+    "archive": "Archive",
+    "fightFinished": "Fight finished",
+    "chooseWinner": "Choose winner",
+    "totalVotes": "Total votes:",
+    "loginToVote": "To vote, please log in",
+    "login": "Log In",
+    "register": "Register",
+    "judgePanel": "Judge Panel (ADMIN)",
+    "wonBy": "Won by {fighter}",
+    "submitting": "Submitting...",
+    "makePrediction": "Make prediction",
+    "alreadyVoted": "You have already made your choice",
+    "yourChoiceLabel": "Your choice",
+    "confirmFinish": "Are you sure? This action will award points and close the voting."
+  },
+  "Common": {
+    "loading": "Loading..."
   }
 }

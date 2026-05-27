@@ -72,5 +72,36 @@
     "resetPasswordDescription": "Для сброса пароля введите свою почту",
     "resetButton": "Сбросить",
     "or": "Или"
+  },
+  "Voting": {
+    "voteButton": "Проголосовать",
+    "yourChoice": "Ваш выбор",
+    "votingEnded": "Голосование завершено",
+    "loadingTournaments": "Загрузка турниров...",
+    "noActivePolls": "Нет активных голосований",
+    "noFightsInTournament": "В этом турнире пока нет активных боев для голосования.",
+    "predictionSaved": "Прогноз успешно сохранен",
+    "votingError": "Ошибка голосования",
+    "voteCounted": "Ваш голос учтен!",
+    "voteFailed": "Не удалось отправить голос",
+    "linePredictions": "Линия прогнозов",
+    "loading": "Загрузка...",
+    "archive": "Архив",
+    "fightFinished": "Бой завершен",
+    "chooseWinner": "Выберите победителя",
+    "totalVotes": "Всего голосов:",
+    "loginToVote": "Чтобы проголосовать, войдите в аккаунт",
+    "login": "Вход",
+    "register": "Регистрация",
+    "judgePanel": "Панель судьи (ADMIN)",
+    "wonBy": "Победил {fighter}",
+    "submitting": "Отправка...",
+    "makePrediction": "Сделать прогноз",
+    "alreadyVoted": "Вы уже сделали свой выбор",
+    "yourChoiceLabel": "Ваш выбор",
+    "confirmFinish": "Вы уверены? Это действие начислит баллы и закроет голосование."
+  },
+  "Common": {
+    "loading": "Загрузка..."
   }
 }

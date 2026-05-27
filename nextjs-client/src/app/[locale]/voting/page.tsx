@@ -12,11 +12,13 @@ import { cn } from "@/shared/utils/clsx"
 import { Link, useRouter } from "@/i18n/routing"
 import { useSearchParams } from "next/navigation"
 import { History } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 function VotingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const urlTournamentId = searchParams.get('tournamentId') // Берем ID из ссылки типа ?tournamentId=...
+  const t = useTranslations('Voting')
 
   // Оставляем стейт, но инициализируем его из URL
   const [selectedTournamentId, setSelectedTournamentId] = useState<string | undefined>(urlTournamentId || undefined)
@@ -57,10 +59,10 @@ function VotingContent() {
   return (
     <div className="container mx-auto py-10 px-4">
       <h1 className="text-4xl font-black mb-2 text-center uppercase tracking-tighter italic italic">
-        {finalTournament?.name || "Линия прогнозов"}
+        {finalTournament?.name || t('linePredictions')}
       </h1>
       <p className="text-center text-muted-foreground mb-8 text-xs uppercase tracking-[0.3em]">
-        {finalTournament ? new Date(finalTournament.date).toLocaleDateString() : "Загрузка..."}
+        {finalTournament ? new Date(finalTournament.date).toLocaleDateString() : t('loading')}
       </p>
 
       {/* Панель выбора турнира */}
@@ -80,7 +82,7 @@ function VotingContent() {
         <Button variant="ghost" asChild className="rounded-full gap-2 text-muted-foreground hover:text-primary">
           <Link href="/archive">
             <History className="size-4" />
-            Архив
+            {t('archive')}
           </Link>
         </Button>
       </div>
@@ -93,7 +95,7 @@ function VotingContent() {
             polls.map((poll) => <VotingCard key={poll.id} poll={poll} />)
           ) : (
             <p className="col-span-full text-center text-muted-foreground py-20">
-              В этом турнире пока нет активных боев для голосования.
+              {t('noFightsInTournament')}
             </p>
           )}
         </div>

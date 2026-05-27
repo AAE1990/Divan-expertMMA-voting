@@ -17,7 +17,7 @@ import { useState } from "react";
 export function SettingsFrom() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
-    const { user, isLoading } = useProfile(page, limit)
+    const { user, isLoading, isFetching } = useProfile(page, limit)
     const { update, isLoadingUpdate } = useUpdateProfileMutation()
 
     const form = useForm<TypeSettingsSchema>({
@@ -46,6 +46,14 @@ export function SettingsFrom() {
     const totalVotes = user.totalVotes || 0
     const totalPages = Math.ceil(totalVotes / limit)
 
+    if (isLoading || isFetching) {
+        return (
+            <div className="flex min-h-[400px] w-full items-center justify-center text-primary bg-background/50 backdrop-blur-sm z-50">
+                <Loading />
+            </div>
+        )
+    }
+
     return (
         <div className="max-w-6xl mx-auto p-4 lg:p-8 space-y-8">
             {/* ШАПКА ПРОФИЛЯ */}
@@ -60,7 +68,7 @@ export function SettingsFrom() {
                         <p className="text-muted-foreground text-sm">{user.email}</p>
                     </div>
                 </div>
-                
+
                 {/* МЕСТО В РЕЙТИНГЕ ПЕРЕЕХАЛО В ШАПКУ */}
                 <div className="flex items-center gap-6 px-6 py-3 bg-background/50 rounded-xl border border-primary/20 shadow-sm">
                     <div className="text-right">
