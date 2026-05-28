@@ -181,5 +181,32 @@
   },
   "Common": {
     "loading": "Loading..."
+  },
+  "Archive": {
+    "title": "Tournament Archive",
+    "searchPlaceholder": "Search tournament (e.g., UFC 300)...",
+    "viewResults": "View Results",
+    "nothingFound": "Nothing found for your request",
+    "guestTitle": "The archive is only available to league members.",
+    "loginButton": "Log In",
+    "registerButton": "Register",
+    "pagination": {
+      "page": "Page",
+      "of": "of",
+      "back": "Back",
+      "next": "Next"
+    }
+  },
+  "News": {
+    "title": "News",
+    "description": "All the latest news and tournament announcements. Stay tuned!",
+    "noNewsTitle": "No news available yet",
+    "noNewsDescription": "Follow the updates, something interesting will appear soon!",
+    "pagination": {
+      "page": "Page",
+      "of": "of",
+      "back": "Back",
+      "next": "Next"
+    }
   }
 }

@@ -7,6 +7,7 @@ import { useProfile, useDebounce } from "@/shared/hooks";
 import { Link } from "@/i18n/routing";
 import { CalendarDays, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function ArchivePage() {
   const [page, setPage] = useState(1);
@@ -33,19 +34,20 @@ export default function ArchivePage() {
     if (page < totalPages) setPage(page + 1);
   };
 
+  const tArchive = useTranslations('Archive');
   const showSkeleton = isLoading || isProfileLoading;
 
   return (
     <div className="container mx-auto py-10 px-4 max-w-4xl">
       <h1 className="text-4xl font-black mb-8 uppercase tracking-tighter italic text-center">
-        Архив событий
+        {tArchive('title')}
       </h1>
 
       {/* ПОЛЕ ПОИСКА */}
       <div className="relative mb-8 max-w-md mx-auto">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <Input
-          placeholder="Поиск турнира (например, UFC 300)..."
+          placeholder={tArchive('searchPlaceholder')}
           className="pl-10 rounded-full border-2 focus:border-primary transition-all"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -77,7 +79,7 @@ export default function ArchivePage() {
                         </CardDescription>
                       </div>
                       <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                        Смотреть итоги
+                        {tArchive('viewResults')}
                       </div>
                     </CardHeader>
                   </Card>
@@ -85,7 +87,7 @@ export default function ArchivePage() {
               ))
             ) : (
               <p className="text-center text-muted-foreground py-10 italic">
-                Ничего не найдено по запросу "{debouncedSearchTerm}"
+                {tArchive('nothingFound', { query: debouncedSearchTerm })}
               </p>
             )}
           </div>
@@ -93,14 +95,14 @@ export default function ArchivePage() {
         {!user && !isProfileLoading && !showSkeleton && (
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center rounded-lg p-6">
             <p className="text-xl font-bold text-foreground mb-4 text-center">
-              Архив доступен только участникам лиги.
+              {tArchive('guestTitle')}
             </p>
             <div className="flex gap-4">
               <Button asChild size="lg" variant="outline">
-                <Link href="/auth/login">Войти</Link>
+                <Link href="/auth/login">{tArchive('loginButton')}</Link>
               </Button>
               <Button asChild size="lg">
-                <Link href="/auth/register">Зарегистрироваться</Link>
+                <Link href="/auth/register">{tArchive('registerButton')}</Link>
               </Button>
             </div>
           </div>
@@ -126,7 +128,7 @@ export default function ArchivePage() {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-sm font-medium">
-            Страница {page} из {totalPages}
+            {tArchive('pagination.page')} {page} {tArchive('pagination.of')} {totalPages}
           </span>
           <Button
             variant="outline"

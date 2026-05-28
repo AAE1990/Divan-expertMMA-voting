@@ -4,9 +4,10 @@ import { useGetNews } from "@/features/news/hooks/useGetNews";
 import { Card, CardHeader, CardTitle, CardDescription, Button, Skeleton } from "@/shared/components/ui";
 import { Loading } from "@/shared/components/ui";
 import { useProfile } from "@/shared/hooks";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { CalendarDays, ChevronLeft, ChevronRight, Newspaper } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function NewsPage() {
   const [page, setPage] = useState(1);
@@ -26,16 +27,17 @@ export default function NewsPage() {
     if (page < totalPages) setPage(page + 1);
   };
 
+  const tNews = useTranslations('News');
   const showSkeleton = isLoading || isProfileLoading;
 
   return (
     <div className="container mx-auto py-10 px-4 max-w-6xl">
       <div className="flex items-center justify-center gap-3 mb-8">
         <Newspaper className="size-10 text-primary" />
-        <h1 className="text-4xl font-black uppercase tracking-tighter italic">Новости</h1>
+        <h1 className="text-4xl font-black uppercase tracking-tighter italic">{tNews('title')}</h1>
       </div>
       <p className="text-muted-foreground text-lg text-center max-w-2xl mx-auto mb-10">
-        Все последние новости и анонсы турниров. Оставайтесь в курсе событий!
+        {tNews('description')}
       </p>
 
       {showSkeleton ? (
@@ -98,8 +100,8 @@ export default function NewsPage() {
           ) : (
             <div className="text-center py-20">
               <Newspaper className="size-20 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-2xl font-black uppercase italic mb-2">Новостей пока нет</h3>
-              <p className="text-muted-foreground">Следите за обновлениями, скоро появится что-то интересное!</p>
+              <h3 className="text-2xl font-black uppercase italic mb-2">{tNews('noNewsTitle')}</h3>
+              <p className="text-muted-foreground">{tNews('noNewsDescription')}</p>
             </div>
           )}
 
@@ -116,7 +118,7 @@ export default function NewsPage() {
                 <ChevronLeft className="size-4" />
               </Button>
               <span className="font-bold">
-                Страница {page} из {totalPages}
+                {tNews('pagination.page')} {page} {tNews('pagination.of')} {totalPages}
               </span>
               <Button
                 variant="outline"
