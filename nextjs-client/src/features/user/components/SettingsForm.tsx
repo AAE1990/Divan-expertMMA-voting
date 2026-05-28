@@ -13,12 +13,14 @@ import { useUpdateProfileMutation } from "@/features/auth/hooks/useUpdateProfile
 import { Trophy } from "lucide-react";
 import { PredictionsHistory } from "./PredictionsHistory";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
-export function SettingsFrom() {
+export function SettingsForm() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
     const { user, isLoading, isFetching } = useProfile(page, limit)
     const { update, isLoadingUpdate } = useUpdateProfileMutation()
+    const t = useTranslations('Profile');
 
     const form = useForm<TypeSettingsSchema>({
         resolver: zodResolver(SettingsSchema),
@@ -72,7 +74,7 @@ export function SettingsFrom() {
                 {/* МЕСТО В РЕЙТИНГЕ ПЕРЕЕХАЛО В ШАПКУ */}
                 <div className="flex items-center gap-6 px-6 py-3 bg-background/50 rounded-xl border border-primary/20 shadow-sm">
                     <div className="text-right">
-                        <p className="text-[10px] font-bold uppercase text-primary tracking-widest">Твое место</p>
+                        <p className="text-[10px] font-bold uppercase text-primary tracking-widest">{t('Your rank')}</p>
                         <p className="text-2xl font-black">{user.rank || 1}</p>
                     </div>
                     <Trophy className="text-primary size-8" />
@@ -84,7 +86,7 @@ export function SettingsFrom() {
                 <div className="lg:col-span-7">
                     <Card className="shadow-none border-none bg-transparent">
                         <CardHeader className="px-0 pt-0">
-                            <CardTitle className="text-lg font-bold uppercase tracking-wider text-center mb-4">Настройки</CardTitle>
+                            <CardTitle className="text-lg font-bold uppercase tracking-wider text-center mb-4">{t('Settings')}</CardTitle>
                         </CardHeader>
                         <CardContent className="px-6">
                             {isLoading ? <Loading /> : (
@@ -95,8 +97,8 @@ export function SettingsFrom() {
                                             name='name'
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Имя</FormLabel>
-                                                    <FormControl><Input placeholder="Иван" disabled={isLoadingUpdate} {...field} className="bg-background" /></FormControl>
+                                                    <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Username')}</FormLabel>
+                                                    <FormControl><Input placeholder={t('Name placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -106,8 +108,8 @@ export function SettingsFrom() {
                                             name='email'
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Email</FormLabel>
-                                                    <FormControl><Input placeholder="your@example.com" disabled={isLoadingUpdate} type='email' {...field} className="bg-background" /></FormControl>
+                                                    <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Email')}</FormLabel>
+                                                    <FormControl><Input placeholder={t('Email placeholder')} disabled={isLoadingUpdate} type='email' {...field} className="bg-background" /></FormControl>
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -118,8 +120,8 @@ export function SettingsFrom() {
                                             render={({ field }) => (
                                                 <FormItem className="flex flex-row items-center justify-between rounded-xl border bg-background/50 p-4 shadow-sm">
                                                     <div className="space-y-0.5">
-                                                        <FormLabel className="font-bold">2FA</FormLabel>
-                                                        <FormDescription className="text-[11px]">Дополнительная защита аккаунта</FormDescription>
+                                                        <FormLabel className="font-bold">{t('2FA')}</FormLabel>
+                                                        <FormDescription className="text-[11px]">{t('Extra account protection')}</FormDescription>
                                                     </div>
                                                     <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                                                 </FormItem>
@@ -128,16 +130,16 @@ export function SettingsFrom() {
 
                                         {/* Биография, город, страна */}
                                         <div className="space-y-4 pt-4 border-t">
-                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Дополнительная информация</h3>
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('Additional Info')}</h3>
                                             <FormField
                                                 control={form.control}
                                                 name='bio'
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Биография (макс. 100 символов)</FormLabel>
+                                                        <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Bio (max 100 characters)')}</FormLabel>
                                                         <FormControl>
                                                             <Input
-                                                                placeholder="Расскажите о себе..."
+                                                                placeholder={t('Bio placeholder')}
                                                                 disabled={isLoadingUpdate}
                                                                 {...field}
                                                                 className="bg-background"
@@ -154,9 +156,9 @@ export function SettingsFrom() {
                                                     name='city'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Город</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('City')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="Москва" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('City placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -167,9 +169,9 @@ export function SettingsFrom() {
                                                     name='country'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Страна</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Country')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="Россия" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('Country placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -180,16 +182,16 @@ export function SettingsFrom() {
 
                                         {/* Социальные сети */}
                                         <div className="space-y-4 pt-4 border-t">
-                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Социальные сети</h3>
+                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">{t('Social Networks')}</h3>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <FormField
                                                     control={form.control}
                                                     name='youtube'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">YouTube</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('YouTube')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('Social placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -200,9 +202,9 @@ export function SettingsFrom() {
                                                     name='telegram'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Telegram</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Telegram')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('Social placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -213,9 +215,9 @@ export function SettingsFrom() {
                                                     name='vk'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">VK</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('VK')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('Social placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -226,9 +228,9 @@ export function SettingsFrom() {
                                                     name='twitter'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">X (Twitter)</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('X (Twitter)')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('Social placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -239,9 +241,9 @@ export function SettingsFrom() {
                                                     name='instagram'
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">Instagram</FormLabel>
+                                                            <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Instagram')}</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="username" disabled={isLoadingUpdate} {...field} className="bg-background" />
+                                                                <Input placeholder={t('Social placeholder')} disabled={isLoadingUpdate} {...field} className="bg-background" />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -251,7 +253,7 @@ export function SettingsFrom() {
                                         </div>
 
                                         <Button type='submit' disabled={isLoadingUpdate} className="w-full font-bold uppercase tracking-widest">
-                                            {isLoadingUpdate ? "Сохранение..." : "Сохранить профиль"}
+                                            {isLoadingUpdate ? t('Saving') : t('Save Profile')}
                                         </Button>
                                     </form>
                                 </Form>
@@ -264,14 +266,14 @@ export function SettingsFrom() {
                 <div className="lg:col-span-5 space-y-4">
                     {/* БЛОК СТАТИСТИКИ */}
                     <div className="rounded-2xl border bg-secondary/5 p-4">
-                        <h3 className="text-lg font-bold uppercase tracking-wider text-center mb-4">Статистика</h3>
+                        <h3 className="text-lg font-bold uppercase tracking-wider text-center mb-4">{t('Statistics')}</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="rounded-xl border bg-secondary/5 p-4">
-                                <p className="text-xs uppercase font-bold text-muted-foreground">Всего прогнозов</p>
+                                <p className="text-xs uppercase font-bold text-muted-foreground">{t('Total Predictions')}</p>
                                 <p className="text-2xl font-black mt-2">{totalVotes}</p>
                             </div>
                             <div className="rounded-xl border bg-secondary/5 p-4">
-                                <p className="text-xs uppercase font-bold text-muted-foreground">Точность</p>
+                                <p className="text-xs uppercase font-bold text-muted-foreground">{t('Accuracy')}</p>
                                 <p className="text-2xl font-black mt-2">
                                     {user.correctVotes ?? 0}
                                     <span className="text-sm text-muted-foreground"> / {totalVotes}</span>
@@ -280,14 +282,14 @@ export function SettingsFrom() {
                         </div>
                     </div>
 
-                    <h2 className="text-lg font-bold uppercase tracking-wider text-center mb-4">История прогнозов</h2>
+                    <h2 className="text-lg font-bold uppercase tracking-wider text-center mb-4">{t('Prediction History')}</h2>
                     <div className="rounded-2xl border bg-secondary/5 p-2 min-h-[300px]">
                         <PredictionsHistory votes={user?.votes || []} />
                     </div>
                     {totalVotes > 0 && (
                         <div className="flex items-center justify-between px-2">
                             <div className="text-sm text-muted-foreground">
-                                Страница {page} из {totalPages}
+                                {t('Page')} {page} {t('of')} {totalPages}
                             </div>
                             <div className="flex gap-2">
                                 <Button
@@ -297,7 +299,7 @@ export function SettingsFrom() {
                                     disabled={page <= 1}
                                     className="cursor-pointer"
                                 >
-                                    Назад
+                                    {t('Back')}
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -306,7 +308,7 @@ export function SettingsFrom() {
                                     disabled={page >= totalPages}
                                     className="cursor-pointer"
                                 >
-                                    Вперед
+                                    {t('Next')}
                                 </Button>
                             </div>
                         </div>

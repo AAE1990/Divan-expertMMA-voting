@@ -1,8 +1,10 @@
 import { IUserVote } from "@/features/auth/types"
 import { Badge } from "@/shared/components/ui/Badge"
 import { CheckCircle2, XCircle, Clock } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export const PredictionsHistory = ({ votes }: { votes: IUserVote[] }) => {
+  const t = useTranslations('Profile')
   if (!votes?.length) return (
     <p className="text-center text-muted-foreground text-xs py-10 italic">
       Вы еще не сделали ни одного прогноза
@@ -29,15 +31,15 @@ export const PredictionsHistory = ({ votes }: { votes: IUserVote[] }) => {
             <div className="flex shrink-0 ml-4">
               {!isFinished ? (
                 <Badge variant="outline" className="gap-1 text-sky-500 border-sky-500/20">
-                  <Clock className="size-3" /> Ожидание
+                  <Clock className="size-3" /> {t('Pending')}
                 </Badge>
               ) : isWinner ? (
                 <Badge variant="default" className="gap-1 bg-green-500 hover:bg-green-600">
-                  <CheckCircle2 className="size-3" /> +1 балл
+                  <CheckCircle2 className="size-3" /> {t('+1 Point')}
                 </Badge>
               ) : (
                 <Badge variant="destructive" className="gap-1">
-                  <XCircle className="size-3" /> Мимо
+                  <XCircle className="size-3" /> {t('Missed')}
                 </Badge>
               )}
             </div>

@@ -1,3 +1,3 @@
-export * from './SettingsFrom'
+export * from './SettingsForm'
 export * from './UserButton'
 export * from './PredictionsHistory'
