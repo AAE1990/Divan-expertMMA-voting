@@ -153,6 +153,32 @@
     "Country placeholder": "Russia",
     "Social placeholder": "username"
   },
+  "Leaderboard": {
+    "title": "Top Predictors",
+    "timeFilters": {
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "allTime": "All Time"
+    },
+    "tableHeaders": {
+      "rank": "Rank",
+      "user": "User",
+      "points": "Points"
+    },
+    "publicProfile": {
+      "memberSince": "Member since",
+      "leaderboardRank": "Leaderboard Rank",
+      "statistics": "Statistics",
+      "socialNetworks": "Social Networks"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "of",
+      "back": "Back",
+      "next": "Next",
+      "totalParticipants": "total {count} participants"
+    }
+  },
   "Common": {
     "loading": "Loading..."
   }

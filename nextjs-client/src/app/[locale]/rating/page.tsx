@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useLeaderboard } from "@/features/user/hooks/useLeaderboard";
 import { Card, CardContent, Loading, Button, Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
@@ -9,6 +10,7 @@ import { cn } from "@/shared/utils/clsx";
 import { Link } from "@/i18n/routing";
 
 export default function RatingPage() {
+  const t = useTranslations('Leaderboard');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [period, setPeriod] = useState<'all' | 'month' | 'week'>('all');
@@ -30,7 +32,7 @@ export default function RatingPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
           <Trophy className="size-10 text-yellow-500" />
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter break-words">Топ прогнозистов</h1>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter break-words">{t('title')}</h1>
         </div>
         <div className="flex items-center gap-3">
           <Calendar className="size-5 text-muted-foreground" />
@@ -39,9 +41,9 @@ export default function RatingPage() {
               <SelectValue placeholder="Период" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Всё время</SelectItem>
-              <SelectItem value="month">За месяц</SelectItem>
-              <SelectItem value="week">За неделю</SelectItem>
+              <SelectItem value="all">{t('timeFilters.allTime')}</SelectItem>
+              <SelectItem value="month">{t('timeFilters.monthly')}</SelectItem>
+              <SelectItem value="week">{t('timeFilters.weekly')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -53,9 +55,9 @@ export default function RatingPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-muted/30 border-b">
-                  <th className="p-2 md:p-4 font-bold uppercase text-xs">Место</th>
-                  <th className="p-2 md:p-4 font-bold uppercase text-xs">Участник</th>
-                  <th className="p-2 md:p-4 font-bold uppercase text-xs text-right">Баллы</th>
+                  <th className="p-2 md:p-4 font-bold uppercase text-xs">{t('tableHeaders.rank')}</th>
+                  <th className="p-2 md:p-4 font-bold uppercase text-xs">{t('tableHeaders.user')}</th>
+                  <th className="p-2 md:p-4 font-bold uppercase text-xs text-right">{t('tableHeaders.points')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -98,7 +100,7 @@ export default function RatingPage() {
       {totalUsers > 0 && (
         <div className="flex items-center justify-between mt-6 px-2">
           <div className="text-sm text-muted-foreground">
-            Страница {page} из {totalPages} (всего {totalUsers} участников)
+            {t('pagination.page')} {page} {t('pagination.of')} {totalPages} ({t('pagination.totalParticipants', { count: totalUsers })})
           </div>
           <div className="flex gap-2">
             <Button
@@ -108,7 +110,7 @@ export default function RatingPage() {
               disabled={page <= 1}
               className="cursor-pointer"
             >
-              Назад
+              {t('pagination.back')}
             </Button>
             <Button
               variant="outline"
@@ -117,7 +119,7 @@ export default function RatingPage() {
               disabled={page >= totalPages}
               className="cursor-pointer"
             >
-              Вперед
+              {t('pagination.next')}
             </Button>
           </div>
         </div>

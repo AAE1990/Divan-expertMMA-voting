@@ -153,6 +153,32 @@
     "Country placeholder": "Россия",
     "Social placeholder": "username"
   },
+  "Leaderboard": {
+    "title": "Топ прогнозистов",
+    "timeFilters": {
+      "weekly": "За неделю",
+      "monthly": "За месяц",
+      "allTime": "За всё время"
+    },
+    "tableHeaders": {
+      "rank": "Место",
+      "user": "Участник",
+      "points": "Баллы"
+    },
+    "publicProfile": {
+      "memberSince": "Участник с",
+      "leaderboardRank": "Место в рейтинге",
+      "statistics": "Статистика",
+      "socialNetworks": "Социальные сети"
+    },
+    "pagination": {
+      "page": "Страница",
+      "of": "из",
+      "back": "Назад",
+      "next": "Вперед",
+      "totalParticipants": "всего {count} участников"
+    }
+  },
   "Common": {
     "loading": "Загрузка..."
   }

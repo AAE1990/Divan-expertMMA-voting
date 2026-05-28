@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from "next-intl"
 import { useParams } from "next/navigation"
 import { userService } from "@/features/user/services/user.services"
 import { useQuery } from "@tanstack/react-query"
@@ -12,6 +13,8 @@ import Link from "next/link"
 import { useProfile } from "@/shared/hooks"
 
 export default function PublicProfilePage() {
+    const t = useTranslations('Profile')
+    const tLeaderboard = useTranslations('Leaderboard')
     const params = useParams()
     const id = params.id as string
     const [page, setPage] = useState(1)
@@ -68,7 +71,7 @@ export default function PublicProfilePage() {
                     </Avatar>
                     <div>
                         <h1 className="text-3xl font-black uppercase tracking-tight">{user.displayName}</h1>
-                        <p className="text-muted-foreground text-sm">Участник с {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'не определенной даты'}</p>
+                        <p className="text-muted-foreground text-sm">{tLeaderboard('publicProfile.memberSince')} {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'не определенной даты'}</p>
                         
                         {/* Биография */}
                         {user.bio && (
@@ -116,7 +119,7 @@ export default function PublicProfilePage() {
                 {/* МЕСТО В РЕЙТИНГЕ */}
                 <div className="flex items-center gap-6 px-6 py-3 bg-background/50 rounded-xl border border-primary/20 shadow-sm">
                     <div className="text-right">
-                        <p className="text-[10px] font-bold uppercase text-primary tracking-widest">Место в рейтинге</p>
+                        <p className="text-[10px] font-bold uppercase text-primary tracking-widest">{tLeaderboard('publicProfile.leaderboardRank')}</p>
                         <p className="text-3xl font-black">{user.rank || 1}</p>
                     </div>
                     <Trophy className="text-primary size-10" />
@@ -128,16 +131,16 @@ export default function PublicProfilePage() {
                 <div className="lg:col-span-7 space-y-6">
                     <Card className="shadow-none border-none bg-transparent">
                         <CardHeader className="px-0 pt-0">
-                            <CardTitle className="text-lg font-bold uppercase tracking-wider text-left pl-4 border-l-4 border-primary">Статистика</CardTitle>
+                            <CardTitle className="text-lg font-bold uppercase tracking-wider text-left pl-4 border-l-4 border-primary">{t('Statistics')}</CardTitle>
                         </CardHeader>
                         <CardContent className="px-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="rounded-xl border bg-secondary/5 p-4">
-                                    <p className="text-xs uppercase font-bold text-muted-foreground">Всего прогнозов</p>
+                                    <p className="text-xs uppercase font-bold text-muted-foreground">{t('Total Predictions')}</p>
                                     <p className="text-2xl font-black mt-2">{totalVotes}</p>
                                 </div>
                                 <div className="rounded-xl border bg-secondary/5 p-4">
-                                    <p className="text-xs uppercase font-bold text-muted-foreground">Точность</p>
+                                    <p className="text-xs uppercase font-bold text-muted-foreground">{t('Accuracy')}</p>
                                     <p className="text-2xl font-black mt-2">
                                         {user.correctVotes ?? 0}
                                         <span className="text-sm text-muted-foreground"> / {totalVotes}</span>
@@ -151,7 +154,7 @@ export default function PublicProfilePage() {
                     {currentUser?.id && (user.youtube || user.telegram || user.vk || user.twitter || user.instagram) && (
                         <Card className="shadow-none border-none bg-transparent">
                             <CardHeader className="px-0 pt-0">
-                                <CardTitle className="text-lg font-bold uppercase tracking-wider text-left pl-4 border-l-4 border-primary">Социальные сети</CardTitle>
+                                <CardTitle className="text-lg font-bold uppercase tracking-wider text-left pl-4 border-l-4 border-primary">{t('Social Networks')}</CardTitle>
                             </CardHeader>
                             <CardContent className="px-4">
                                 <div className="flex flex-wrap gap-3">
@@ -175,14 +178,14 @@ export default function PublicProfilePage() {
 
                 {/* ПРАВАЯ КОЛОНКА: ИСТОРИЯ ПРОГНОЗОВ */}
                 <div className="lg:col-span-5 space-y-4">
-                    <h2 className="text-lg font-bold uppercase tracking-wider text-center mb-4">История прогнозов</h2>
+                    <h2 className="text-lg font-bold uppercase tracking-wider text-center mb-4">{t('Prediction History')}</h2>
                     <div className="rounded-2xl border bg-secondary/5 p-2 min-h-[300px]">
                         <PredictionsHistory votes={user?.votes || []} />
                     </div>
                     {totalVotes > 0 && (
                         <div className="flex items-center justify-between px-2">
                             <div className="text-sm text-muted-foreground">
-                                Страница {page} из {totalPages}
+                                {t('Page')} {page} {t('of')} {totalPages}
                             </div>
                             <div className="flex gap-2">
                                 <Button
@@ -192,7 +195,7 @@ export default function PublicProfilePage() {
                                     disabled={page <= 1}
                                     className="cursor-pointer"
                                 >
-                                    Назад
+                                    {t('Back')}
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -201,7 +204,7 @@ export default function PublicProfilePage() {
                                     disabled={page >= totalPages}
                                     className="cursor-pointer"
                                 >
-                                    Вперед
+                                    {t('Next')}
                                 </Button>
                             </div>
                         </div>
