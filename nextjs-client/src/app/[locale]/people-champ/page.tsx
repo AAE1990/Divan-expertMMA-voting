@@ -2,17 +2,19 @@
 
 import { useProfile } from "@/shared/hooks"
 import { Card, CardHeader, CardTitle, CardDescription, Button, Skeleton, Loading } from "@/shared/components/ui"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Scale, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { votingService } from "@/features/voting/services/voting.service"
 import { VotingCard } from "@/features/voting/components/VotingCard"
+import { useTranslations } from "next-intl"
 
 export default function PeopleChampPage() {
   const [page, setPage] = useState(1)
   const limit = 5 // Количество опросов на странице
   const { user, isLoading: isProfileLoading } = useProfile()
+  const t = useTranslations('PeopleChamp')
 
   const { data: pollsData, isLoading } = useQuery({
     queryKey: ["people-champ-polls", page],
@@ -45,17 +47,17 @@ export default function PeopleChampPage() {
       <div className="container mx-auto py-20 px-4 max-w-4xl text-center">
         <Scale className="size-24 mx-auto mb-6 text-muted-foreground" />
         <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter italic">
-          Народный чемпион
+          {t('title')}
         </h1>
         <p className="text-xl text-muted-foreground mb-8">
-          Этот раздел доступен только участникам лиги.
+          {t('guestDescription')}
         </p>
         <div className="flex gap-4 justify-center">
           <Button asChild size="lg" variant="outline">
-            <Link href="/auth/login">Войти</Link>
+            <Link href="/auth/login">{t('loginButton')}</Link>
           </Button>
           <Button asChild size="lg">
-            <Link href="/auth/register">Присоединиться</Link>
+            <Link href="/auth/register">{t('joinButton')}</Link>
           </Button>
         </div>
       </div>
@@ -67,13 +69,12 @@ export default function PeopleChampPage() {
       <div className="flex items-center justify-center mb-10">
         <Scale className="size-10 mr-4 text-primary" />
         <h1 className="text-4xl font-black uppercase tracking-tighter italic">
-          Народный чемпион
+          {t('title')}
         </h1>
       </div>
 
       <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
-        Голосования по спорным боям, которые не влияют на основной рейтинг, но показывают мнение комьюнити.
-        Ваш голос важен!
+        {t('authDescription')}
       </p>
 
       <div className="relative min-h-[60vh]">
@@ -95,7 +96,7 @@ export default function PeopleChampPage() {
               ))
             ) : (
               <p className="text-center text-muted-foreground py-10 italic">
-                Пока нет голосований в разделе «Народный чемпион».
+                {t('noPolls')}
               </p>
             )}
           </div>
@@ -114,7 +115,7 @@ export default function PeopleChampPage() {
             <ChevronLeft className="size-4" />
           </Button>
           <span className="text-sm font-medium">
-            Страница {page} из {totalPages}
+            {t('page')} {page} {t('of')} {totalPages}
           </span>
           <Button
             variant="outline"

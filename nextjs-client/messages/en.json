@@ -101,6 +101,18 @@
     "yourChoiceLabel": "Your choice",
     "confirmFinish": "Are you sure? This action will award points and close the voting."
   },
+  "PeopleChamp": {
+    "title": "People's Champion",
+    "guestDescription": "This section is only available to league members.",
+    "authDescription": "Polls on controversial fights that do not affect the main leaderboard but show the community's opinion. Your vote matters!",
+    "loginButton": "Log In",
+    "joinButton": "Join Now",
+    "noPolls": "No polls available in the People's Champion section yet.",
+    "page": "Page",
+    "of": "of",
+    "back": "Back",
+    "next": "Next"
+  },
   "Common": {
     "loading": "Loading..."
   }
