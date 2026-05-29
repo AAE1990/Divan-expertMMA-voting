@@ -263,5 +263,41 @@
     "message": "We use cookies to improve site performance. By staying on the site, you agree to our policy.",
     "acceptButton": "Accept",
     "closeButton": "Close"
+  },
+  "AdminVoting": {
+    "tournamentsTitle": "Tournaments",
+    "quickTournamentButton": "+ Quick Tournament",
+    "addFightTitle": "Add Fight to Card",
+    "selectTournamentLabel": "Select tournament",
+    "selectTournamentPlaceholder": "Select event",
+    "questionLabel": "Question",
+    "questionPlaceholder": "e.g., Who will win at UFC 300?",
+    "fighterNameLabel": "Name",
+    "fighterNamePlaceholder": "First and Last Name",
+    "fighter1Label": "Fighter 1",
+    "fighter2Label": "Fighter 2",
+    "photoUrlLabel": "Photo URL (optional)",
+    "previewLabel": "Preview:",
+    "expiresAtLabel": "End Date and Time (MSK)",
+    "peopleChampLabel": "People's Champion (does not affect leaderboard)",
+    "publishButton": "Publish",
+    "publishingButton": "Publishing...",
+    "tournamentPrompt": "Tournament Title (e.g., UFC 300)"
+  },
+  "AdminNews": {
+    "createNewsTitle": "Create News",
+    "titleLabel": "News Title",
+    "titlePlaceholder": "Enter news title",
+    "contentLabel": "News Content",
+    "contentPlaceholder": "Enter full news content",
+    "imageUrlLabel": "Image URL (optional)",
+    "publishNewsButton": "Publish News",
+    "creatingButton": "Creating..."
+  },
+  "Toasts": {
+    "tournamentCreatedSuccess": "Tournament created successfully!",
+    "newsPublishedSuccess": "News published successfully!",
+    "creationFailedTournament": "Error when creating the tournament",
+    "creationFailedNews": "Error when publishing news"
   }
 }

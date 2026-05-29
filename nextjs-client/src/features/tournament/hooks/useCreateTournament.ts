@@ -1,18 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { tournamentService } from "../services/tournament.service";
+import { useTranslations } from "next-intl"
 import { toast } from "sonner";
 
 export const useCreateTournament = () => {
+  const t = useTranslations('Toasts')
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: any) => tournamentService.create(data),
     onSuccess: () => {
-      toast.success("Турнир успешно создан!");
+      toast.success(t('tournamentCreatedSuccess'));
       queryClient.invalidateQueries({ queryKey: ["tournaments"] });
     },
     onError: (error: any) => {
-      toast.error(error.message || "Ошибка при создании турнира");
+      toast.error(error.message || (t("creationFailedTournament")));
     },
   });
 };

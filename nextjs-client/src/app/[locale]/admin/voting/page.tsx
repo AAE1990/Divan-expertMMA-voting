@@ -15,6 +15,7 @@ import { useCreateTournament } from "@/features/tournament/hooks/useCreateTourna
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
 import { useEffect } from "react"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 export default function AdminVotingPage() {
     // 1. Сначала ВСЕ хуки без исключения
@@ -23,6 +24,8 @@ export default function AdminVotingPage() {
     const { mutate: createTournament } = useCreateTournament()
     const { mutate: createPoll, isPending } = useCreatePoll()
     const router = useRouter()
+    const t = useTranslations('AdminVoting')
+    const tCommon = useTranslations('Common')
 
     // Форма боя теперь должна включать tournamentId
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<TCreatePollSchema>({
@@ -57,7 +60,7 @@ export default function AdminVotingPage() {
 
     // Функция для создания тестового турнира (чтобы не верстать пока всю форму)
     const handleQuickTournament = () => {
-        const name = prompt("Название турнира (напр. UFC 300):")
+        const name = prompt(t('tournamentPrompt'))
         const date = new Date().toISOString()
         if (name) createTournament({ name, date })
     }
@@ -75,7 +78,7 @@ export default function AdminVotingPage() {
         
         return (
             <div className="mt-3">
-                <p className="text-xs text-gray-500 mb-1">Предпросмотр:</p>
+                <p className="text-xs text-gray-500 mb-1">{t('previewLabel')}</p>
                 <div className="h-40 w-full overflow-hidden rounded-lg shadow-md">
                     <img
                         src={photoUrl}
@@ -118,23 +121,23 @@ export default function AdminVotingPage() {
             {/* Секция 1: Управление турнирами */}
             <Card className="border-dashed border-2">
                 <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Турниры</CardTitle>
+                    <CardTitle>{t('tournamentsTitle')}</CardTitle>
                     <Button variant="outline" size="sm" onClick={handleQuickTournament}>
-                        + Быстрый турнир
+                        {t('quickTournamentButton')}
                     </Button>
                 </CardHeader>
             </Card>
 
             {/* Секция 2: Создание боя */}
             <Card>
-                <CardHeader><CardTitle>Добавить бой в кард</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{t('addFightTitle')}</CardTitle></CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div className="space-y-2">
-                            <Label>Выберите турнир</Label>
+                            <Label>{t('selectTournamentLabel')}</Label>
                             <Select onValueChange={(value) => setValue("tournamentId", value)}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder={isTournamentsLoading ? "Загрузка..." : "Выберите ивент"} />
+                                    <SelectValue placeholder={isTournamentsLoading ? tCommon('loading') : t('selectTournamentPlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {tournaments?.tournaments?.map((t) => (
@@ -147,47 +150,47 @@ export default function AdminVotingPage() {
 
                         {/* ... твои старые поля fighter1, fighter2, expiresAt ... */}
                         <div className="space-y-2">
-                            <Label>Вопрос</Label>
-                            <Input {...register("question")} placeholder="Например: Кто победит на UFC 300?" />
+                            <Label>{t('questionLabel')}</Label>
+                            <Input {...register("question")} placeholder={t('questionPlaceholder')} />
                             {errors.question && <p className="text-red-500 text-xs">{errors.question.message}</p>}
                         </div>
 
                         <div className="space-y-4">
                             <div className="border p-4 rounded-lg">
-                                <h3 className="font-medium mb-3">Боец 1</h3>
+                                <h3 className="font-medium mb-3">{t('fighter1Label')}</h3>
                                 <div className="space-y-2">
-                                    <Label>Имя</Label>
-                                    <Input {...register("fighter1")} placeholder="Имя Фамилия" />
+                                    <Label>{t('fighterNameLabel')}</Label>
+                                    <Input {...register("fighter1")} placeholder={t('fighterNamePlaceholder')} />
                                     {errors.fighter1 && <p className="text-red-500 text-xs">{errors.fighter1.message}</p>}
                                 </div>
                                 <div className="space-y-2 mt-3">
-                                    <Label>URL фотографии (опционально)</Label>
+                                    <Label>{t('photoUrlLabel')}</Label>
                                     <Input {...register("fighter1Photo")} placeholder="https://example.com/fighter1.jpg" />
                                     {errors.fighter1Photo && <p className="text-red-500 text-xs">{errors.fighter1Photo.message}</p>}
                                 </div>
                                 {/* Предпросмотр фотографии */}
-                                <PreviewImage register={register} name="fighter1Photo" label="Боец 1" />
+                                <PreviewImage register={register} name="fighter1Photo" label={t('fighter1Label')} />
                             </div>
                             
                             <div className="border p-4 rounded-lg">
-                                <h3 className="font-medium mb-3">Боец 2</h3>
+                                <h3 className="font-medium mb-3">{t('fighter2Label')}</h3>
                                 <div className="space-y-2">
-                                    <Label>Имя</Label>
-                                    <Input {...register("fighter2")} placeholder="Имя Фамилия" />
+                                    <Label>{t('fighterNameLabel')}</Label>
+                                    <Input {...register("fighter2")} placeholder={t('fighterNamePlaceholder')} />
                                     {errors.fighter2 && <p className="text-red-500 text-xs">{errors.fighter2.message}</p>}
                                 </div>
                                 <div className="space-y-2 mt-3">
-                                    <Label>URL фотографии (опционально)</Label>
+                                    <Label>{t('photoUrlLabel')}</Label>
                                     <Input {...register("fighter2Photo")} placeholder="https://example.com/fighter2.jpg" />
                                     {errors.fighter2Photo && <p className="text-red-500 text-xs">{errors.fighter2Photo.message}</p>}
                                 </div>
                                 {/* Предпросмотр фотографии */}
-                                <PreviewImage register={register} name="fighter2Photo" label="Боец 2" />
+                                <PreviewImage register={register} name="fighter2Photo" label={t('fighter2Label')} />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Дата и время завершения (МСК)</Label>
+                            <Label>{t('expiresAtLabel')}</Label>
                             <Input type="datetime-local" {...register("expiresAt")} />
                             {errors.expiresAt && <p className="text-red-500 text-xs">{errors.expiresAt.message}</p>}
                         </div>
@@ -200,12 +203,14 @@ export default function AdminVotingPage() {
                                 className="h-4 w-4 rounded border-gray-300"
                             />
                             <Label htmlFor="isPeopleChamp" className="text-sm font-medium leading-none">
-                                Народный чемпион (не влияет на рейтинг)
+                                {t('peopleChampLabel')}
                             </Label>
                         </div>
                         {errors.isPeopleChamp && <p className="text-red-500 text-xs">{errors.isPeopleChamp.message}</p>}
 
-                        <Button type="submit" className="w-full" disabled={isPending}>Опубликовать</Button>
+                        <Button type="submit" className="w-full" disabled={isPending}>
+                            {isPending ? t('publishingButton') : t('publishButton')}
+                        </Button>
                     </form>
                 </CardContent>
             </Card>

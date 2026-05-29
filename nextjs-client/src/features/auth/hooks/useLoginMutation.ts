@@ -27,7 +27,7 @@ export function useLoginMutation(
                 toastMessageHandler(data)
                 setIsShowFactor(true)
             } else {
-                toast.success('Успешное авторизация')
+                toast.success('Успешная авторизация')
                 // Сбрасываем все запросы профиля, чтобы немедленно обновить интерфейс
                 queryClient.resetQueries({ queryKey: ['profile'], exact: false })
                 router.push('/dashboard/settings')

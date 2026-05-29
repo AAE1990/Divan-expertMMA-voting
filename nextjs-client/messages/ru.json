@@ -263,5 +263,41 @@
     "message": "Мы используем файлы cookie для улучшения работы сайта. Оставаясь на сайте, вы соглашаетесь с нашей политикой.",
     "acceptButton": "Принять",
     "closeButton": "Закрыть"
+  },
+  "AdminVoting": {
+    "tournamentsTitle": "Турниры",
+    "quickTournamentButton": "+ Быстрый турнир",
+    "addFightTitle": "Добавить бой в кард",
+    "selectTournamentLabel": "Выберите турнир",
+    "selectTournamentPlaceholder": "Выберите ивент",
+    "questionLabel": "Вопрос",
+    "questionPlaceholder": "Например: Кто победит на UFC 300?",
+    "fighterNameLabel": "Имя",
+    "fighterNamePlaceholder": "Имя Фамилия",
+    "fighter1Label": "Боец 1",
+    "fighter2Label": "Боец 2",
+    "photoUrlLabel": "URL фотографии (опционально)",
+    "previewLabel": "Предпросмотр:",
+    "expiresAtLabel": "Дата и время завершения (МСК)",
+    "peopleChampLabel": "Народный чемпион (не влияет на рейтинг)",
+    "publishButton": "Опубликовать",
+    "publishingButton": "Публикация...",
+    "tournamentPrompt": "Название турнира (напр. UFC 300)"
+  },
+  "AdminNews": {
+    "createNewsTitle": "Создание новости",
+    "titleLabel": "Заголовок",
+    "titlePlaceholder": "Введите заголовок новости",
+    "contentLabel": "Текст новости",
+    "contentPlaceholder": "Введите полный текст новости",
+    "imageUrlLabel": "URL изображения (необязательно)",
+    "publishNewsButton": "Опубликовать новость",
+    "creatingButton": "Создание..."
+  },
+  "Toasts": {
+    "tournamentCreatedSuccess": "Турнир успешно создан",
+    "newsPublishedSuccess": "Новость успешно опубликована",
+    "creationFailedTournament": "Ошибка создания турнира",
+    "creationFailedNews": "Ошибка публикации новости"
   }
 }
