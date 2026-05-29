@@ -208,5 +208,60 @@
       "back": "Back",
       "next": "Next"
     }
+  },
+  "Rules": {
+    "title": "Site Rules",
+    "updated": "Updated: May 15, 2026",
+    "generalTitle": "General Provisions",
+    "generalParagraph1": "Welcome to the fight prediction platform! Our service is created for the community of martial arts enthusiasts, where everyone can participate in voting, make predictions and compete in the rating.",
+    "generalParagraph2": "By using our site, you agree to the rules below. The author of the service reserves the right to make changes to the rules, informing users by publishing an updated version on this page.",
+    "respectfulTitle": "Respectful Communication",
+    "respectfulItem1": "In our groups and social networks associated with the service, insults, discrimination, hate speech and trolling are prohibited.",
+    "respectfulItem2": "Criticism must be constructive and respectful. Remember that there are real people behind the avatars.",
+    "respectfulItem3": "The administration reserves the right to delete comments and block users violating these principles without warning.",
+    "prohibitedTitle": "Prohibited Actions",
+    "prohibitedItem1": "Spam and flooding – repeated sending of similar messages, advertising of third-party resources without approval.",
+    "prohibitedItem2": "Vote manipulation – using scripts, bots or creating multiple accounts to artificially influence voting results.",
+    "prohibitedItem3": "Distribution of malicious software – links to viruses, phishing sites, etc.",
+    "prohibitedItem4": "Attempts to hack – scanning vulnerabilities, SQL injections, DDOS attacks on infrastructure.",
+    "prohibitedNote": "If such actions are detected, the offender's account will be blocked and data may be transferred to law enforcement agencies if necessary.",
+    "safetyTitle": "Security and Moderation",
+    "safetyParagraph": "The author of the service reserves the right to make final decisions on organization, security and moderation of the resource. This includes, but is not limited to:",
+    "safetyItem1": "Deleting content that violates the rules.",
+    "safetyItem2": "Blocking users who violate the rules.",
+    "safetyItem3": "Adjusting the rating when unfair play is detected.",
+    "safetyItem4": "Temporary or permanent restriction of access to certain functions.",
+    "safetyParagraph2": "If you encounter a rule violation by another user or discover a technical problem, report it via the 'Feedback' section or to the support email.",
+    "ratingTitle": "Rating System",
+    "ratingParagraph": "User ratings are calculated based on the accuracy of predictions in votes. The more often your prediction matches the actual outcome of a fight, the higher your position in the overall standings.",
+    "ratingSubtitle": "How points are awarded:",
+    "ratingItem1": "For each correct prediction you receive 1 point.",
+    "ratingItem2": "If the prediction is incorrect – 0 points.",
+    "ratingItem3": "Votes in the 'People's Champion' section do not bring points to the rating.",
+    "ratingItem4": "The rating is updated automatically immediately after the fight result is confirmed by the admin.",
+    "ratingNote": "The rating is a game indicator and has no monetary equivalent. The administration may change the calculation algorithm, informing users beforehand.",
+    "conclusionTitle": "Conclusion",
+    "conclusionParagraph1": "Following these rules makes our community comfortable and fair for everyone. If you have any questions, refer to the 'Frequently Asked Questions' section or write to support.",
+    "conclusionParagraph2": "By using the site, you confirm that you have read the rules and accept them.",
+    "copyright": "© 2026 Fight Predictions. All rights reserved."
+  },
+  "Footer": {
+    "logo": "Couch Expert",
+    "description": "The first league for those who see upset where others see favorites. Your analytics — your reputation.",
+    "copyright": "© {year} All rights reserved",
+    "communityTitle": "Community",
+    "importantTitle": "Important",
+    "links": {
+      "telegram": "Telegram channel",
+      "vk": "VKontakte",
+      "email": "Write to us",
+      "rules": "Site Rules"
+    },
+    "disclaimer": "This resource is created solely for entertainment and analytical purposes. We are not a bookmaker, do not accept money bets and do not conduct gambling. Predictions on the site are the personal opinion of community members."
+  },
+  "CookieBanner": {
+    "message": "We use cookies to improve site performance. By staying on the site, you agree to our policy.",
+    "acceptButton": "Accept",
+    "closeButton": "Close"
   }
 }

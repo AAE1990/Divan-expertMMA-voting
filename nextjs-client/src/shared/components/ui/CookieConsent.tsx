@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from './Button'
 import { X } from 'lucide-react'
 import { cn } from '@/shared/utils/clsx'
+import { useTranslations } from 'next-intl'
 
 interface CookieConsentProps {
   /** Текст соглашения */
@@ -17,12 +18,16 @@ interface CookieConsentProps {
 }
 
 export function CookieConsent({
-  message = 'Мы используем файлы cookie для улучшения работы сайта. Оставаясь на сайте, вы соглашаетесь с нашей политикой.',
-  buttonText = 'Принять',
+  message,
+  buttonText,
   position = 'bottom-right',
   className,
 }: CookieConsentProps) {
+  const t = useTranslations('CookieBanner');
   const [isVisible, setIsVisible] = useState(false)
+  const finalMessage = message ?? t('message');
+  const finalButtonText = buttonText ?? t('acceptButton');
+  const closeButtonText = t('closeButton');
 
   useEffect(() => {
     const hasConsent = localStorage.getItem('cookie-consent')
@@ -61,14 +66,14 @@ export function CookieConsent({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <p className="text-sm text-foreground">{message}</p>
+          <p className="text-sm text-foreground">{finalMessage}</p>
           <div className="mt-3 flex items-center gap-2">
             <Button
               size="sm"
               onClick={handleAccept}
               className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              {buttonText}
+              {finalButtonText}
             </Button>
             <Button
               size="sm"
@@ -76,14 +81,14 @@ export function CookieConsent({
               onClick={handleClose}
               className="border-border text-foreground hover:bg-accent"
             >
-              Закрыть
+              {closeButtonText}
             </Button>
           </div>
         </div>
         <button
           onClick={handleClose}
           className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
-          aria-label="Закрыть"
+          aria-label={closeButtonText}
         >
           <X size={16} />
         </button>
