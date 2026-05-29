@@ -6,12 +6,14 @@ import { toastMessageHandler } from "@/shared/utils";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 import { Dispatch, SetStateAction } from "react";
+import { useTranslations } from "next-intl";
 
 export function useLoginMutation(
     setIsShowFactor: Dispatch<SetStateAction<boolean>>
 ) {
     const router = useRouter()
     const queryClient = useQueryClient()
+    const t = useTranslations("Auth")
     
     const  { mutate: login, isPending: isLoadingLogin} = useMutation({
         mutationKey: ['login user'],
@@ -27,7 +29,7 @@ export function useLoginMutation(
                 toastMessageHandler(data)
                 setIsShowFactor(true)
             } else {
-                toast.success('Успешная авторизация')
+                toast.success(t('successLogin'))
                 // Сбрасываем все запросы профиля, чтобы немедленно обновить интерфейс
                 queryClient.resetQueries({ queryKey: ['profile'], exact: false })
                 router.push('/dashboard/settings')

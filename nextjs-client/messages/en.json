@@ -71,7 +71,17 @@
     "emailVerificationTitle": "Email Verification",
     "resetPasswordDescription": "To reset your password, enter your email",
     "resetButton": "Reset",
-    "or": "Or"
+    "or": "Or",
+    "successLogin": "Successfully logged in!",
+    "loginError": "Invalid email or password",
+    "passwordResetSent": "Password reset link has been sent to your email!",
+    "passwordResetSentDesc": "A link for confirmation has been sent to your email.",
+    "passwordChanged": "Password has been successfully changed!",
+    "passwordChangedDesc": "You can now log in to your account.",
+    "emailVerified": "Email successfully verified!",
+    "verificationError": "Token verification failed",
+    "profileUpdated": "Profile data updated successfully!",
+    "logoutSuccess": "You have successfully logged out"
   },
   "Voting": {
     "voteButton": "Vote",
@@ -99,7 +109,11 @@
     "makePrediction": "Make prediction",
     "alreadyVoted": "You have already made your choice",
     "yourChoiceLabel": "Your choice",
-    "confirmFinish": "Are you sure? This action will award points and close the voting."
+    "confirmFinish": "Are you sure? This action will award points and close the voting.",
+    "pollCreated": "New poll created successfully!",
+    "pollCreateError": "Failed to create poll",
+    "pollFinished": "Poll successfully finished!",
+    "pollFinishError": "Failed to finish poll"
   },
   "PeopleChamp": {
     "title": "People's Champion",

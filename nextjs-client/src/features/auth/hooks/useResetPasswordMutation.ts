@@ -3,8 +3,10 @@ import { TypeResetPasswordSchema } from '../schemes/reset-password.schema'
 import { passwordRecoveryService } from "../services/password-recovery.service";
 import { toast } from "sonner";
 import { toastMessageHandler } from "@/shared/utils";
+import { useTranslations } from "next-intl";
 
 export function useResetPasswordMutation() {
+    const t = useTranslations("Auth")
     const { mutate: reset, isPending: isLoadingReset } = useMutation({
         mutationKey: ['reset password'],
         mutationFn: ({
@@ -15,9 +17,8 @@ export function useResetPasswordMutation() {
             recaptcha: string
         }) => passwordRecoveryService.reset(values, recaptcha),
         onSuccess() {
-            toast.success('Проверьте почту', {
-                description:
-                    'На вашу почту была отправлена ссылка на подтверждение'
+            toast.success(t('passwordResetSent'), {
+                description: t('passwordResetSentDesc')
             })
         },
         onError(error) {

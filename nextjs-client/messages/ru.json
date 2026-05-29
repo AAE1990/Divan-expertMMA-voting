@@ -71,7 +71,17 @@
     "emailVerificationTitle": "Подтверждение почты",
     "resetPasswordDescription": "Для сброса пароля введите свою почту",
     "resetButton": "Сбросить",
-    "or": "Или"
+    "or": "Или",
+    "successLogin": "Успешная авторизация!",
+    "loginError": "Неверная почта или пароль",
+    "passwordResetSent": "Ссылка для сброса пароля отправлена на почту!",
+    "passwordResetSentDesc": "На вашу почту была отправлена ссылка для подтверждения.",
+    "passwordChanged": "Пароль успешно изменен!",
+    "passwordChangedDesc": "Теперь вы можете войти в свой аккаунт",
+    "emailVerified": "Почта успешно подтверждена!",
+    "verificationError": "Ошибка верификации токена",
+    "profileUpdated": "Данные профиля обновлены!",
+    "logoutSuccess": "Вы успешно вышли из аккаунта"
   },
   "Voting": {
     "voteButton": "Проголосовать",
@@ -99,7 +109,11 @@
     "makePrediction": "Сделать прогноз",
     "alreadyVoted": "Вы уже сделали свой выбор",
     "yourChoiceLabel": "Ваш выбор",
-    "confirmFinish": "Вы уверены? Это действие начислит баллы и закроет голосование."
+    "confirmFinish": "Вы уверены? Это действие начислит баллы и закроет голосование.",
+    "pollCreated": "Новое голосование создано!",
+    "pollCreateError": "Ошибка при создании голосования",
+    "pollFinished": "Голосование успешно завершено!",
+    "pollFinishError": "Ошибка при завершении голосования"
   },
   "PeopleChamp": {
     "title": "Народный чемпион",
