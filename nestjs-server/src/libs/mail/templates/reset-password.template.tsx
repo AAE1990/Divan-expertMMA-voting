@@ -4,11 +4,12 @@ import * as React from "react"
 
 interface ResetPasswordTemplateProps {
     domain: string;
-    token: string
+    token: string;
+    locale?: string;
 }
 
-export function ResetPasswordTemplate({ domain, token }: ResetPasswordTemplateProps) {
-    const resetLink = `${domain}/en/auth/new-password?token=${token}`;
+export function ResetPasswordTemplate({ domain, token, locale = 'en' }: ResetPasswordTemplateProps) {
+    const resetLink = `${domain}/${locale}/auth/new-password?token=${token}`;
 
     return (
         <Tailwind>

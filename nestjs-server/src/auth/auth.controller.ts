@@ -19,15 +19,15 @@ export class AuthController {
   @Recaptcha()
   @Post('register')
   @HttpCode(HttpStatus.OK)
-  public async register(@Req() req: Request, @Body() dto: RegisterDto) {
-    return this.authService.register(dto)
+  public async register(@Req() req: Request, @Body() dto: RegisterDto, @Query('locale') locale?: string) {
+    return this.authService.register(dto, locale)
   }
   
   @Recaptcha()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  public async login(@Req() req: Request, @Body() dto: LoginDto) {
-    return this.authService.login(req, dto)
+  public async login(@Req() req: Request, @Body() dto: LoginDto, @Query('locale') locale?: string) {
+    return this.authService.login(req, dto, locale)
   }
 
   @Get('/oauth/callback/:provider')
@@ -36,7 +36,8 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true}) res: Response,
     @Query('code') code: string,
-    @Param('provider') provider: string
+    @Param('provider') provider: string,
+    @Query('state') state?: string
   ) {
     if (!code) {
       throw new BadRequestException(
@@ -46,18 +47,21 @@ export class AuthController {
 
     await this.authService.extractProfileFromCode(req, provider, code)
 
-    return res.redirect(
-      `${this.configService.getOrThrow<string>('ALLOWED_ORIGIN')}/dashboard/settings`
-    )
+    const baseUrl = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
+    const redirectPath = state ? `/${state}/dashboard/settings` : '/dashboard/settings'
+    return res.redirect(`${baseUrl}${redirectPath}`)
   }
 
   @UseGuards(AuthProviderGuard)
   @Get('/oauth/connect/:provider')
-  public async connect(@Param('provider') provider: string) {
+  public async connect(
+    @Param('provider') provider: string,
+    @Query('locale') locale?: string
+  ) {
     const providerInstance = this.providerService.findByService(provider)
 
     return {
-      url: providerInstance!.getAuthUrl()
+      url: providerInstance!.getAuthUrl(locale)
     }
   }
 

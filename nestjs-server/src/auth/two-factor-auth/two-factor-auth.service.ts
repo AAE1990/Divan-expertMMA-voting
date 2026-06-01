@@ -10,7 +10,7 @@ export class TwoFactorAuthService {
         private readonly mailService: MailService
     ) { }
 
-    public async validateTwoFactorToken(email: string, code: string) {
+    public async validateTwoFactorToken(email: string, code: string, locale: string = 'en') {
         const existingToken = await this.prismaService.token.findFirst({
             where: {
                 email,
@@ -19,23 +19,26 @@ export class TwoFactorAuthService {
         })
 
         if (!existingToken) {
-            throw new NotFoundException(
-                'Токен двухфакторной авторизации не найден. Убедитесь, пожалуйста, что вы запрашивали токен для данного адреса электронной почты'
-            )
+            throw new NotFoundException({
+                message: 'Токен двухфакторной авторизации не найден. Убедитесь, пожалуйста, что вы запрашивали токен для данного адреса электронной почты',
+                code: 'TOKEN_NOT_FOUND'
+            })
         }
 
         const hasExpired = new Date(existingToken.expiresIn) < new Date()
 
         if (existingToken.token !== code) {
-            throw new BadRequestException(
-                'Неверный код двухфакторной авторизации. Пожалуйста, проверьте введенный код и попробуйте снова.'
-            )
+            throw new BadRequestException({
+                message: 'Неверный код двухфакторной авторизации. Пожалуйста, проверьте введенный код и попробуйте снова.',
+                code: 'INVALID_TOKEN'
+            })
         }
 
         if (hasExpired) {
-            throw new BadRequestException(
-                'Срок действия токена двухфакторной авторизации истек. Пожалуйста, запросите новый токен.'
-            )
+            throw new BadRequestException({
+                message: 'Срок действия токена двухфакторной авторизации истек. Пожалуйста, запросите новый токен.',
+                code: 'TOKEN_EXPIRED'
+            })
         }
 
         await this.prismaService.token.delete({

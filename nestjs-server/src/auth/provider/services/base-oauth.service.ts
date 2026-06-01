@@ -15,7 +15,7 @@ export class BaseOAuthService {
         }
     }
 
-    public getAuthUrl() {
+    public getAuthUrl(state?: string) {
         const query = new URLSearchParams({
             response_type: 'code',
             client_id: this.options.client_id,
@@ -24,6 +24,9 @@ export class BaseOAuthService {
             access_type: 'offline',
             prompt: 'select_account'
         })
+        if (state) {
+            query.set('state', state)
+        }
 
         return `${this.options.authorize_url}?${query}`
     }

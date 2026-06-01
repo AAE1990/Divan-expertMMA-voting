@@ -20,7 +20,7 @@ export class EmailConfirmationService {
         private readonly authService: AuthService
     ) {}
 
-    public async newVerification(req: Request, dto: ConfirmationDto){
+    public async newVerification(req: Request, dto: ConfirmationDto, locale: string = 'en'){
         const existingToken = await this.prismaService.token.findUnique({
             where: {
                 token: dto.token,
@@ -29,17 +29,19 @@ export class EmailConfirmationService {
         })
 
         if (!existingToken) {
-            throw new NotFoundException(
-                'Токен подтверджения не найден. Пожалуйста, убедитесь, что у вас правильный токен.'
-            )
+            throw new NotFoundException({
+                message: 'Токен подтверджения не найден. Пожалуйста, убедитесь, что у вас правильный токен.',
+                code: 'TOKEN_NOT_FOUND'
+            })
         }
 
         const hasExpired = new Date(existingToken.expiresIn) < new Date()
 
         if (hasExpired) {
-            throw new BadRequestException(
-                'Токен подтверждения истек. Пожалуйста, запросите новый токен для подтверждения.'
-            )
+            throw new BadRequestException({
+                message: 'Токен подтверждения истек. Пожалуйста, запросите новый токен для подтверждения.',
+                code: 'TOKEN_EXPIRED'
+            })
         }
 
         const existingUser = await this.userService.findByEmail(
@@ -71,7 +73,7 @@ export class EmailConfirmationService {
         return this.authService.saveSession(req, existingUser)
     }
 
-    public async sendVerificationToken(email: string) {
+    public async sendVerificationToken(email: string, locale: string = 'en') {
         const verificationToken = await this.generateVerificationToken(
             email
         )
@@ -79,7 +81,8 @@ export class EmailConfirmationService {
         try {
             await this.mailService.sendConfirmationEmail(
                 verificationToken.email,
-                verificationToken.token
+                verificationToken.token,
+                locale
             )
         } catch (err) {
             this.logger.warn(

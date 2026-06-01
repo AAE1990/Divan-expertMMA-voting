@@ -13,16 +13,16 @@ export class MailService {
         private readonly configService: ConfigService
     ) {}
 
-    public async sendConfirmationEmail(email: string, token: string) {
+    public async sendConfirmationEmail(email: string, token: string, locale: string = 'en') {
         const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
-        const html = await render(ConfirmationTemplate({ domain, token}))
+        const html = await render(ConfirmationTemplate({ domain, token, locale}))
 
         return this.sendMail(email, 'Подтверждение почты', html)
     }
 
-    public async sendPasswordResetEmail(email: string, token: string) {
+    public async sendPasswordResetEmail(email: string, token: string, locale: string = 'en') {
         const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
-        const html = await render(ResetPasswordTemplate({ domain, token}))
+        const html = await render(ResetPasswordTemplate({ domain, token, locale}))
 
         return this.sendMail(email, 'Сброс пароля', html)
     }

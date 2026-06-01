@@ -18,7 +18,7 @@ export class PasswordRecoveryService {
         private readonly mailService: MailService,
     ) {}
 
-    public async resetPassword(dto: ResetPasswordDto) {
+    public async resetPassword(dto: ResetPasswordDto, locale: string = 'en') {
         const existingUser = await this.userService.findByEmail(dto.email)
 
         if (!existingUser) {
@@ -33,13 +33,14 @@ export class PasswordRecoveryService {
 
         await this.mailService.sendPasswordResetEmail(
             passwordResetToken.email,
-            passwordResetToken.token
+            passwordResetToken.token,
+            locale
         )
 
         return true
     }
 
-    public async newPassword(dto: NewPasswordDto, token: string) {
+    public async newPassword(dto: NewPasswordDto, token: string, locale: string = 'en') {
         const existingToken = await this.prismaService.token.findFirst({
             where: {
                 token,
@@ -48,17 +49,19 @@ export class PasswordRecoveryService {
         })
 
         if (!existingToken) {
-            throw new NotFoundException(
-                'Токен не найден. Пожалуйста, проверьте, что у вас правильный токен или запросите новый.'
-            )
+            throw new NotFoundException({
+                message: 'Токен не найден. Пожалуйста, проверьте, что у вас правильный токен или запросите новый.',
+                code: 'TOKEN_NOT_FOUND'
+            })
         }
 
         const hasExpired = new Date(existingToken.expiresIn) < new Date()
 
         if (hasExpired) {
-            throw new BadRequestException(
-                'Срок действия токена истек. Пожалуйста, запросите новый токен для сброса пароля.'
-            )
+            throw new BadRequestException({
+                message: 'Срок действия токена истек. Пожалуйста, запросите новый токен для сброса пароля.',
+                code: 'TOKEN_EXPIRED'
+            })
         }
 
         const existingUser = await this.userService.findByEmail(

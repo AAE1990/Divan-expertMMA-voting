@@ -5,13 +5,15 @@ import * as React from "react"
 interface ConfirmationTemplateProps {
     domain: string
     token: string
+    locale?: string
 }
 
 export function ConfirmationTemplate({
     domain,
-    token
+    token,
+    locale = 'en'
 }: ConfirmationTemplateProps) {
-    const confirmLink = `${domain}/en/auth/new-verification?token=${token}`
+    const confirmLink = `${domain}/${locale}/auth/new-verification?token=${token}`
 
     return (
         <Tailwind>

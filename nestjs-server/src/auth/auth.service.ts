@@ -22,7 +22,7 @@ export class AuthService {
         private readonly twoFactorAuthService: TwoFactorAuthService
     ) { }
 
-    public async register(dto: RegisterDto) {
+    public async register(dto: RegisterDto, locale: string = 'en') {
         const isExists = await this.userService.findByEmail(dto.email)
 
         if (isExists) {
@@ -38,7 +38,7 @@ export class AuthService {
             false
         )
 
-        await this.emailConfirmationService.sendVerificationToken(newUser.email)
+        await this.emailConfirmationService.sendVerificationToken(newUser.email, locale)
 
         return {
             message:
@@ -46,7 +46,7 @@ export class AuthService {
         }
     }
 
-    public async login(req: Request, dto: LoginDto) {
+    public async login(req: Request, dto: LoginDto, locale: string = 'en') {
         const user = await this.userService.findByEmail(dto.email)
 
         if (!user || !user.password) {
@@ -64,7 +64,7 @@ export class AuthService {
         }
 
         if (!user.isVerified) {
-            await this.emailConfirmationService.sendVerificationToken(user.email)
+            await this.emailConfirmationService.sendVerificationToken(user.email, locale)
             throw new UnauthorizedException(
                 'Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес'
             )
@@ -82,7 +82,8 @@ export class AuthService {
 
             await this.twoFactorAuthService.validateTwoFactorToken(
                 user.email,
-                dto.code)
+                dto.code,
+                locale)
 
         }
 
