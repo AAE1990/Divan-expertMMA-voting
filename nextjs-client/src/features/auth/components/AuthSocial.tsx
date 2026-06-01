@@ -3,7 +3,7 @@
 import { Button } from "@/shared/components/ui"
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { FaGoogle, FaYandex } from "react-icons/fa";
 import { authService } from "../services";
 
@@ -11,11 +11,12 @@ import { authService } from "../services";
 export function AuthSocial() {
     const router = useRouter()
     const t = useTranslations('Auth')
+    const locale = useLocale()
 
     const { mutateAsync } = useMutation({
-        mutationKey: ['oauth by provider'],
+        mutationKey: ['oauth by provider', locale],
         mutationFn: async (provider: 'google' | 'yandex') =>
-            await authService.oauthByProvider(provider)
+            await authService.oauthByProvider(provider, locale)
     })
 
     const onClick = async (provider: 'google' | 'yandex') => {

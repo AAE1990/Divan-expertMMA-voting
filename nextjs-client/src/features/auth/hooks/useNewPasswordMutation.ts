@@ -29,10 +29,21 @@ export function useNewPasswordMutation() {
             })
             router.push('/dashboard/settings')
         },
-        onError(error) {
-            toastMessageHandler(error)
+        onError(error: any) {
+            // Сканируем все возможные места, где NestJS может спрятать наш code
+            const data = error.response?.data;
+            const code = data?.code || data?.message?.code || data?.error?.code;
+
+            // Включаем принудительный дебаг прямо в консоль браузера (F12)
+            console.log("=== DEBUG ERROR CODE ===", { code, data });
+
+            if (code && typeof code === 'string') {
+                toast.error(t(code)) // Если код нашли — берем перевод из JSON!
+            } else {
+                toastMessageHandler(error) // Если код не долетел — отдаем старой утилите
+            }
         }
     })
 
-    return { newPassword, isLoadingNew}
+    return { newPassword, isLoadingNew }
 }

@@ -6,30 +6,32 @@ import { NewPasswordDto } from './dto/new-password.dto';
 
 @Controller('auth/password-recovery')
 export class PasswordRecoveryController {
-    constructor(
-      private readonly passwordRecoveryService: PasswordRecoveryService
-    ) { }
+  constructor(
+    private readonly passwordRecoveryService: PasswordRecoveryService
+  ) { }
 
-    @Recaptcha()
-    @Post('reset')
-    @HttpCode(HttpStatus.OK)
-    public async resetPassword(
-      @Body() dto: ResetPasswordDto,
-      @Query('locale') locale?: string
-    ) {
-      return this.passwordRecoveryService.resetPassword(dto, locale || 'en')
-    }
+  @Recaptcha()
+  @Post('reset')
+  @HttpCode(HttpStatus.OK)
+  public async resetPassword(
+    @Body() dto: ResetPasswordDto & { locale?: string }, // Разрешаем locale в body
+    @Query('locale') queryLocale?: string
+  ) {
+    // Ищем везде: сначала в query, потом в body, если пусто — берём 'en'
+    const locale = queryLocale || dto.locale || 'en'
+    return this.passwordRecoveryService.resetPassword(dto, locale)
+  }
 
-    @Recaptcha()
-    @Post('new/:token')
-    @HttpCode(HttpStatus.OK)
-    public async newPassword(
-      @Body() dto: NewPasswordDto,
-      @Param('token') token: string,
-      @Query('locale') locale?: string
-    ) {
-      return this.passwordRecoveryService.newPassword(dto, token, locale)
-    }
+  @Recaptcha()
+  @Post('new/:token')
+  @HttpCode(HttpStatus.OK)
+  public async newPassword(
+    @Body() dto: NewPasswordDto & { locale?: string }, // Берём locale из body!
+    @Param('token') token: string
+  ) {
+    // Спокойно забираем locale из body, если фронтенд её прислал, иначе 'en'
+    const locale = dto.locale || 'en'
+    return this.passwordRecoveryService.newPassword(dto, token, locale)
+  }
 }
-
 

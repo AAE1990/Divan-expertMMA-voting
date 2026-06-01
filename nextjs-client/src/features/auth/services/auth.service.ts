@@ -19,9 +19,10 @@ class AuthService {
         return response
     }
 
-    public async oauthByProvider(provider: 'google' | 'yandex') {
+    public async oauthByProvider(provider: 'google' | 'yandex', locale?: string) {
         const response = await api.get<{ url: string }>(
-            `auth/oauth/connect/${provider}`
+            `auth/oauth/connect/${provider}`,
+            locale ? { params: { locale } } : undefined
         )
 
         return response

@@ -81,7 +81,9 @@
     "emailVerified": "Email successfully verified!",
     "verificationError": "Token verification failed",
     "profileUpdated": "Profile data updated successfully!",
-    "logoutSuccess": "You have successfully logged out"
+    "logoutSuccess": "You have successfully logged out",
+    "TOKEN_NOT_FOUND": "Token not found or invalid. Please request a new link.",
+    "TOKEN_EXPIRED": "Token has expired. Please request a new link."
   },
   "Voting": {
     "voteButton": "Vote",

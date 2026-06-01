@@ -16,9 +16,14 @@ export function useVerificationMutation() {
             toast.success(t('emailVerified'))
             router.push('/dashboard/settings')
         },
-        onError(error) {
+        onError(error: any) {
             console.error('Ошибка верификации:', error) // Выведет детали в консоль
-            toast.error(t('verificationError'))
+            const code = error.response?.data?.code
+            if (code && typeof code === 'string') {
+                toast.error(t(code))
+            } else {
+                toast.error(t('verificationError'))
+            }
             router.push('/auth/login')
         }
     })
