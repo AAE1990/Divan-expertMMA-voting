@@ -30,17 +30,13 @@ export function useNewPasswordMutation() {
             router.push('/dashboard/settings')
         },
         onError(error: any) {
-            // Сканируем все возможные места, где NestJS может спрятать наш code
-            const data = error.response?.data;
-            const code = data?.code || data?.message?.code || data?.error?.code;
-
-            // Включаем принудительный дебаг прямо в консоль браузера (F12)
-            console.log("=== DEBUG ERROR CODE ===", { code, data });
+            // Теперь code гарантированно долетит в наш хук из FetchError!
+            const code = error.code;
 
             if (code && typeof code === 'string') {
-                toast.error(t(code)) // Если код нашли — берем перевод из JSON!
+                toast.error(t(code)) // Достаем "TOKEN_NOT_FOUND" из en.json / ru.json
             } else {
-                toastMessageHandler(error) // Если код не долетел — отдаем старой утилите
+                toastMessageHandler(error) // Если кода нет — выводим дефолтный текст
             }
         }
     })

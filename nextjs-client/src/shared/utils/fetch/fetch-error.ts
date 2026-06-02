@@ -1,7 +1,8 @@
 export class FetchError extends Error {
     public constructor(
         public statusCode: number,
-        public message: string
+        public message: string,
+        public code?: string
     ) {
         super(message)
         

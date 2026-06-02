@@ -65,12 +65,16 @@ export class FetchClient {
         const response: Response = await fetch(url, config)
 
         if (!response.ok) {
+            // Читаем из ответа сервера и message, и наш системный code!
             const error = (await response.json()) as
-            | {message: string}
+
+            | { message: string; code?: string }
             | undefined
+            
             throw new FetchError(
                 response.status,
-                error?.message || response.statusText
+                error?.message || response.statusText,
+                error?.code // Пробрасываем код дальше в хуки!
             )
         }
 
