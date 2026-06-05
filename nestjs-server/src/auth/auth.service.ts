@@ -26,7 +26,10 @@ export class AuthService {
         const isExists = await this.userService.findByEmail(dto.email)
 
         if (isExists) {
-            throw new ConflictException('Регистрация не удалась. Пользователь с таким email уже существует. Пожалуйста, используйте другой email или войдите в систему.')
+            throw new ConflictException({
+                message: 'Регистрация не удалась. Пользователь с таким email уже существует. Пожалуйста, используйте другой email или войдите в систему.',
+                code: 'EMAIL_ALREADY_IN_USE'
+            })
         }
 
         const newUser = await this.userService.create(
@@ -50,29 +53,32 @@ export class AuthService {
         const user = await this.userService.findByEmail(dto.email)
 
         if (!user || !user.password) {
-            throw new NotFoundException(
-                'Пользователь не найден. Пожалуйста, провертье введенные данные'
-            )
+            throw new NotFoundException({
+                message: 'Пользователь не найден. Пожалуйста, провертье введенные данные',
+                code: 'USER_NOT_FOUND'
+            })
         }
 
         const isValidPassword = await verify(user.password, dto.password)
 
         if (!isValidPassword) {
-            throw new UnauthorizedException(
-                'Неверный пароль. Пожалуйста, попробуйте еще раз или восстановите пароль, если забыли его'
-            )
+            throw new UnauthorizedException({
+                message: 'Неверный пароль. Пожалуйста, попробуйте еще раз или восстановите пароль, если забыли его',
+                code: 'INVALID_CREDENTIALS'
+            })
         }
 
         if (!user.isVerified) {
             await this.emailConfirmationService.sendVerificationToken(user.email, locale)
-            throw new UnauthorizedException(
-                'Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес'
-            )
+            throw new UnauthorizedException({
+                message: 'Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес',
+                code: 'EMAIL_NOT_VERIFIED'
+            })
         }
 
         if (user.isTwoFactorEnabled) {
             if (!dto.code) {
-                await this.twoFactorAuthService.sendTwoFactorToken(user.email)
+                await this.twoFactorAuthService.sendTwoFactorToken(user.email, locale)
 
                 return {
                     message:

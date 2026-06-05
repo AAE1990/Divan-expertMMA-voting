@@ -3,7 +3,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { RegisterSchema, TypeRegisterSchema } from "../schemes"
+import { getRegisterSchema, TypeRegisterSchema } from "../schemes"
 import { AuthWrapper } from "./AuthWrapper"
 import { useState } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
@@ -14,15 +14,16 @@ import { Input } from "@/shared/components/ui/Input"
 import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { PasswordInput } from "@/shared/components/ui"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 export function RegisterForm() {
   const {theme} = useTheme()
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
   const t = useTranslations('Auth')
+  const locale = useLocale()
 
   const form = useForm<TypeRegisterSchema>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(getRegisterSchema(t)),
     defaultValues: {
       name: "",
       email: "",
@@ -127,6 +128,7 @@ export function RegisterForm() {
                 sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY as string}
                 onChange={setRecaptchaValue}
                 theme={theme === "light" ? "light" : "dark"}
+                hl={locale} // МАГИЯ ЗДЕСЬ! Передает 'ru' или 'en' напрямую в Google!
               />
           </div>
 

@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { NewPasswordSchema, TypeNewPasswordSchema } from "../schemes";
+import { getNewPasswordSchema, TypeNewPasswordSchema } from "../schemes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNewPasswordMutation } from "../hooks";
 import { toast } from "sonner";
@@ -13,7 +13,7 @@ import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { PasswordInput } from "@/shared/components/ui";
 import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export function NewPasswordForm() {
     const { theme } = useTheme()
@@ -21,9 +21,10 @@ export function NewPasswordForm() {
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const t = useTranslations('Auth')
+    const locale = useLocale()
 
     const form = useForm<TypeNewPasswordSchema>({
-        resolver: zodResolver(NewPasswordSchema),
+        resolver: zodResolver(getNewPasswordSchema(t)),
         defaultValues: {
           password: ''
         },
@@ -96,6 +97,7 @@ export function NewPasswordForm() {
                             sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY as string}
                             onChange={setRecaptchaValue}
                             theme={theme === "light" ? "light" : "dark"}
+                            hl={locale} // МАГИЯ ЗДЕСЬ! Передает 'ru' или 'en' напрямую в Google!
                         />
                     </div>
 

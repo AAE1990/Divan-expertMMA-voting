@@ -14,8 +14,8 @@ export function useLoginMutation(
     const router = useRouter()
     const queryClient = useQueryClient()
     const t = useTranslations("Auth")
-    
-    const  { mutate: login, isPending: isLoadingLogin} = useMutation({
+
+    const { mutate: login, isPending: isLoadingLogin } = useMutation({
         mutationKey: ['login user'],
         mutationFn: ({
             values,
@@ -35,8 +35,13 @@ export function useLoginMutation(
                 router.push('/dashboard/settings')
             }
         },
-        onError(error) {
-            toastMessageHandler(error)
+        onError(error: any) {
+            const code = error.code // Читаем проброшенный код из FetchError!
+            if (code && typeof code === 'string') {
+                toast.error(t(code)) // Достает INVALID_CREDENTIALS / USER_NOT_FOUND из JSON
+            } else {
+                toastMessageHandler(error)
+            }
         }
     })
 

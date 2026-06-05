@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const ResetPasswordSchema = z.object({
+export const getResetPasswordSchema = (t: (key: string) => string) => z.object({
     email: z.email({
-        message: 'Некорректная почта'
+        message: t('invalidEmail')
     })
 })
 
-export type TypeResetPasswordSchema = z.infer<typeof ResetPasswordSchema>
+export type TypeResetPasswordSchema = z.infer<ReturnType<typeof getResetPasswordSchema>>

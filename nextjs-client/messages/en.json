@@ -83,7 +83,22 @@
     "profileUpdated": "Profile data updated successfully!",
     "logoutSuccess": "You have successfully logged out",
     "TOKEN_NOT_FOUND": "Token not found or invalid. Please request a new link.",
-    "TOKEN_EXPIRED": "Token has expired. Please request a new link."
+    "TOKEN_EXPIRED": "Token has expired. Please request a new link.",
+    "USER_NOT_FOUND": "User not found. Please check your input",
+    "EMAIL_ALREADY_IN_USE": "Registration failed. User with this email already exists. Please use another email or log in.",
+    "INVALID_CREDENTIALS": "Invalid password. Please try again or recover your password if you forgot it.",
+    "EMAIL_NOT_VERIFIED": "Your email is not verified. Please check your email and confirm the address.",
+    "EMAIL_SEND_FAILED": "Failed to send confirmation email. Please try again later.",
+    "INVALID_TOKEN": "Invalid two-factor authentication code. Please check the entered code and try again.",
+    "nameRequired": "Name is required",
+    "invalidEmail": "Invalid email",
+    "passwordsMismatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordMin": "Minimum 8 characters",
+    "passwordUppercase": "At least one uppercase letter",
+    "passwordLowercase": "At least one lowercase letter",
+    "passwordDigit": "At least one digit",
+    "passwordSpecial": "At least one special character (@, #, $, %, etc.)"
   },
   "Voting": {
     "voteButton": "Vote",

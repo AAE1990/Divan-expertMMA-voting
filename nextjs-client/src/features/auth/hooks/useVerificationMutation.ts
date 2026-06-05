@@ -18,7 +18,7 @@ export function useVerificationMutation() {
         },
         onError(error: any) {
             console.error('Ошибка верификации:', error) // Выведет детали в консоль
-            const code = error.response?.data?.code
+            const code = error.code
             if (code && typeof code === 'string') {
                 toast.error(t(code))
             } else {

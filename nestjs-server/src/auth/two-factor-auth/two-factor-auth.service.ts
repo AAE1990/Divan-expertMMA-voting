@@ -51,12 +51,13 @@ export class TwoFactorAuthService {
         return true
     }
 
-    public async sendTwoFactorToken(email: string) {
+    public async sendTwoFactorToken(email: string, locale: string = 'en') {
         const twoFactorToken = await this.generateTwoFactorToken(email)
 
         await this.mailService.sendTwoFactorAuthEmail(
-            twoFactorToken.email, 
-            twoFactorToken.token
+            twoFactorToken.email,
+            twoFactorToken.token,
+            locale
         )
 
         return true

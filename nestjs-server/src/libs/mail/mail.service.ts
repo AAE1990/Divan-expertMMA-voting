@@ -16,21 +16,24 @@ export class MailService {
     public async sendConfirmationEmail(email: string, token: string, locale: string = 'en') {
         const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
         const html = await render(ConfirmationTemplate({ domain, token, locale}))
+        const subject = locale === 'en' ? 'Confirm your email' : 'Подтверждение почты'
 
-        return this.sendMail(email, 'Подтверждение почты', html)
+        return this.sendMail(email, subject, html)
     }
 
     public async sendPasswordResetEmail(email: string, token: string, locale: string = 'en') {
         const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
         const html = await render(ResetPasswordTemplate({ domain, token, locale}))
+        const subject = locale === 'en' ? 'Reset your password' : 'Сброс пароля'
 
-        return this.sendMail(email, 'Сброс пароля', html)
+        return this.sendMail(email, subject, html)
     }
 
-    public async sendTwoFactorAuthEmail(email: string, token: string) {
+    public async sendTwoFactorAuthEmail(email: string, token: string, locale: string = 'en') {
         const html = await render(TwoFactorAuthTemplate({token}))
+        const subject = locale === 'en' ? 'Verify your identity' : 'Подтверждение вашей личности'
 
-        return this.sendMail(email, 'Подтверждение вашей личности', html)
+        return this.sendMail(email, subject, html)
     }
 
     private sendMail(email: string, subject: string, html: string) {

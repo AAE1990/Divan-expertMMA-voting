@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ResetPasswordSchema, TypeResetPasswordSchema } from "../schemes";
+import { getResetPasswordSchema, TypeResetPasswordSchema } from "../schemes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useResetPasswordMutation } from "../hooks";
 import { toast } from "sonner";
@@ -12,15 +12,16 @@ import ReCAPTCHA from "react-google-recaptcha"
 import { Input } from "@/shared/components/ui/Input"
 import { Button } from "@/shared/components/ui/Button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export function ResetPasswordFrom() {
     const { theme } = useTheme()
     const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
     const t = useTranslations('Auth')
+    const locale = useLocale()
 
     const form = useForm<TypeResetPasswordSchema>({
-        resolver: zodResolver(ResetPasswordSchema),
+        resolver: zodResolver(getResetPasswordSchema(t)),
         defaultValues: {
             email: "",
         },
@@ -72,6 +73,7 @@ export function ResetPasswordFrom() {
                             sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY as string}
                             onChange={setRecaptchaValue}
                             theme={theme === "light" ? "light" : "dark"}
+                            hl={locale} // МАГИЯ ЗДЕСЬ! Передает 'ru' или 'en' напрямую в Google!
                         />
                     </div>
 

@@ -67,9 +67,10 @@ export class UserService {
         ])
 
         if (!user) {
-            throw new NotFoundException(
-                'Пользователь не найден. Пожалуйста, проверьте введенные данные.'
-            )
+            throw new NotFoundException({
+                message: 'Пользователь не найден. Пожалуйста, проверьте введенные данные.',
+                code: 'USER_NOT_FOUND'
+            })
         }
 
         const correctVotes = Number(correctVotesResult[0]?.count ?? 0);
@@ -218,7 +219,10 @@ export class UserService {
         ]);
 
         if (!user) {
-            throw new NotFoundException('Пользователь не найден');
+            throw new NotFoundException({
+                message: 'Пользователь не найден',
+                code: 'USER_NOT_FOUND'
+            });
         }
 
         const correctVotes = Number(correctVotesResult[0]?.count || 0);

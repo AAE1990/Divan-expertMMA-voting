@@ -3,25 +3,34 @@ import { Html } from "@react-email/html"
 import * as React from "react"
 
 interface TwoFactorAuthTemplateProps {
-  token: string
+  token: string;
+  locale?: string; // Добавили поддержку локали
 }
 
-export const TwoFactorAuthTemplate = ({token}: TwoFactorAuthTemplateProps) => {
+export const TwoFactorAuthTemplate = ({ token, locale = 'en' }: TwoFactorAuthTemplateProps) => {
+  const isEn = locale === 'en';
+
   return (
     <Tailwind>
       <Html>
         <Body className="text-black">
-          <Heading>Двухфакторная авторизация</Heading>
+          <Heading>{isEn ? 'Two-Factor Authentication' : 'Двухфакторная авторизация'}</Heading>
           <Text>
-            Ваш токен для двухфакторной авторизации: <strong>{token}</strong>
+            {isEn 
+              ? <>Your two-factor authentication token: <strong>{token}</strong></>
+              : <>Ваш токен для двухфакторной авторизации: <strong>{token}</strong></>}
           </Text>
           <Text>
-            Пожалуйста, введите этот токен в приложение для завершения процесса авторизации.
+            {isEn 
+              ? 'Please enter this token in the application to complete the sign-in process.' 
+              : 'Пожалуйста, введите этот токен в приложение для завершения процесса авторизации.'}
           </Text>
           <Text>
-            Если вы не запрашивали двухфакторную авторизацию, просто проигнорируйте это сообщение.
+            {isEn 
+              ? 'If you did not request two-factor authentication, please ignore this message.' 
+              : 'Если вы не запрашивали двухфакторную авторизацию, просто проигнорируйте это сообщение.'}
           </Text>
-          <Text>Спасибо за использование нашего сервиса.</Text>
+          <Text>{isEn ? 'Thank you for using our service.' : 'Спасибо за использование нашего сервиса.'}</Text>
         </Body>
       </Html>
     </Tailwind>

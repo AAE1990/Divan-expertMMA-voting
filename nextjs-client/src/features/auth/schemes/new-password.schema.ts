@@ -1,8 +1,8 @@
 import z from "zod";
-import { passwordValidation } from "./password.schema";
+import { getPasswordValidation } from "./password.schema";
 
-export const NewPasswordSchema = z.object({
-    password: passwordValidation
+export const getNewPasswordSchema = (t: (key: string) => string) => z.object({
+    password: getPasswordValidation(t)
 })
 
-export type TypeNewPasswordSchema = z.infer<typeof NewPasswordSchema>
+export type TypeNewPasswordSchema = z.infer<ReturnType<typeof getNewPasswordSchema>>

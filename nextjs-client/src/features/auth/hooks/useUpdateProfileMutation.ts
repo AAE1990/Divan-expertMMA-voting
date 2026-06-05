@@ -16,10 +16,15 @@ export function useUpdateProfileMutation() {
         onSuccess() {
             toast.success(t('profileUpdated'))
         },
-        onError(error) {
-            toastMessageHandler(error)
+        onError(error: any) {
+            const code = error.code
+            if (code && typeof code === 'string') {
+                toast.error(t(code))
+            } else {
+                toastMessageHandler(error)
+            }
         }
     })
 
-    return {update, isLoadingUpdate}
+    return { update, isLoadingUpdate }
 }

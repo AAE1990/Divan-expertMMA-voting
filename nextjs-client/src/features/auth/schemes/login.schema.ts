@@ -1,9 +1,9 @@
 import { z } from "zod"
 
-export const LoginSchema = z.object({
-    email: z.string({ message: "Неверный email"}),
-    password: z.string().min(8, { message: "Пароль должен быть не менее 8 символов" }),
+export const getLoginSchema = (t: (key: string) => string) => z.object({
+    email: z.string({ message: t('invalidEmail') }),
+    password: z.string().min(8, { message: t('passwordMinLength') }),
     code: z.optional(z.string())
 })
 
-export type TypeLoginSchema = z.infer<typeof LoginSchema>
+export type TypeLoginSchema = z.infer<ReturnType<typeof getLoginSchema>>

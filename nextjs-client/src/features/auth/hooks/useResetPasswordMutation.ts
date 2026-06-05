@@ -23,14 +23,16 @@ export function useResetPasswordMutation() {
             })
         },
         onError(error: any) {
-            const code = error.response?.data?.code
+            // МЕНЯЕМ ТУТ! Читаем code напрямую из error.code, как в useNewPasswordMutation!
+            const code = error.code
+
             if (code && typeof code === 'string') {
-                toast.error(t(code))
+                toast.error(t(code)) // Мгновенно подтянет идеальный английский из JSON!
             } else {
                 toastMessageHandler(error)
             }
         }
     })
 
-    return { reset, isLoadingReset}
+    return { reset, isLoadingReset }
 }

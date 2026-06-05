@@ -3,7 +3,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { LoginSchema, TypeLoginSchema } from "../schemes"
+import { getLoginSchema, TypeLoginSchema } from "../schemes"
 import { AuthWrapper } from "./AuthWrapper"
 import { useTheme } from "next-themes"
 import { useState } from "react"
@@ -14,16 +14,17 @@ import { Input, PasswordInput } from "@/shared/components/ui"
 import { Button } from "@/shared/components/ui"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui";
 import { Link } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 export function LoginForm() {
   const {theme} = useTheme()
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
   const [isShowTwoFactor, setIsShowFactor] = useState(false)
   const t = useTranslations('Auth')
+  const locale = useLocale()
 
   const form = useForm<TypeLoginSchema>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(getLoginSchema(t)),
     defaultValues: {
       email: "",
       password: "",
@@ -126,6 +127,7 @@ export function LoginForm() {
                 sitekey={process.env.GOOGLE_RECAPTCHA_SITE_KEY as string}
                 onChange={setRecaptchaValue}
                 theme={theme === "light" ? "light" : "dark"}
+                hl={locale} // МАГИЯ ЗДЕСЬ! Передает 'ru' или 'en' напрямую в Google!
               />
           </div>
 

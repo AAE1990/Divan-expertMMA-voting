@@ -1,5 +1,5 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { BadRequestException, forwardRef, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { TokenType, User } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfirmationDto } from './dto/confirmation.dto';
@@ -49,9 +49,10 @@ export class EmailConfirmationService {
         )
 
         if (!existingUser) {
-            throw new NotFoundException(
-                'Пользователь не найден. Пожалуйста, проверьте, что вы ввели правильный email и попробуйте снова.'
-            )
+            throw new NotFoundException({
+                message: 'Пользователь не найден. Пожалуйста, проверьте, что вы ввели правильный email и попробуйте снова.',
+                code: 'USER_NOT_FOUND'
+            })
         }
 
         await this.prismaService.user.update({
@@ -88,6 +89,10 @@ export class EmailConfirmationService {
             this.logger.warn(
                 `Не удалось отправить письмо подтверждения на ${email}: ${err instanceof Error ? err.message : String(err)}`
             )
+            throw new InternalServerErrorException({
+                message: 'Не удалось отправить письмо подтверждения. Пожалуйста, попробуйте позже.',
+                code: 'EMAIL_SEND_FAILED'
+            })
         }
     }
 
