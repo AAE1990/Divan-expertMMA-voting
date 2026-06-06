@@ -60,29 +60,60 @@ export default function AdminNewsPage() {
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div className="space-y-2">
                             <Label htmlFor="title">{t('titleLabel')}</Label>
-                            <Input
-                                id="title"
-                                placeholder={t('titlePlaceholder')}
-                                {...register("title")}
-                                className={errors.title ? "border-destructive" : ""}
-                            />
-                            {errors.title && (
-                                <p className="text-sm text-destructive">{errors.title.message}</p>
-                            )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <Input
+                                        id="titleRu"
+                                        placeholder={t('titlePlaceholderRu') || "Заголовок на русском"}
+                                        {...register("titleRu")}
+                                        className={errors.titleRu ? "border-destructive" : ""}
+                                    />
+                                    {errors.titleRu && (
+                                        <p className="text-sm text-destructive">{errors.titleRu.message}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <Input
+                                        id="titleEn"
+                                        placeholder={t('titlePlaceholderEn') || "Заголовок на английском"}
+                                        {...register("titleEn")}
+                                        className={errors.titleEn ? "border-destructive" : ""}
+                                    />
+                                    {errors.titleEn && (
+                                        <p className="text-sm text-destructive">{errors.titleEn.message}</p>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="content">{t('contentLabel')}</Label>
-                            <textarea
-                                id="content"
-                                placeholder={t('contentPlaceholder')}
-                                rows={6}
-                                {...register("content")}
-                                className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.content ? "border-destructive" : ""}`}
-                            />
-                            {errors.content && (
-                                <p className="text-sm text-destructive">{errors.content.message}</p>
-                            )}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <textarea
+                                        id="contentRu"
+                                        placeholder={t('contentPlaceholderRu') || "Текст новости на русском"}
+                                        rows={6}
+                                        {...register("contentRu")}
+                                        className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.contentRu ? "border-destructive" : ""}`}
+                                    />
+                                    {errors.contentRu && (
+                                        <p className="text-sm text-destructive">{errors.contentRu.message}</p>
+                                    )}
+                                </div>
+                                <div>
+                                    <textarea
+                                        id="contentEn"
+                                        placeholder={t('contentPlaceholderEn') || "Текст новости на английском"}
+                                        rows={6}
+                                        {...register("contentEn")}
+                                        className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.contentEn ? "border-destructive" : ""}`}
+                                    />
+                                    {errors.contentEn && (
+                                        <p className="text-sm text-destructive">{errors.contentEn.message}</p>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
                         <div className="space-y-2">

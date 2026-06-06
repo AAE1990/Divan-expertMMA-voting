@@ -15,7 +15,7 @@ import { useCreateTournament } from "@/features/tournament/hooks/useCreateTourna
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
 import { useEffect } from "react"
 import Image from "next/image"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
 export default function AdminVotingPage() {
     // 1. Сначала ВСЕ хуки без исключения
@@ -26,6 +26,7 @@ export default function AdminVotingPage() {
     const router = useRouter()
     const t = useTranslations('AdminVoting')
     const tCommon = useTranslations('Common')
+    const locale = useLocale()
 
     // Форма боя теперь должна включать tournamentId
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<TCreatePollSchema>({
@@ -54,15 +55,18 @@ export default function AdminVotingPage() {
     // 3. ЗАЩИТА: Если загрузилось, и это НЕ админ, возвращаем ПУСТОТУ (null), 
     // пока useEffect делает свою работу по редиректу.
     if (!user || user.role !== 'ADMIN') {
-        return null 
+        return null
     }
 
 
     // Функция для создания тестового турнира (чтобы не верстать пока всю форму)
     const handleQuickTournament = () => {
-        const name = prompt(t('tournamentPrompt'))
+        const nameRu = prompt(t('tournamentPromptRu') || 'Введите название турнира на русском')
+        if (!nameRu) return
+        const nameEn = prompt(t('tournamentPromptEn') || 'Введите название турнира на английском')
+        if (!nameEn) return
         const date = new Date().toISOString()
-        if (name) createTournament({ name, date })
+        createTournament({ nameRu, nameEn, date })
     }
 
     // Компонент для предпросмотра изображения
@@ -73,9 +77,9 @@ export default function AdminVotingPage() {
             name: name,
             defaultValue: ""
         });
-        
+
         if (!photoUrl) return null;
-        
+
         return (
             <div className="mt-3">
                 <p className="text-xs text-gray-500 mb-1">{t('previewLabel')}</p>
@@ -96,15 +100,18 @@ export default function AdminVotingPage() {
 
     const onSubmit = (data: TCreatePollSchema) => {
         createPoll({
-            question: data.question,
+            questionRu: data.questionRu,
+            questionEn: data.questionEn,
             // Массив из двух бойцов с фотографиями
             options: [
                 {
-                    text: data.fighter1,
+                    textRu: data.fighter1Ru,
+                    textEn: data.fighter1En,
                     photoUrl: data.fighter1Photo || undefined
                 },
                 {
-                    text: data.fighter2,
+                    textRu: data.fighter2Ru,
+                    textEn: data.fighter2En,
                     photoUrl: data.fighter2Photo || undefined
                 }
             ],
@@ -140,8 +147,10 @@ export default function AdminVotingPage() {
                                     <SelectValue placeholder={isTournamentsLoading ? tCommon('loading') : t('selectTournamentPlaceholder')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {tournaments?.tournaments?.map((t) => (
-                                        <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                                    {tournaments?.tournaments?.map((tournament) => ( // Назвали переменную 'tournament'
+                                        <SelectItem key={tournament.id} value={tournament.id}>
+                                            {locale === 'en' ? tournament.nameEn : tournament.nameRu}
+                                        </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
@@ -151,8 +160,16 @@ export default function AdminVotingPage() {
                         {/* ... твои старые поля fighter1, fighter2, expiresAt ... */}
                         <div className="space-y-2">
                             <Label>{t('questionLabel')}</Label>
-                            <Input {...register("question")} placeholder={t('questionPlaceholder')} />
-                            {errors.question && <p className="text-red-500 text-xs">{errors.question.message}</p>}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <Input {...register("questionRu")} placeholder={t('questionPlaceholderRu') || "Вопрос на русском"} />
+                                    {errors.questionRu && <p className="text-red-500 text-xs">{errors.questionRu.message}</p>}
+                                </div>
+                                <div>
+                                    <Input {...register("questionEn")} placeholder={t('questionPlaceholderEn') || "Вопрос на английском"} />
+                                    {errors.questionEn && <p className="text-red-500 text-xs">{errors.questionEn.message}</p>}
+                                </div>
+                            </div>
                         </div>
 
                         <div className="space-y-4">
@@ -160,8 +177,16 @@ export default function AdminVotingPage() {
                                 <h3 className="font-medium mb-3">{t('fighter1Label')}</h3>
                                 <div className="space-y-2">
                                     <Label>{t('fighterNameLabel')}</Label>
-                                    <Input {...register("fighter1")} placeholder={t('fighterNamePlaceholder')} />
-                                    {errors.fighter1 && <p className="text-red-500 text-xs">{errors.fighter1.message}</p>}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <Input {...register("fighter1Ru")} placeholder={t('fighterNamePlaceholderRu') || "Имя на русском"} />
+                                            {errors.fighter1Ru && <p className="text-red-500 text-xs">{errors.fighter1Ru.message}</p>}
+                                        </div>
+                                        <div>
+                                            <Input {...register("fighter1En")} placeholder={t('fighterNamePlaceholderEn') || "Имя на английском"} />
+                                            {errors.fighter1En && <p className="text-red-500 text-xs">{errors.fighter1En.message}</p>}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="space-y-2 mt-3">
                                     <Label>{t('photoUrlLabel')}</Label>
@@ -171,13 +196,21 @@ export default function AdminVotingPage() {
                                 {/* Предпросмотр фотографии */}
                                 <PreviewImage register={register} name="fighter1Photo" label={t('fighter1Label')} />
                             </div>
-                            
+
                             <div className="border p-4 rounded-lg">
                                 <h3 className="font-medium mb-3">{t('fighter2Label')}</h3>
                                 <div className="space-y-2">
                                     <Label>{t('fighterNameLabel')}</Label>
-                                    <Input {...register("fighter2")} placeholder={t('fighterNamePlaceholder')} />
-                                    {errors.fighter2 && <p className="text-red-500 text-xs">{errors.fighter2.message}</p>}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <Input {...register("fighter2Ru")} placeholder={t('fighterNamePlaceholderRu') || "Имя на русском"} />
+                                            {errors.fighter2Ru && <p className="text-red-500 text-xs">{errors.fighter2Ru.message}</p>}
+                                        </div>
+                                        <div>
+                                            <Input {...register("fighter2En")} placeholder={t('fighterNamePlaceholderEn') || "Имя на английском"} />
+                                            {errors.fighter2En && <p className="text-red-500 text-xs">{errors.fighter2En.message}</p>}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="space-y-2 mt-3">
                                     <Label>{t('photoUrlLabel')}</Label>

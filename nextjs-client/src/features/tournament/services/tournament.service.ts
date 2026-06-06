@@ -2,8 +2,8 @@ import { api } from "@/shared/api/instance.api";
 
 export interface ITournament {
   id: string;
-  name: string;
-  date: string;
+  nameRu: string;   // Добавили RU!
+  nameEn: string;   // Добавили EN!
   description?: string;
 }
 

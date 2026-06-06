@@ -15,7 +15,8 @@ import { cn } from "@/shared/utils"
 import { useFinishPoll } from "../hooks/useFinishPoll"
 import { useProfile } from "@/shared/hooks/useProfile"
 import { Trophy } from "lucide-react" // Для красоты
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
+
 
 interface VotingCardProps {
   poll: IPoll
@@ -23,6 +24,7 @@ interface VotingCardProps {
 
 export const VotingCard = ({ poll }: VotingCardProps) => {
   const t = useTranslations('Voting')
+  const locale = useLocale()
 
   const { user } = useProfile()
   const { mutate: finishPoll, isPending: isFinishing } = useFinishPoll()
@@ -67,7 +69,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle>{poll.question}</CardTitle>
+            <CardTitle>{locale === 'en' ? poll.questionEn : poll.questionRu}</CardTitle>
             <CardDescription>
               {isFinished ? t('fightFinished') : t('chooseWinner')}
             </CardDescription>
@@ -92,14 +94,18 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                 <div key={option.id} className="group">
                   {/* Добавляем фото бойца */}
                   {option.photoUrl && (
-                    <div className="mb-3 w-full h-40 overflow-hidden rounded-lg shadow-md">
+                    // 1. Убрали h-40, поставили идеальные пропорции постера aspect-[3/4]
+                    <div className="mb-3 w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-900">
                       <img
                         src={option.photoUrl}
-                        alt={option.text}
-                        className="w-full h-full object-cover"
+                        // 2. Локализуем alt-текст на основе новой структуры базы данных
+                        alt={locale === 'en' ? option.textEn : option.textRu}
+                        // 3. Сменили фокус обрезки на object-top — головы и плечи теперь ВСЕГДА в кадре!
+                        className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-102"
                         onError={(e) => {
-                          // Если изображение не загрузилось, показываем заглушку
-                          e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                          // 4. Локализуем заглушку, если картинка сломалась
+                          const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено';
+                          e.currentTarget.src = `https://placeholder.com{text}`;
                         }}
                       />
                     </div>
@@ -110,7 +116,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                       isUserChoice && "text-primary font-bold",
                       isWinner && "text-green-600 font-bold"
                     )}>
-                      {option.text}
+                      {locale === 'en' ? option.textEn : option.textRu}
                       {isUserChoice && " ✅"}
                       {isWinner && " 🏆"}
                     </span>
@@ -154,14 +160,18 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                 >
                   {/* Добавляем фото бойца */}
                   {option.photoUrl && (
-                    <div className="w-full h-40 overflow-hidden">
+                    // 1. Убрали h-40, поставили идеальные пропорции постера aspect-[3/4]
+                    <div className="mb-3 w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-900">
                       <img
                         src={option.photoUrl}
-                        alt={option.text}
-                        className="w-full h-full object-cover shadow-md"
+                        // 2. Локализуем alt-текст на основе новой структуры базы данных
+                        alt={locale === 'en' ? option.textEn : option.textRu}
+                        // 3. Сменили фокус обрезки на object-top — головы и плечи теперь ВСЕГДА в кадре!
+                        className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-102"
                         onError={(e) => {
-                          // Если изображение не загрузилось, показываем заглушку
-                          e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                          // 4. Локализуем заглушку, если картинка сломалась
+                          const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено';
+                          e.currentTarget.src = `https://placeholder.com{text}`;
                         }}
                       />
                     </div>
@@ -177,7 +187,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                       className="shrink-0 shadow-[0_0_5px_rgba(0,0,0,0.5)] border-2 border-primary" // Чтобы кружочек не сплющивался
                     />
                     <span className="flex-1 font-semibold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
-                      {option.text}
+                      {locale === 'en' ? option.textEn : option.textRu}
                     </span>
                   </Label>
                 </div>
@@ -199,21 +209,25 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                 >
                   {/* Добавляем фото бойца */}
                   {option.photoUrl && (
-                    <div className="w-full h-40 overflow-hidden">
+                    // 1. Убрали h-40, поставили идеальные пропорции постера aspect-[3/4]
+                    <div className="mb-3 w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-900">
                       <img
                         src={option.photoUrl}
-                        alt={option.text}
-                        className="w-full h-full object-cover shadow-md"
+                        // 2. Локализуем alt-текст на основе новой структуры базы данных
+                        alt={locale === 'en' ? option.textEn : option.textRu}
+                        // 3. Сменили фокус обрезки на object-top — головы и плечи теперь ВСЕГДА в кадре!
+                        className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-102"
                         onError={(e) => {
-                          // Если изображение не загрузилось, показываем заглушку
-                          e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Фото+не+найдено';
+                          // 4. Локализуем заглушку, если картинка сломалась
+                          const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено';
+                          e.currentTarget.src = `https://placeholder.com{text}`;
                         }}
                       />
                     </div>
                   )}
                   <div className="p-4">
                     <span className="font-semibold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
-                      {option.text}
+                      {locale === 'en' ? option.textEn : option.textRu}
                     </span>
                   </div>
                 </div>

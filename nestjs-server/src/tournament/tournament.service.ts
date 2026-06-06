@@ -6,12 +6,14 @@ export class TournamentService {
   constructor(private readonly prisma: PrismaService) {}
 
   // Создать новый турнир (UFC 300, etc.)
-  public async create(dto: { name: string; date: string; description?: string }) {
+  public async create(dto: { nameRu: string; nameEn: string; date: string; descriptionRu?: string; descriptionEn?: string }) {
     return this.prisma.tournament.create({
       data: {
-        name: dto.name,
+        nameRu: dto.nameRu,
+        nameEn: dto.nameEn,
         date: new Date(dto.date),
-        description: dto.description,
+        descriptionRu: dto.descriptionRu,
+        descriptionEn: dto.descriptionEn,
       },
     });
   }
@@ -24,10 +26,10 @@ export class TournamentService {
 
     const where = search
       ? {
-          name: {
-            contains: search,
-            mode: 'insensitive' as const,
-          },
+          OR: [
+            { nameRu: { contains: search, mode: 'insensitive' as const } },
+            { nameEn: { contains: search, mode: 'insensitive' as const } },
+          ],
         }
       : undefined;
 

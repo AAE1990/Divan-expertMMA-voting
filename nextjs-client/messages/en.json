@@ -313,7 +313,13 @@
     "peopleChampLabel": "People's Champion (does not affect leaderboard)",
     "publishButton": "Publish",
     "publishingButton": "Publishing...",
-    "tournamentPrompt": "Tournament Title (e.g., UFC 300)"
+    "tournamentPrompt": "Tournament Title (e.g., UFC 300)",
+    "questionPlaceholderRu": "Enter question in Russian...",
+    "questionPlaceholderEn": "Enter question in English...",
+    "fighterNamePlaceholderRu": "Fighter Name (RU)...",
+    "fighterNamePlaceholderEn": "Fighter Name (EN)...",
+    "tournamentPromptRu": "Tournament title in Russian (e.g., UFC 300)",
+    "tournamentPromptEn": "Tournament title in English (e.g., UFC 300)"
   },
   "AdminNews": {
     "createNewsTitle": "Create News",

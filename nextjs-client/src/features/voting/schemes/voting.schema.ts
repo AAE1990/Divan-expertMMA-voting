@@ -10,20 +10,29 @@ export const votingSchema = z.object({
 export type TVotingSchema = z.infer<typeof votingSchema>;
 
 export const createPollSchema = z.object({
-  question: z
+  questionRu: z
     .string()
-    .min(5, { message: "Вопрос должен быть не менее 5 символов" }),
-  fighter1: z
+    .min(5, { message: "Вопрос на русском должен быть не менее 5 символов" }),
+  questionEn: z
     .string()
-    .min(2, { message: "Введите имя первого бойца" }),
+    .min(5, { message: "Вопрос на английском должен быть не менее 5 символов" }),
+  fighter1Ru: z
+    .string()
+    .min(2, { message: "Введите имя первого бойца на русском" }),
+  fighter1En: z
+    .string()
+    .min(2, { message: "Введите имя первого бойца на английском" }),
   fighter1Photo: z
     .string()
     .url({ message: "Введите корректный URL-адрес фотографии" })
     .optional()
     .or(z.literal('')),
-  fighter2: z
+  fighter2Ru: z
     .string()
-    .min(2, { message: "Введите имя второго бойца" }),
+    .min(2, { message: "Введите имя второго бойца на русском" }),
+  fighter2En: z
+    .string()
+    .min(2, { message: "Введите имя второго бойца на английском" }),
   fighter2Photo: z
     .string()
     .url({ message: "Введите корректный URL-адрес фотографии" })

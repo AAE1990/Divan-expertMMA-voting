@@ -5,7 +5,11 @@ import { CreateOptionDto } from './create-option.dto';
 export class CreatePollDto {
   @IsString()
   @IsNotEmpty()
-  question!: string;
+  questionRu!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  questionEn!: string;
 
   @IsArray()
   @ValidateNested({ each: true })

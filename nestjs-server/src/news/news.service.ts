@@ -10,8 +10,10 @@ export class NewsService {
   // Создать новость
   public async create(dto: CreateNewsDto) {
     const data: any = {
-      title: dto.title,
-      content: dto.content,
+      titleRu: dto.titleRu,
+      titleEn: dto.titleEn,
+      contentRu: dto.contentRu,
+      contentEn: dto.contentEn,
       imageUrl: dto.imageUrl,
     };
     // createdAt будет установлен автоматически Prisma (default(now()))
@@ -48,8 +50,10 @@ export class NewsService {
   // Обновить новость
   public async update(id: string, dto: UpdateNewsDto) {
     const data: any = {};
-    if (dto.title !== undefined) data.title = dto.title;
-    if (dto.content !== undefined) data.content = dto.content;
+    if (dto.titleRu !== undefined) data.titleRu = dto.titleRu;
+    if (dto.titleEn !== undefined) data.titleEn = dto.titleEn;
+    if (dto.contentRu !== undefined) data.contentRu = dto.contentRu;
+    if (dto.contentEn !== undefined) data.contentEn = dto.contentEn;
     if (dto.imageUrl !== undefined) data.imageUrl = dto.imageUrl;
     // createdAt не обновляется через API, остается оригинальным
     return this.prisma.news.update({

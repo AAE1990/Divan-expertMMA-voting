@@ -33,7 +33,7 @@ export class VotingService {
       ...poll,
       options: poll.options.map(opt => ({
         id: opt.id,
-        text: opt.text,
+        text: opt.textRu, // Используем русскую версию текста
         photoUrl: opt.photoUrl, // Добавляем URL фотографии
         votesCount: opt._count.votes // Превращаем счетчик в число
       })),
@@ -73,7 +73,7 @@ export class VotingService {
         ...poll,
         options: poll.options.map(opt => ({
           id: opt.id,
-          text: opt.text,
+          text: opt.textRu, // Используем русскую версию текста
           photoUrl: opt.photoUrl,
           votesCount: opt._count.votes
         })),
@@ -116,11 +116,13 @@ export class VotingService {
   // Метод создания нового голосования
   async create(dto: CreatePollDto) {
     const data: any = {
-      question: dto.question,
+      questionRu: dto.questionRu,
+      questionEn: dto.questionEn,
       expiresAt: new Date(dto.expiresAt),
       options: {
         create: dto.options.map(option => ({
-          text: option.text,
+          textRu: option.textRu,
+          textEn: option.textEn,
           photoUrl: option.photoUrl // Добавляем URL фотографии
         }))
       },

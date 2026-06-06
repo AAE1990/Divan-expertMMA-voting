@@ -313,7 +313,13 @@
     "peopleChampLabel": "Народный чемпион (не влияет на рейтинг)",
     "publishButton": "Опубликовать",
     "publishingButton": "Публикация...",
-    "tournamentPrompt": "Название турнира (напр. UFC 300)"
+    "tournamentPrompt": "Название турнира (напр. UFC 300)",
+    "questionPlaceholderRu": "Введите вопрос на русском...",
+    "questionPlaceholderEn": "Введите вопрос на английском...",
+    "fighterNamePlaceholderRu": "Имя Фамилия (RU)...",
+    "fighterNamePlaceholderEn": "First and Last Name (EN)...",
+    "tournamentPromptRu": "Название турнира на русском (напр. UFC 300)",
+    "tournamentPromptEn": "Название турнира на английском (напр. UFC 300)"
   },
   "AdminNews": {
     "createNewsTitle": "Создание новости",
