@@ -17,6 +17,7 @@ import { useProfile } from "@/shared/hooks/useProfile"
 import { Trophy } from "lucide-react" // Для красоты
 import { useTranslations, useLocale } from "next-intl"
 import { Clock, Swords } from "lucide-react"
+import { useRouter } from "@/i18n/routing"
 
 
 interface VotingCardProps {
@@ -26,6 +27,7 @@ interface VotingCardProps {
 export const VotingCard = ({ poll }: VotingCardProps) => {
   const t = useTranslations('Voting')
   const locale = useLocale()
+  const router = useRouter()
 
   const { user } = useProfile()
   const { mutate: finishPoll, isPending: isFinishing } = useFinishPoll()
@@ -66,7 +68,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
   const renderFighterPhoto = (option: any) => {
     if (!option.photoUrl) return null
     return (
-      <div className="mb-3 w-full aspect-square overflow-hidden rounded-xl shadow-lg bg-neutral-900">
+      <div className="mb-3 w-full max-w-[200px] md:max-w-[240px] aspect-[3/4] overflow-hidden rounded-xl shadow-md bg-neutral-900 mx-auto">
         <img
           src={option.photoUrl}
           alt={locale === 'en' ? option.textEn : option.textRu}
@@ -85,11 +87,11 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const isClosed = poll.status === 'CLOSED'
     const isOpen = poll.status === 'OPEN'
     return (
-      <div className="flex flex-col items-center justify-center px-2 md:px-4 py-4">
+      <div className="flex flex-col items-center justify-center gap-1 shrink-0">
         <div className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-red-900 to-black border-4 border-red-800 shadow-2xl">
           <Swords className="text-white size-6 md:size-8" />
         </div>
-        <div className="mt-3 text-center">
+        <div className="text-center">
           <div className="text-2xl md:text-3xl font-black tracking-tighter text-red-700 uppercase">VS</div>
           <div className="text-[10px] md:text-xs font-semibold text-muted-foreground mt-1 uppercase tracking-widest">
             {isFinished ? t('fightFinished') : isClosed ? t('votingEnded') : t('live')}
@@ -114,21 +116,21 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     return (
       <div className={cn(
         "flex flex-col items-center w-full p-3 md:p-4",
-        isLeft ? "md:items-end md:text-right" : "md:items-start md:text-left"
+        isLeft ? "lg:items-end lg:text-right" : "lg:items-start lg:text-left"
       )}>
         {/* Фото */}
         {renderFighterPhoto(option)}
         {/* Имя и индикаторы */}
         <div className={cn(
           "flex flex-col w-full",
-          isLeft ? "md:items-end" : "md:items-start"
+          isLeft ? "lg:items-end" : "lg:items-start"
         )}>
           <div className="flex items-center justify-between w-full mb-2">
             <span className={cn(
               "text-sm font-bold uppercase tracking-wide transition-colors",
               isUserChoice && "text-primary",
               isWinner && "text-green-600",
-              isLeft ? "md:order-2" : "md:order-1"
+              isLeft ? "lg:order-2" : "lg:order-1"
             )}>
               {locale === 'en' ? option.textEn : option.textRu}
               {isUserChoice && " ✅"}
@@ -137,7 +139,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
             <span className={cn(
               "text-xs font-bold px-2 py-1 rounded",
               isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted",
-              isLeft ? "md:order-1" : "md:order-2"
+              isLeft ? "lg:order-1" : "lg:order-2"
             )}>
               {percentage}%
             </span>
@@ -162,14 +164,14 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
   const renderFighterVoting = (option: any, isLeft: boolean) => {
     return (
       <div
-      onClick={() => setValue("optionId", option.id)} // МАГИЯ ЗДЕСЬ! Клик по карточке выбирает бойца!
-      className={cn(
-        "flex flex-col items-center w-full p-3 md:p-4 border-2 rounded-xl transition-all",
-        "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
-        "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
-        selectedValue === option.id && "border-primary ring-2 ring-primary/30",
-        isLeft ? "md:items-end md:text-right" : "md:items-start md:text-left"
-      )}>
+        onClick={() => setValue("optionId", option.id)} // МАГИЯ ЗДЕСЬ! Клик по карточке выбирает бойца!
+        className={cn(
+          "flex flex-col items-center w-full p-3 md:p-4 border-2 rounded-xl transition-all",
+          "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
+          "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
+          selectedValue === option.id && "border-primary ring-2 ring-primary/30",
+          isLeft ? "lg:items-end lg:text-right" : "lg:items-start lg:text-left"
+        )}>
         {renderFighterPhoto(option)}
         <Label
           htmlFor={option.id}
@@ -178,8 +180,8 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           <div className="flex items-center justify-center w-full mb-2">
             <div
               className={`shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all ${selectedValue === option.id
-                  ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
-                  : "border-muted-foreground/30 bg-transparent"
+                ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
+                : "border-muted-foreground/30 bg-transparent"
                 }`}
             >
               {/* Маленькая точка внутри активного чекбокса */}
@@ -202,14 +204,13 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         "flex flex-col items-center w-full p-3 md:p-4 border rounded-xl opacity-60",
         "bg-sky-50 border-sky-200",
         "dark:bg-slate-900 dark:border-slate-800",
-        isLeft ? "md:items-end md:text-right" : "md:items-start md:text-left"
+        isLeft ? "lg:items-end lg:text-right" : "lg:items-start lg:text-left"
       )}>
         {renderFighterPhoto(option)}
         <div className="mt-2 text-center">
           <span className="font-bold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
             {locale === 'en' ? option.textEn : option.textRu}
           </span>
-          <p className="text-[10px] text-muted-foreground mt-1">{t('loginToSee')}</p>
         </div>
       </div>
     )
@@ -258,39 +259,34 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
     const [fighter1, fighter2] = poll.options
 
-    return (
-      <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-2">
-        {/* Левый боец */}
-        <div className="flex-1">
-          {hasVoted
-            ? renderFighterResult(fighter1, true)
-            : user
-              ? renderFighterVoting(fighter1, true)
-              : renderFighterAnonymous(fighter1, true)
-          }
-        </div>
+return (
+  <div className="flex flex-col lg:flex-row items-stretch justify-between gap-2 w-full">
+    
+    {/* Левый боец — принудительно делит место поровну */}
+    <div className="flex-1 w-full lg:w-1/2">
+      {hasVoted 
+        ? renderFighterResult(fighter1, true) 
+        : user 
+          ? renderFighterVoting(fighter1, true) 
+          : renderFighterAnonymous(fighter1, true)}
+    </div>
 
-        {/* Центральный блок VS */}
-        <div className="hidden md:flex flex-col justify-center">
-          {renderCenterBlock()}
-        </div>
+    {/* Центральный блок VS */}
+    <div className="flex justify-center items-center py-2 lg:py-0 px-0 lg:px-2 shrink-0"> {/* Добавили shrink-0, чтобы круг VS никогда не сжимался */}
+      {renderCenterBlock()}
+    </div>
 
-        {/* Правый боец */}
-        <div className="flex-1">
-          {hasVoted
-            ? renderFighterResult(fighter2, false)
-            : user
-              ? renderFighterVoting(fighter2, false)
-              : renderFighterAnonymous(fighter2, false)
-          }
-        </div>
+    {/* Правый боец — принудительно делит место поровну */}
+    <div className="flex-1 w-full lg:w-1/2">
+      {hasVoted 
+        ? renderFighterResult(fighter2, false) 
+        : user 
+          ? renderFighterVoting(fighter2, false) 
+          : renderFighterAnonymous(fighter2, false)}
+    </div>
 
-        {/* Центральный блок на мобилках (под бойцами) */}
-        <div className="md:hidden flex justify-center py-4">
-          {renderCenterBlock()}
-        </div>
-      </div>
-    )
+  </div>
+)
   }
 
   return (
@@ -349,9 +345,10 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       </CardContent>
 
       {/* Футер с кнопкой прогноза */}
-      {user && (
-        <CardFooter className="pt-4 border-t">
-          {!hasVoted ? (
+      <CardFooter className="pt-4 border-t">
+        {user ? (
+          // 1. ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН
+          !hasVoted ? (
             <Button
               form={`form-${poll.id}`}
               type="submit"
@@ -364,9 +361,18 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
             <div className="w-full text-center text-sm font-medium text-muted-foreground">
               {t('alreadyVoted')}
             </div>
-          )}
-        </CardFooter>
-      )}
+          )
+        ) : (
+          // 2. ПОЛЬЗОВАТЕЛЬ — АНОНИМ (Выводим красивую интерактивную кнопку!)
+          <Button
+            variant="outline"
+            className="w-full font-bold uppercase py-3 border-dashed border-primary/40 text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all"
+            onClick={() => router.push(`/auth/login`)} // Улетает на логин!
+          >
+            {t('loginToVoteAction')}
+          </Button>
+        )}
+      </CardFooter>
     </Card>
   )
 }

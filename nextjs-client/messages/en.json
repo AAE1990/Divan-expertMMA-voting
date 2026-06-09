@@ -134,7 +134,7 @@
     "pleaseSelectOption": "Please select a voting option",
     "live": "LIVE",
     "clickToVote": "Click to vote",
-    "loginToSee": "Log in to place a prediction and view analytics"
+    "loginToVoteAction": "Log In to Predict"
   },
   "PeopleChamp": {
     "title": "People's Champion",
