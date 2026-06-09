@@ -131,7 +131,10 @@
     "pollCreateError": "Failed to create poll",
     "pollFinished": "Poll successfully finished!",
     "pollFinishError": "Failed to finish poll",
-    "pleaseSelectOption": "Please select a voting option"
+    "pleaseSelectOption": "Please select a voting option",
+    "live": "LIVE",
+    "clickToVote": "Click to vote",
+    "loginToSee": "Log in to place a prediction and view analytics"
   },
   "PeopleChamp": {
     "title": "People's Champion",

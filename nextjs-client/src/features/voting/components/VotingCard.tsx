@@ -16,6 +16,7 @@ import { useFinishPoll } from "../hooks/useFinishPoll"
 import { useProfile } from "@/shared/hooks/useProfile"
 import { Trophy } from "lucide-react" // Для красоты
 import { useTranslations, useLocale } from "next-intl"
+import { Clock, Swords } from "lucide-react"
 
 
 interface VotingCardProps {
@@ -61,15 +62,246 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
   const isExpired = poll.isPeopleChamp ? false : new Date(poll.expiresAt).getTime() < new Date().getTime()
 
+  // Вспомогательная функция для рендеринга фото бойца
+  const renderFighterPhoto = (option: any) => {
+    if (!option.photoUrl) return null
+    return (
+      <div className="mb-3 w-full aspect-square overflow-hidden rounded-xl shadow-lg bg-neutral-900">
+        <img
+          src={option.photoUrl}
+          alt={locale === 'en' ? option.textEn : option.textRu}
+          className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-105"
+          onError={(e) => {
+            const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено'
+            e.currentTarget.src = `https://placeholder.com{text}`
+          }}
+        />
+      </div>
+    )
+  }
+
+  // Центральный блок VS
+  const renderCenterBlock = () => {
+    const isClosed = poll.status === 'CLOSED'
+    const isOpen = poll.status === 'OPEN'
+    return (
+      <div className="flex flex-col items-center justify-center px-2 md:px-4 py-4">
+        <div className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-red-900 to-black border-4 border-red-800 shadow-2xl">
+          <Swords className="text-white size-6 md:size-8" />
+        </div>
+        <div className="mt-3 text-center">
+          <div className="text-2xl md:text-3xl font-black tracking-tighter text-red-700 uppercase">VS</div>
+          <div className="text-[10px] md:text-xs font-semibold text-muted-foreground mt-1 uppercase tracking-widest">
+            {isFinished ? t('fightFinished') : isClosed ? t('votingEnded') : t('live')}
+          </div>
+          {!isFinished && !isClosed && (
+            <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-amber-600">
+              <Clock className="size-3" />
+              <span>{new Date(poll.expiresAt).toLocaleDateString(locale, { day: 'numeric', month: 'short' })}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Блок бойца для режима результатов (hasVoted)
+  const renderFighterResult = (option: any, isLeft: boolean) => {
+    const percentage = totalVotes > 0 ? Math.round((option.votesCount / totalVotes) * 100) : 0
+    const isUserChoice = option.id === poll.userVoteOptionId
+    const isWinner = !poll.isPeopleChamp && option.id === poll.winnerOptionId
+
+    return (
+      <div className={cn(
+        "flex flex-col items-center w-full p-3 md:p-4",
+        isLeft ? "md:items-end md:text-right" : "md:items-start md:text-left"
+      )}>
+        {/* Фото */}
+        {renderFighterPhoto(option)}
+        {/* Имя и индикаторы */}
+        <div className={cn(
+          "flex flex-col w-full",
+          isLeft ? "md:items-end" : "md:items-start"
+        )}>
+          <div className="flex items-center justify-between w-full mb-2">
+            <span className={cn(
+              "text-sm font-bold uppercase tracking-wide transition-colors",
+              isUserChoice && "text-primary",
+              isWinner && "text-green-600",
+              isLeft ? "md:order-2" : "md:order-1"
+            )}>
+              {locale === 'en' ? option.textEn : option.textRu}
+              {isUserChoice && " ✅"}
+              {isWinner && " 🏆"}
+            </span>
+            <span className={cn(
+              "text-xs font-bold px-2 py-1 rounded",
+              isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted",
+              isLeft ? "md:order-1" : "md:order-2"
+            )}>
+              {percentage}%
+            </span>
+          </div>
+          {/* Прогресс-бар */}
+          <Progress
+            value={percentage}
+            className={cn(
+              "h-2 w-full",
+              isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
+            )}
+          />
+          <p className="text-[10px] text-muted-foreground mt-1 italic">
+            {t('totalVotes')} {option.votesCount}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Блок бойца для режима голосования (user, не голосовал)
+  const renderFighterVoting = (option: any, isLeft: boolean) => {
+    return (
+      <div
+      onClick={() => setValue("optionId", option.id)} // МАГИЯ ЗДЕСЬ! Клик по карточке выбирает бойца!
+      className={cn(
+        "flex flex-col items-center w-full p-3 md:p-4 border-2 rounded-xl transition-all",
+        "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
+        "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
+        selectedValue === option.id && "border-primary ring-2 ring-primary/30",
+        isLeft ? "md:items-end md:text-right" : "md:items-start md:text-left"
+      )}>
+        {renderFighterPhoto(option)}
+        <Label
+          htmlFor={option.id}
+          className="flex flex-col items-center w-full mt-2 cursor-pointer"
+        >
+          <div className="flex items-center justify-center w-full mb-2">
+            <div
+              className={`shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all ${selectedValue === option.id
+                  ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
+                  : "border-muted-foreground/30 bg-transparent"
+                }`}
+            >
+              {/* Маленькая точка внутри активного чекбокса */}
+              {selectedValue === option.id && <div className="size-2 rounded-full bg-white" />}
+            </div>
+            <span className="flex-1 font-black uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100 mx-3">
+              {locale === 'en' ? option.textEn : option.textRu}
+            </span>
+          </div>
+          <span className="text-[10px] text-muted-foreground italic">{t('clickToVote')}</span>
+        </Label>
+      </div>
+    )
+  }
+
+  // Блок бойца для анонимного просмотра
+  const renderFighterAnonymous = (option: any, isLeft: boolean) => {
+    return (
+      <div className={cn(
+        "flex flex-col items-center w-full p-3 md:p-4 border rounded-xl opacity-60",
+        "bg-sky-50 border-sky-200",
+        "dark:bg-slate-900 dark:border-slate-800",
+        isLeft ? "md:items-end md:text-right" : "md:items-start md:text-left"
+      )}>
+        {renderFighterPhoto(option)}
+        <div className="mt-2 text-center">
+          <span className="font-bold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
+            {locale === 'en' ? option.textEn : option.textRu}
+          </span>
+          <p className="text-[10px] text-muted-foreground mt-1">{t('loginToSee')}</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Основной контент карточки в зависимости от режима
+  const renderFightCardContent = () => {
+    // Если опций не 2, откатываемся к вертикальному стеку (на всякий случай)
+    if (poll.options.length !== 2) {
+      // Возвращаем старый вертикальный рендер (упрощённо)
+      return (
+        <div className="space-y-6 py-2">
+          {poll.options.map((option) => {
+            const percentage = totalVotes > 0 ? Math.round((option.votesCount / totalVotes) * 100) : 0
+            const isUserChoice = option.id === poll.userVoteOptionId
+            const isWinner = !poll.isPeopleChamp && option.id === poll.winnerOptionId
+            return (
+              <div key={option.id} className="group">
+                {option.photoUrl && (
+                  <div className="mb-3 w-full aspect-square overflow-hidden rounded-xl shadow-md bg-neutral-900">
+                    <img
+                      src={option.photoUrl}
+                      alt={locale === 'en' ? option.textEn : option.textRu}
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                )}
+                <div className="flex justify-between mb-2 items-center">
+                  <span className={cn("text-sm font-medium", isUserChoice && "text-primary font-bold", isWinner && "text-green-600 font-bold")}>
+                    {locale === 'en' ? option.textEn : option.textRu}
+                    {isUserChoice && " ✅"}
+                    {isWinner && " 🏆"}
+                  </span>
+                  <span className={cn("text-xs font-bold px-2 py-1 rounded", isWinner ? "bg-green-100 text-green-800" : "bg-muted")}>
+                    {percentage}%
+                  </span>
+                </div>
+                <Progress value={percentage} className={cn("h-3", isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted")} />
+                <p className="text-[10px] text-muted-foreground mt-1 text-right italic">{t('totalVotes')} {option.votesCount}</p>
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
+
+    const [fighter1, fighter2] = poll.options
+
+    return (
+      <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-2">
+        {/* Левый боец */}
+        <div className="flex-1">
+          {hasVoted
+            ? renderFighterResult(fighter1, true)
+            : user
+              ? renderFighterVoting(fighter1, true)
+              : renderFighterAnonymous(fighter1, true)
+          }
+        </div>
+
+        {/* Центральный блок VS */}
+        <div className="hidden md:flex flex-col justify-center">
+          {renderCenterBlock()}
+        </div>
+
+        {/* Правый боец */}
+        <div className="flex-1">
+          {hasVoted
+            ? renderFighterResult(fighter2, false)
+            : user
+              ? renderFighterVoting(fighter2, false)
+              : renderFighterAnonymous(fighter2, false)
+          }
+        </div>
+
+        {/* Центральный блок на мобилках (под бойцами) */}
+        <div className="md:hidden flex justify-center py-4">
+          {renderCenterBlock()}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Card className={cn(
-      "w-full max-w-md mx-auto mb-6 flex flex-col h-full shadow-lg border-2",
-      isFinished && "border-yellow-500/50" // Подсветим завершенные бои золотым
+      "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
+      isFinished && "border-yellow-500/50"
     )}>
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle>{locale === 'en' ? poll.questionEn : poll.questionRu}</CardTitle>
+            <CardTitle className="text-lg md:text-xl">{locale === 'en' ? poll.questionEn : poll.questionRu}</CardTitle>
             <CardDescription>
               {isFinished ? t('fightFinished') : t('chooseWinner')}
             </CardDescription>
@@ -79,182 +311,26 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       </CardHeader>
 
       <CardContent className="flex-1">
-        {hasVoted ? (
-          /* --- РЕЖИМ РЕЗУЛЬТАТОВ --- */
-          <div className="space-y-6 py-2">
-            {poll.options.map((option) => {
-              const percentage = totalVotes > 0
-                ? Math.round((option.votesCount / totalVotes) * 100)
-                : 0
-              const isUserChoice = option.id === poll.userVoteOptionId
-              // Победитель определяется только для обычных опросов (не People's Champion)
-              const isWinner = !poll.isPeopleChamp && option.id === poll.winnerOptionId
-
-              return (
-                <div key={option.id} className="group">
-                  {/* Добавляем фото бойца */}
-                  {option.photoUrl && (
-                    // 1. Убрали h-40, поставили идеальные пропорции постера aspect-[3/4]
-                    <div className="mb-3 w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-900">
-                      <img
-                        src={option.photoUrl}
-                        // 2. Локализуем alt-текст на основе новой структуры базы данных
-                        alt={locale === 'en' ? option.textEn : option.textRu}
-                        // 3. Сменили фокус обрезки на object-top — головы и плечи теперь ВСЕГДА в кадре!
-                        className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-102"
-                        onError={(e) => {
-                          // 4. Локализуем заглушку, если картинка сломалась
-                          const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено';
-                          e.currentTarget.src = `https://placeholder.com{text}`;
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div className="flex justify-between mb-2 items-center">
-                    <span className={cn(
-                      "text-sm font-medium transition-colors",
-                      isUserChoice && "text-primary font-bold",
-                      isWinner && "text-green-600 font-bold"
-                    )}>
-                      {locale === 'en' ? option.textEn : option.textRu}
-                      {isUserChoice && " ✅"}
-                      {isWinner && " 🏆"}
-                    </span>
-                    <span className={cn(
-                      "text-xs font-bold px-2 py-1 rounded",
-                      isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
-                    )}>
-                      {percentage}%
-                    </span>
-                  </div>
-                  <Progress
-                    value={percentage}
-                    className={cn(
-                      "h-3",
-                      isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
-                    )}
-                  />
-                  <p className="text-[10px] text-muted-foreground mt-1 text-right italic">
-                    {t('totalVotes')} {option.votesCount}
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-        ) : user ? (
-          /* --- РЕЖИМ ГОЛОСОВАНИЯ (только для авторизованных) --- */
-          <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`}>
-            <RadioGroup
-              value={selectedValue}
-              onValueChange={(v) => setValue("optionId", v)}
-              className="space-y-4"
-            >
-              {poll.options.map((option) => (
-                <div
-                  key={option.id}
-                  className={cn(
-                    "relative overflow-hidden border rounded-lg transition-colors",
-                    "bg-sky-50 border-sky-200 hover:bg-sky-100",
-                    "dark:bg-slate-900 dark:border-slate-800 dark:hover:bg-slate-800"
-                  )}
-                >
-                  {/* Добавляем фото бойца */}
-                  {option.photoUrl && (
-                    // 1. Убрали h-40, поставили идеальные пропорции постера aspect-[3/4]
-                    <div className="mb-3 w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-900">
-                      <img
-                        src={option.photoUrl}
-                        // 2. Локализуем alt-текст на основе новой структуры базы данных
-                        alt={locale === 'en' ? option.textEn : option.textRu}
-                        // 3. Сменили фокус обрезки на object-top — головы и плечи теперь ВСЕГДА в кадре!
-                        className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-102"
-                        onError={(e) => {
-                          // 4. Локализуем заглушку, если картинка сломалась
-                          const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено';
-                          e.currentTarget.src = `https://placeholder.com{text}`;
-                        }}
-                      />
-                    </div>
-                  )}
-                  {/* Теперь Label — это ГЛАВНЫЙ контейнер, он занимает всё пространство */}
-                  <Label
-                    htmlFor={option.id}
-                    className="flex items-center space-x-3 w-full p-4 cursor-pointer"
-                  >
-                    <RadioGroupItem
-                      value={option.id}
-                      id={option.id}
-                      className="shrink-0 shadow-[0_0_5px_rgba(0,0,0,0.5)] border-2 border-primary" // Чтобы кружочек не сплющивался
-                    />
-                    <span className="flex-1 font-semibold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
-                      {locale === 'en' ? option.textEn : option.textRu}
-                    </span>
-                  </Label>
-                </div>
+        {/* Форма для голосования (скрытая, но нужна для сабмита) */}
+        {user && !hasVoted && (
+          <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">
+            <RadioGroup value={selectedValue} onValueChange={(v) => setValue("optionId", v)}>
+              {poll.options.map(opt => (
+                <RadioGroupItem key={opt.id} value={opt.id} id={opt.id} />
               ))}
             </RadioGroup>
           </form>
-        ) : (
-          /* --- РЕЖИМ ПРОСМОТРА ДЛЯ АНОНИМОВ --- */
-          <div className="relative">
-            <div className="space-y-4 opacity-50">
-              {poll.options.map((option) => (
-                <div
-                  key={option.id}
-                  className={cn(
-                    "relative overflow-hidden border rounded-lg",
-                    "bg-sky-50 border-sky-200",
-                    "dark:bg-slate-900 dark:border-slate-800"
-                  )}
-                >
-                  {/* Добавляем фото бойца */}
-                  {option.photoUrl && (
-                    // 1. Убрали h-40, поставили идеальные пропорции постера aspect-[3/4]
-                    <div className="mb-3 w-full aspect-[3/4] overflow-hidden rounded-lg shadow-md bg-neutral-900">
-                      <img
-                        src={option.photoUrl}
-                        // 2. Локализуем alt-текст на основе новой структуры базы данных
-                        alt={locale === 'en' ? option.textEn : option.textRu}
-                        // 3. Сменили фокус обрезки на object-top — головы и плечи теперь ВСЕГДА в кадре!
-                        className="w-full h-full object-cover object-top transition-transform duration-300 hover:scale-102"
-                        onError={(e) => {
-                          // 4. Локализуем заглушку, если картинка сломалась
-                          const text = locale === 'en' ? 'Photo+Not+Found' : 'Фото+не+найдено';
-                          e.currentTarget.src = `https://placeholder.com{text}`;
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div className="p-4">
-                    <span className="font-semibold uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100">
-                      {locale === 'en' ? option.textEn : option.textRu}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-lg p-6">
-              <p className="text-lg font-medium text-foreground mb-4 text-center">
-                {t('loginToVote')}
-              </p>
-              <div className="flex gap-4">
-                <Button asChild variant="outline" size="sm">
-                  <Link href="/auth/login">{t('login')}</Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link href="/auth/register">{t('register')}</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
         )}
-        {/* --- ПАНЕЛЬ АДМИНА (Добавляем в самый низ контента) --- */}
+
+        {renderFightCardContent()}
+
+        {/* Панель админа */}
         {isAdmin && !isFinished && !poll.isPeopleChamp && (
-          <div className="mt-6 pt-4 border-t border-dashed border-primary/30">
+          <div className="mt-8 pt-6 border-t border-dashed border-primary/30">
             <p className="text-[10px] uppercase font-bold text-primary mb-3 text-center tracking-widest">
               {t('judgePanel')}
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {poll.options.map((option) => (
                 <Button
                   key={option.id}
@@ -272,14 +348,14 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         )}
       </CardContent>
 
-      {/* ... CardFooter ... */}
+      {/* Футер с кнопкой прогноза */}
       {user && (
         <CardFooter className="pt-4 border-t">
           {!hasVoted ? (
             <Button
               form={`form-${poll.id}`}
               type="submit"
-              className="w-full font-bold uppercase"
+              className="w-full font-bold uppercase py-3"
               disabled={isPending || poll.status === 'CLOSED' || isExpired}
             >
               {isExpired ? t('votingEnded') : isPending ? t('submitting') : t('makePrediction')}
@@ -294,4 +370,3 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     </Card>
   )
 }
-
