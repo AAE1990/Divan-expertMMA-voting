@@ -2,7 +2,7 @@
 
 import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createPollSchema, TCreatePollSchema } from "@/features/voting/schemes/voting.schema"
+import { getCreatePollSchema, TCreatePollSchema } from "@/features/voting/schemes/voting.schema"
 import { useCreatePoll } from "@/features/voting/hooks/useCreatePoll"
 import { Card, CardContent, CardHeader, CardTitle, Loading } from "@/shared/components/ui/"
 import { Input } from "@/shared/components/ui"
@@ -30,7 +30,7 @@ export default function AdminVotingPage() {
 
     // Форма боя теперь должна включать tournamentId
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<TCreatePollSchema>({
-        resolver: zodResolver(createPollSchema),
+        resolver: zodResolver(getCreatePollSchema(t)),
         defaultValues: {
             isPeopleChamp: false
         }

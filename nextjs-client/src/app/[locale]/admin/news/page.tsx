@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createNewsSchema, TCreateNewsSchema } from "@/features/news/schemes/news.schema"
+import { getCreateNewsSchema, TCreateNewsSchema } from "@/features/news/schemes/news.schema"
 import { useCreateNews } from "@/features/news/hooks/useCreateNews"
 import { Card, CardContent, CardHeader, CardTitle, Loading } from "@/shared/components/ui/"
 import { Input } from "@/shared/components/ui"
@@ -20,7 +20,7 @@ export default function AdminNewsPage() {
     const t = useTranslations('AdminNews')
 
     const { register, handleSubmit, formState: { errors } } = useForm<TCreateNewsSchema>({
-        resolver: zodResolver(createNewsSchema),
+        resolver: zodResolver(getCreateNewsSchema(t)),
     })
 
     // Редирект не-админов

@@ -1,46 +1,46 @@
 import { z } from "zod";
 
-export const votingSchema = z.object({
+export const getVotingSchema = (t: (key: string) => string) => z.object({
   // Используем .min(1) с объектом сообщения — это самая стабильная перегрузка
   optionId: z
     .string()
-    .min(1, { message: "Пожалуйста, выберите вариант для голосования" }),
+    .min(1, { message: t('pleaseSelectOption') }),
 });
 
-export type TVotingSchema = z.infer<typeof votingSchema>;
+export type TVotingSchema = z.infer<ReturnType<typeof getVotingSchema>>;
 
-export const createPollSchema = z.object({
+export const getCreatePollSchema = (t: (key: string) => string) => z.object({
   questionRu: z
     .string()
-    .min(5, { message: "Вопрос на русском должен быть не менее 5 символов" }),
+    .min(5, { message: t('questionRequired') }),
   questionEn: z
     .string()
-    .min(5, { message: "Вопрос на английском должен быть не менее 5 символов" }),
+    .min(5, { message: t('questionRequired') }),
   fighter1Ru: z
     .string()
-    .min(2, { message: "Введите имя первого бойца на русском" }),
+    .min(2, { message: t('fighterRequired') }),
   fighter1En: z
     .string()
-    .min(2, { message: "Введите имя первого бойца на английском" }),
+    .min(2, { message: t('fighterRequired') }),
   fighter1Photo: z
     .string()
-    .url({ message: "Введите корректный URL-адрес фотографии" })
+    .url({ message: t('invalidPhotoUrl') })
     .optional()
     .or(z.literal('')),
   fighter2Ru: z
     .string()
-    .min(2, { message: "Введите имя второго бойца на русском" }),
+    .min(2, { message: t('fighterRequired') }),
   fighter2En: z
     .string()
-    .min(2, { message: "Введите имя второго бойца на английском" }),
+    .min(2, { message: t('fighterRequired') }),
   fighter2Photo: z
     .string()
-    .url({ message: "Введите корректный URL-адрес фотографии" })
+    .url({ message: t('invalidPhotoUrl') })
     .optional()
     .or(z.literal('')),
   expiresAt: z
     .string()
-    .min(1, { message: "Укажите дату и время окончания боя" }),
+    .min(1, { message: t('expiresAtRequired') }),
   tournamentId: z
     .string()
     .optional(),
@@ -52,8 +52,12 @@ export const createPollSchema = z.object({
   }
   return true;
 }, {
-  message: "Выберите турнир или отметьте 'Народный чемпион'",
+  message: t('tournamentOrPeopleChampRequired'),
   path: ["tournamentId"],
 });
 
-export type TCreatePollSchema = z.infer<typeof createPollSchema>;
+export type TCreatePollSchema = z.infer<ReturnType<typeof getCreatePollSchema>>;
+
+// Для обратной совместимости (если где-то используется старый импорт)
+export const votingSchema = getVotingSchema(() => "Пожалуйста, выберите вариант для голосования");
+export const createPollSchema = getCreatePollSchema(() => "");

@@ -12,13 +12,14 @@ import { cn } from "@/shared/utils/clsx"
 import { Link, useRouter } from "@/i18n/routing"
 import { useSearchParams } from "next/navigation"
 import { History } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 
 function VotingContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const urlTournamentId = searchParams.get('tournamentId') // Берем ID из ссылки типа ?tournamentId=...
   const t = useTranslations('Voting')
+  const locale = useLocale()
 
   // Оставляем стейт, но инициализируем его из URL
   const [selectedTournamentId, setSelectedTournamentId] = useState<string | undefined>(urlTournamentId || undefined)
@@ -59,7 +60,7 @@ function VotingContent() {
   return (
     <div className="container mx-auto py-10 px-4">
       <h1 className="text-4xl font-black mb-2 text-center uppercase tracking-tighter italic italic">
-        {finalTournament?.name || t('linePredictions')}
+        {finalTournament ? (locale === 'en' ? finalTournament.nameEn : finalTournament.nameRu) : t('linePredictions')}
       </h1>
       <p className="text-center text-muted-foreground mb-8 text-xs uppercase tracking-[0.3em]">
         {finalTournament ? new Date(finalTournament.date).toLocaleDateString() : t('loading')}
@@ -74,7 +75,7 @@ function VotingContent() {
             onClick={() => handleTournamentChange(t.id)}
             className="rounded-full transition-all cursor-pointer"
           >
-            {t.name}
+            {locale === 'en' ? t.nameEn : t.nameRu}
           </Button>
         ))}
 

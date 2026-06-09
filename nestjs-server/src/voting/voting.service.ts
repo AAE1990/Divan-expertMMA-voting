@@ -33,7 +33,9 @@ export class VotingService {
       ...poll,
       options: poll.options.map(opt => ({
         id: opt.id,
-        text: opt.textRu, // Используем русскую версию текста
+        text: opt.textRu, // для обратной совместимости
+        textRu: opt.textRu,
+        textEn: opt.textEn,
         photoUrl: opt.photoUrl, // Добавляем URL фотографии
         votesCount: opt._count.votes // Превращаем счетчик в число
       })),
@@ -73,7 +75,9 @@ export class VotingService {
         ...poll,
         options: poll.options.map(opt => ({
           id: opt.id,
-          text: opt.textRu, // Используем русскую версию текста
+          text: opt.textRu, // для обратной совместимости
+          textRu: opt.textRu,
+          textEn: opt.textEn,
           photoUrl: opt.photoUrl,
           votesCount: opt._count.votes
         })),

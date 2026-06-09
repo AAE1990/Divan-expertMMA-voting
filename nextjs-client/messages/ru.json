@@ -130,7 +130,8 @@
     "pollCreated": "Новое голосование создано!",
     "pollCreateError": "Ошибка при создании голосования",
     "pollFinished": "Голосование успешно завершено!",
-    "pollFinishError": "Ошибка при завершении голосования"
+    "pollFinishError": "Ошибка при завершении голосования",
+    "pleaseSelectOption": "Пожалуйста, выберите вариант для голосования"
   },
   "PeopleChamp": {
     "title": "Народный чемпион",
@@ -319,7 +320,14 @@
     "fighterNamePlaceholderRu": "Имя Фамилия (RU)...",
     "fighterNamePlaceholderEn": "First and Last Name (EN)...",
     "tournamentPromptRu": "Название турнира на русском (напр. UFC 300)",
-    "tournamentPromptEn": "Название турнира на английском (напр. UFC 300)"
+    "tournamentPromptEn": "Название турнира на английском (напр. UFC 300)",
+    "tournamentRequired": "Выберите турнир",
+    "questionRequired": "Введите вопрос",
+    "fighterRequired": "Введите имя бойца",
+    "pleaseSelectOption": "Пожалуйста, выберите вариант для голосования",
+    "invalidPhotoUrl": "Введите корректный URL-адрес фотографии",
+    "expiresAtRequired": "Укажите дату и время окончания боя",
+    "tournamentOrPeopleChampRequired": "Выберите турнир или отметьте 'Народный чемпион'"
   },
   "AdminNews": {
     "createNewsTitle": "Создание новости",
@@ -329,7 +337,18 @@
     "contentPlaceholder": "Введите полный текст новости",
     "imageUrlLabel": "URL изображения (необязательно)",
     "publishNewsButton": "Опубликовать новость",
-    "creatingButton": "Создание..."
+    "creatingButton": "Создание...",
+    "titlePlaceholderRu": "Введите заголовок новости на русском...",
+    "contentPlaceholderRu": "Введите полный текст новости на русском...",
+    "titlePlaceholderEn": "Введите заголовок новости на английском...",
+    "contentPlaceholderEn": "Введите полный текст новости на английском...",
+    "titleRuMinLength": "Заголовок на русском должен быть не менее 5 символов",
+    "titleRuMaxLength": "Заголовок на русском не должен превышать 200 символов",
+    "titleEnMinLength": "Заголовок на английском должен быть не менее 5 символов",
+    "titleEnMaxLength": "Заголовок на английском не должен превышать 200 символов",
+    "contentRuMinLength": "Текст новости на русском должен быть не менее 10 символов",
+    "contentEnMinLength": "Текст новости на английском должен быть не менее 10 символов",
+    "invalidImageUrl": "Введите корректный URL-адрес изображения"
   },
   "Toasts": {
     "tournamentCreatedSuccess": "Турнир успешно создан",

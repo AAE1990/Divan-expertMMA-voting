@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { votingSchema, TVotingSchema } from "../schemes/voting.schema"
+import { getVotingSchema, TVotingSchema } from "../schemes/voting.schema"
 import { IPoll } from "../types/voting.types"
 import { useSubmitVote } from "../hooks/useSubmitVote"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/Card"
@@ -38,7 +38,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
   const totalVotes = poll.options.reduce((sum, opt) => sum + (opt.votesCount || 0), 0)
 
   const { handleSubmit, setValue, watch, formState: { errors } } = useForm<TVotingSchema>({
-    resolver: zodResolver(votingSchema),
+    resolver: zodResolver(getVotingSchema(t)),
   })
 
   const selectedValue = watch("optionId")
@@ -264,7 +264,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                   onClick={() => handleFinish(option.id)}
                   disabled={isFinishing}
                 >
-                  {t('wonBy', { fighter: option.text })}
+                  {t('wonBy', { fighter: locale === 'en' ? option.textEn : option.textRu })}
                 </Button>
               ))}
             </div>
@@ -294,3 +294,4 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     </Card>
   )
 }
+

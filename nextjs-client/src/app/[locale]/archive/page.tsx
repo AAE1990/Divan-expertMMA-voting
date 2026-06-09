@@ -7,9 +7,10 @@ import { useProfile, useDebounce } from "@/shared/hooks";
 import { Link } from "@/i18n/routing";
 import { CalendarDays, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function ArchivePage() {
+  const locale = useLocale();
   const [page, setPage] = useState(1);
   const limit = 10; // Количество турниров на странице
   const [searchTerm, setSearchTerm] = useState(""); // Состояние для текста поиска
@@ -71,7 +72,7 @@ export default function ArchivePage() {
                     <CardHeader className="flex flex-row items-center justify-between space-y-0">
                       <div>
                         <CardTitle className="group-hover:text-primary transition-colors">
-                          {t.name}
+                          {locale === 'en' ? t.nameEn : t.nameRu}
                         </CardTitle>
                         <CardDescription className="flex items-center gap-2 mt-1">
                           <CalendarDays className="size-3" />

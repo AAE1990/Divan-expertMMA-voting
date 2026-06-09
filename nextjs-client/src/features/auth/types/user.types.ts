@@ -28,7 +28,8 @@ export interface IUserVote {
     // Тот самый include, который мы добавили на бэкенде:
     option: {
       id: string
-      text: string // Имя бойца, на которого поставил
+      textRu: string // Имя бойца на русском
+      textEn: string // Имя бойца на английском
     }
     poll: {
       id: string
@@ -37,7 +38,8 @@ export interface IUserVote {
       winnerOptionId: string | null // Кто победил в реальности
       options: {
         id: string
-        text: string
+        textRu: string
+        textEn: string
       }[]
     }
   }

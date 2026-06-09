@@ -1,25 +1,28 @@
 import { z } from "zod";
 
-export const createNewsSchema = z.object({
+export const getCreateNewsSchema = (t: (key: string) => string) => z.object({
   titleRu: z
     .string()
-    .min(5, { message: "Заголовок на русском должен быть не менее 5 символов" })
-    .max(200, { message: "Заголовок на русском не должен превышать 200 символов" }),
+    .min(5, { message: t('titleRuMinLength') })
+    .max(200, { message: t('titleRuMaxLength') }),
   titleEn: z
     .string()
-    .min(5, { message: "Заголовок на английском должен быть не менее 5 символов" })
-    .max(200, { message: "Заголовок на английском не должен превышать 200 символов" }),
+    .min(5, { message: t('titleEnMinLength') })
+    .max(200, { message: t('titleEnMaxLength') }),
   contentRu: z
     .string()
-    .min(10, { message: "Текст новости на русском должен быть не менее 10 символов" }),
+    .min(10, { message: t('contentRuMinLength') }),
   contentEn: z
     .string()
-    .min(10, { message: "Текст новости на английском должен быть не менее 10 символов" }),
+    .min(10, { message: t('contentEnMinLength') }),
   imageUrl: z
     .string()
-    .url({ message: "Введите корректный URL-адрес изображения" })
+    .url({ message: t('invalidImageUrl') })
     .optional()
     .or(z.literal('')),
 });
 
-export type TCreateNewsSchema = z.infer<typeof createNewsSchema>;
+export type TCreateNewsSchema = z.infer<ReturnType<typeof getCreateNewsSchema>>;
+
+// Для обратной совместимости (если где-то используется старый импорт)
+export const createNewsSchema = getCreateNewsSchema(() => "");

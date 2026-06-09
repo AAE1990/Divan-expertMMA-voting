@@ -6,9 +6,8 @@ export enum PollStatus {
 
 export interface IVoteOption {
   id: string;
-  text: string; // "Боец 1" или "Боец 2"
-  textRu: string; // Добавили имя бойца на русском!
-  textEn: string; // Добавили имя бойца на английском
+  textRu: string; // Имя бойца на русском
+  textEn: string; // Имя бойца на английском
   photoUrl?: string; // URL-адрес фотографии бойца
   votesCount: number; // общее кол-во голосов для прогресс-бара
 }

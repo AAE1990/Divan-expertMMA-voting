@@ -5,6 +5,7 @@ export interface ITournament {
   nameRu: string;   // Добавили RU!
   nameEn: string;   // Добавили EN!
   description?: string;
+  date: string;
 }
 
 export interface ITournamentsResponse {

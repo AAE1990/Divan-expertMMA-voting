@@ -130,7 +130,8 @@
     "pollCreated": "New poll created successfully!",
     "pollCreateError": "Failed to create poll",
     "pollFinished": "Poll successfully finished!",
-    "pollFinishError": "Failed to finish poll"
+    "pollFinishError": "Failed to finish poll",
+    "pleaseSelectOption": "Please select a voting option"
   },
   "PeopleChamp": {
     "title": "People's Champion",
@@ -319,7 +320,14 @@
     "fighterNamePlaceholderRu": "Fighter Name (RU)...",
     "fighterNamePlaceholderEn": "Fighter Name (EN)...",
     "tournamentPromptRu": "Tournament title in Russian (e.g., UFC 300)",
-    "tournamentPromptEn": "Tournament title in English (e.g., UFC 300)"
+    "tournamentPromptEn": "Tournament title in English (e.g., UFC 300)",
+    "tournamentRequired": "Select a tournament",
+    "questionRequired": "Enter a question",
+    "fighterRequired": "Enter fighter name",
+    "pleaseSelectOption": "Please select a voting option",
+    "invalidPhotoUrl": "Enter a valid photo URL",
+    "expiresAtRequired": "Specify the fight end date and time",
+    "tournamentOrPeopleChampRequired": "Select a tournament or mark 'People's Champion'"
   },
   "AdminNews": {
     "createNewsTitle": "Create News",
@@ -329,7 +337,18 @@
     "contentPlaceholder": "Enter full news content",
     "imageUrlLabel": "Image URL (optional)",
     "publishNewsButton": "Publish News",
-    "creatingButton": "Creating..."
+    "creatingButton": "Creating...",
+    "titlePlaceholderEn": "Enter news title in English...",
+    "contentPlaceholderEn": "Enter full news content in English...",
+    "titlePlaceholderRu": "Enter news title in Russian...",
+    "contentPlaceholderRu": "Enter full news content in Russian...",
+    "titleRuMinLength": "Russian title must be at least 5 characters",
+    "titleRuMaxLength": "Russian title must not exceed 200 characters",
+    "titleEnMinLength": "English title must be at least 5 characters",
+    "titleEnMaxLength": "English title must not exceed 200 characters",
+    "contentRuMinLength": "Russian news content must be at least 10 characters",
+    "contentEnMinLength": "English news content must be at least 10 characters",
+    "invalidImageUrl": "Enter a valid image URL"
   },
   "Toasts": {
     "tournamentCreatedSuccess": "Tournament created successfully!",

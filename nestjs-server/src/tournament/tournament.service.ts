@@ -48,7 +48,7 @@ export class TournamentService {
 
   // Получить конкретный турнир со всеми его боями (для страницы турнира)
   public async findOne(id: string) {
-    return this.prisma.tournament.findUnique({
+    const tournament = await this.prisma.tournament.findUnique({
       where: { id },
       include: {
         polls: {
@@ -62,5 +62,23 @@ export class TournamentService {
         }
       }
     });
+
+    if (!tournament) {
+      return null;
+    }
+
+    // Добавляем поле text для обратной совместимости и убеждаемся, что textRu и textEn присутствуют
+    const transformedPolls = tournament.polls.map(poll => ({
+      ...poll,
+      options: poll.options.map(opt => ({
+        ...opt,
+        text: opt.textRu, // дефолтное русское поле для обратной совместимости
+      }))
+    }));
+
+    return {
+      ...tournament,
+      polls: transformedPolls,
+    };
   }
 }

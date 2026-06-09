@@ -1,10 +1,11 @@
 import { IUserVote } from "@/features/auth/types"
 import { Badge } from "@/shared/components/ui/Badge"
 import { CheckCircle2, XCircle, Clock } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 
 export const PredictionsHistory = ({ votes }: { votes: IUserVote[] }) => {
   const t = useTranslations('Profile')
+  const locale = useLocale()
   if (!votes?.length) return (
     <p className="text-center text-muted-foreground text-xs py-10 italic">
       Вы еще не сделали ни одного прогноза
@@ -24,7 +25,7 @@ export const PredictionsHistory = ({ votes }: { votes: IUserVote[] }) => {
                 {vote.poll.question}
               </p>
               <p className="text-sm font-semibold truncate italic text-primary">
-                {vote.option.text}
+                {locale === 'en' ? vote.option.textEn : vote.option.textRu}
               </p>
             </div>
 
