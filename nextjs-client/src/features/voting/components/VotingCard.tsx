@@ -68,7 +68,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
   const renderFighterPhoto = (option: any) => {
     if (!option.photoUrl) return null
     return (
-      <div className="mb-3 w-full max-w-[200px] md:max-w-[240px] aspect-[3/4] overflow-hidden rounded-xl shadow-md bg-neutral-900 mx-auto">
+      <div className="mb-3 w-full max-w-[160px] ultra:max-w-[180px] aspect-[3/4] overflow-hidden rounded-xl shadow-md bg-neutral-900 mx-auto">
         <img
           src={option.photoUrl}
           alt={locale === 'en' ? option.textEn : option.textRu}
@@ -87,7 +87,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const isClosed = poll.status === 'CLOSED'
     const isOpen = poll.status === 'OPEN'
     return (
-      <div className="flex flex-col items-center justify-center gap-1 shrink-0">
+      <div className="flex flex-col items-center justify-center gap-2 shrink-0">
         <div className="flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-red-900 to-black border-4 border-red-800 shadow-2xl">
           <Swords className="text-white size-6 md:size-8" />
         </div>
@@ -115,22 +115,22 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
     return (
       <div className={cn(
-        "flex flex-col items-center w-full p-3 md:p-4",
-        isLeft ? "lg:items-end lg:text-right" : "lg:items-start lg:text-left"
+        "flex flex-col items-center w-full p-3 md:p-4 border-2 rounded-xl transition-all cursor-pointer",
+        isLeft ? "ultra:items-end ultra:text-right" : "ultra:items-start ultra:text-left"
       )}>
         {/* Фото */}
         {renderFighterPhoto(option)}
         {/* Имя и индикаторы */}
         <div className={cn(
           "flex flex-col w-full",
-          isLeft ? "lg:items-end" : "lg:items-start"
+          isLeft ? "ultra:items-end" : "ultra:items-start"
         )}>
           <div className="flex items-center justify-between w-full mb-2">
             <span className={cn(
               "text-sm font-bold uppercase tracking-wide transition-colors",
               isUserChoice && "text-primary",
               isWinner && "text-green-600",
-              isLeft ? "lg:order-2" : "lg:order-1"
+              isLeft ? "ultra:order-2" : "ultra:order-1"
             )}>
               {locale === 'en' ? option.textEn : option.textRu}
               {isUserChoice && " ✅"}
@@ -139,7 +139,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
             <span className={cn(
               "text-xs font-bold px-2 py-1 rounded",
               isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted",
-              isLeft ? "lg:order-1" : "lg:order-2"
+              isLeft ? "ultra:order-1" : "ultra:order-2"
             )}>
               {percentage}%
             </span>
@@ -166,11 +166,11 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       <div
         onClick={() => setValue("optionId", option.id)} // МАГИЯ ЗДЕСЬ! Клик по карточке выбирает бойца!
         className={cn(
-          "flex flex-col items-center w-full p-3 md:p-4 border-2 rounded-xl transition-all",
+          "flex flex-col items-center w-full p-4 md:p-4 border-2 rounded-xl transition-all",
           "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
           "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
           selectedValue === option.id && "border-primary ring-2 ring-primary/30",
-          isLeft ? "lg:items-end lg:text-right" : "lg:items-start lg:text-left"
+          isLeft ? "ultra:items-end ultra:text-right" : "ultra:items-start ultra:text-left"
         )}>
         {renderFighterPhoto(option)}
         <Label
@@ -204,7 +204,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         "flex flex-col items-center w-full p-3 md:p-4 border rounded-xl opacity-60",
         "bg-sky-50 border-sky-200",
         "dark:bg-slate-900 dark:border-slate-800",
-        isLeft ? "lg:items-end lg:text-right" : "lg:items-start lg:text-left"
+        isLeft ? "ultra:items-end ultra:text-right" : "ultra:items-start ultra:text-left"
       )}>
         {renderFighterPhoto(option)}
         <div className="mt-2 text-center">
@@ -260,10 +260,11 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const [fighter1, fighter2] = poll.options
 
 return (
-  <div className="flex flex-col lg:flex-row items-stretch justify-between gap-2 w-full">
+  // По умолчанию flex-col (вертикально). На экранах от 1820px — ultra:flex-row (горизонтально)!
+  <div className="flex flex-col ultra:flex-row items-stretch justify-between gap-4 ultra:gap-2 w-full min-w-0">
     
-    {/* Левый боец — принудительно делит место поровну */}
-    <div className="flex-1 w-full lg:w-1/2">
+    {/* Левый боец. До 1820px — на всю ширину w-full, на ультра — ровно половина ultra:w-[45%] */}
+    <div className="w-full ultra:w-[45%] flex-1 min-w-0">
       {hasVoted 
         ? renderFighterResult(fighter1, true) 
         : user 
@@ -271,13 +272,13 @@ return (
           : renderFighterAnonymous(fighter1, true)}
     </div>
 
-    {/* Центральный блок VS */}
-    <div className="flex justify-center items-center py-2 lg:py-0 px-0 lg:px-2 shrink-0"> {/* Добавили shrink-0, чтобы круг VS никогда не сжимался */}
+    {/* Центральный блок VS. Задаем ultra:mx-4, чтобы растолкать бойцов на больших мониторах! */}
+    <div className="flex justify-center items-center py-4 ultra:py-0 shrink-0 ultra:px-6 mx-auto">
       {renderCenterBlock()}
     </div>
 
-    {/* Правый боец — принудительно делит место поровну */}
-    <div className="flex-1 w-full lg:w-1/2">
+    {/* Правый боец */}
+    <div className="w-full ultra:w-[45%] flex-1 min-w-0">
       {hasVoted 
         ? renderFighterResult(fighter2, false) 
         : user 
@@ -306,7 +307,7 @@ return (
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1">
+      <CardContent className="flex-1 px-4 sm:px-6">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
         {user && !hasVoted && (
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">

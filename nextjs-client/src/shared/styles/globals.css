@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Магия Tailwind v4 здесь! Добавляем официальный брейкпоинт ultra */
+@theme {
+  --breakpoint-ultra: 1820px;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
