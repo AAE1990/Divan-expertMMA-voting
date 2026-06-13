@@ -241,7 +241,7 @@ export default function AdminVotingPage() {
                         </div>
                         {errors.isPeopleChamp && <p className="text-red-500 text-xs">{errors.isPeopleChamp.message}</p>}
 
-                        <Button type="submit" className="w-full" disabled={isPending}>
+                        <Button type="submit" className="w-full cursor-pointer" disabled={isPending}>
                             {isPending ? t('publishingButton') : t('publishButton')}
                         </Button>
                     </form>

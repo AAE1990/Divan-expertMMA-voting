@@ -129,7 +129,7 @@ export default function AdminNewsPage() {
                             )}
                         </div>
 
-                        <Button type="submit" disabled={isPending} className="w-full">
+                        <Button type="submit" disabled={isPending} className="w-full cursor-pointer">
                             {isPending ? t('creatingButton') : t('publishNewsButton')}
                         </Button>
                     </form>

@@ -122,11 +122,11 @@ export const Sidebar = () => {
               </div>
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 border-1 border-transparent hover:border-primary/30"
+                className="w-full justify-start gap-3 border-1 border-transparent hover:border-primary/30 cursor-pointer"
                 onClick={() => logout()}
                 disabled={isLoadingLogout}
               >
-                <LogOut className="size-5 text-primary shrink-0" />
+                <LogOut className="size-5 text-primary shrink-0"/>
                 <span className="truncate">{t('logOut')}</span>
               </Button>
             </>

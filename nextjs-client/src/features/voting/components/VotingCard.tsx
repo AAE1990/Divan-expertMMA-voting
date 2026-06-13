@@ -333,7 +333,7 @@ return (
                   key={option.id}
                   size="sm"
                   variant="outline"
-                  className="text-[10px] h-auto py-2 whitespace-normal border-primary/50 hover:bg-primary hover:text-white leading-tight"
+                  className="text-[10px] h-auto py-2 whitespace-normal border-primary/50 hover:bg-primary hover:text-white leading-tight cursor-pointer"
                   onClick={() => handleFinish(option.id)}
                   disabled={isFinishing}
                 >
@@ -353,7 +353,7 @@ return (
             <Button
               form={`form-${poll.id}`}
               type="submit"
-              className="w-full font-bold uppercase py-3"
+              className="w-full font-bold uppercase py-3 cursor-pointer"
               disabled={isPending || poll.status === 'CLOSED' || isExpired}
             >
               {isExpired ? t('votingEnded') : isPending ? t('submitting') : t('makePrediction')}

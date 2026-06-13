@@ -7,13 +7,14 @@ import { useProfile } from "@/shared/hooks";
 import { Link } from "@/i18n/routing";
 import { CalendarDays, ChevronLeft, ChevronRight, Newspaper } from "lucide-react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function NewsPage() {
   const [page, setPage] = useState(1);
   const limit = 6; // Количество новостей на странице
   const { user, isLoading: isProfileLoading } = useProfile();
   const { data: newsData, isLoading } = useGetNews(page, limit);
+  const locale = useLocale();
 
   const totalPages = newsData?.totalNews
     ? Math.ceil(newsData.totalNews / limit)
@@ -73,13 +74,15 @@ export default function NewsPage() {
                     </div>
                   )}
                   <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <CardTitle className="text-xl font-black uppercase italic line-clamp-2">
-                        {news.title}
+                    <div className="flex justify-between items-start gap-4 pl-2 pr-4">
+                      {/* Увеличили line-clamp до 3 строк для длинных заголовков */}
+                      <CardTitle className="text-xl font-black uppercase italic line-clamp-3">
+                        {locale === 'en' ? news.titleEn : news.titleRu}
                       </CardTitle>
                       <CalendarDays className="size-5 text-muted-foreground flex-shrink-0" />
                     </div>
-                    <CardDescription className="flex items-center gap-2 text-sm">
+
+                    <CardDescription className="flex items-center gap-2 text-sm mt-1 pl-2 pr-4">
                       <span>
                         {new Date(news.createdAt).toLocaleDateString('ru-RU', {
                           day: 'numeric',
@@ -89,9 +92,11 @@ export default function NewsPage() {
                       </span>
                     </CardDescription>
                   </CardHeader>
+
                   <div className="p-6 pt-0">
-                    <p className="text-muted-foreground leading-relaxed line-clamp-3">
-                      {news.content}
+                    {/* Увеличили line-clamp до 12 строк для сочного описания */}
+                    <p className="text-muted-foreground leading-relaxed line-clamp-[12] text-left w-full">
+                      {locale === 'en' ? news.contentEn : news.contentRu}
                     </p>
                   </div>
                 </Card>

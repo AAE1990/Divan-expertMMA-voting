@@ -28,7 +28,7 @@ export function LocaleSwitcher() {
         <Button
           variant="outline"
           size="icon"
-          className="relative h-9 w-9 rounded-md border-border bg-background hover:bg-accent"
+          className="relative h-9 w-9 rounded-md border-border bg-background hover:bg-accent cursor-pointer"
           aria-label="Переключить язык"
         >
           <Globe className="h-4 w-4" />

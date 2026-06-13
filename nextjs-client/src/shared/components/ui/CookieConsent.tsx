@@ -71,7 +71,7 @@ export function CookieConsent({
             <Button
               size="sm"
               onClick={handleAccept}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
             >
               {finalButtonText}
             </Button>
@@ -79,7 +79,7 @@ export function CookieConsent({
               size="sm"
               variant="outline"
               onClick={handleClose}
-              className="border-border text-foreground hover:bg-accent"
+              className="border-border text-foreground hover:bg-accent cursor-pointer"
             >
               {closeButtonText}
             </Button>
@@ -87,7 +87,7 @@ export function CookieConsent({
         </div>
         <button
           onClick={handleClose}
-          className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
+          className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
           aria-label={closeButtonText}
         >
           <X size={16} />

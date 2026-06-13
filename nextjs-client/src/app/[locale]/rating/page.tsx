@@ -37,7 +37,7 @@ export default function RatingPage() {
         <div className="flex items-center gap-3">
           <Calendar className="size-5 text-muted-foreground" />
           <Select value={period} onValueChange={handlePeriodChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] cursor-pointer">
               <SelectValue placeholder="Период" />
             </SelectTrigger>
             <SelectContent>

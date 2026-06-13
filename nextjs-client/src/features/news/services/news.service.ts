@@ -7,6 +7,10 @@ export interface INews {
   content: string;
   imageUrl?: string;
   createdAt: string;
+  titleRu: string;
+  titleEn: string;
+  contentRu: string;
+  contentEn: string;
 }
 
 export interface INewsListResponse {

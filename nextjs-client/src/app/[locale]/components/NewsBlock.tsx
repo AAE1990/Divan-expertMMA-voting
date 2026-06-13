@@ -43,7 +43,7 @@ export function NewsBlock() {
             <img
               src={news.imageUrl}
               alt={news.title}
-              className="w-full h-64 object-cover"
+              className="w-full aspect-video object-cover rounded-xl"
             />
           </div>
         )}

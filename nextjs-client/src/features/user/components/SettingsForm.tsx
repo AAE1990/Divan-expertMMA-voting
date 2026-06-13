@@ -252,7 +252,7 @@ export function SettingsForm() {
                                             </div>
                                         </div>
 
-                                        <Button type='submit' disabled={isLoadingUpdate} className="w-full font-bold uppercase tracking-widest">
+                                        <Button type='submit' disabled={isLoadingUpdate} className="w-full font-bold uppercase tracking-widest cursor-pointer">
                                             {isLoadingUpdate ? t('Saving') : t('Save Profile')}
                                         </Button>
                                     </form>
