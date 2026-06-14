@@ -135,7 +135,7 @@ export class UserService {
             },
             data: {
                 email: dto.email,
-                displayName: dto.name,
+                displayName: dto.displayName,
                 isTwoFactorEnabled: dto.isTwoFactorEnabled,
                 bio: dto.bio,
                 city: dto.city,
@@ -266,7 +266,7 @@ export class UserService {
             }>>`
                 SELECT
                     u.id,
-                    u."displayName" as "displayName",
+                    u."display_name" as "displayName",
                     u.picture,
                     u.score,
                     ROW_NUMBER() OVER (ORDER BY u.score DESC, u.last_score_at ASC NULLS LAST) as rank

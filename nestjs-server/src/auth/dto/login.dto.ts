@@ -16,4 +16,5 @@ export class LoginDto {
 	@IsOptional()
 	@IsString()
 	code?: string
+	locale?: string;
 }

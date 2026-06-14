@@ -14,17 +14,17 @@ model User {
   email String @unique
   password String
 
-  displayName String
-  picture String?
+  displayName String @map("display_name")
+  picture String? @db.VarChar(500)
 
   bio String? @db.VarChar(100)
-  city String?
-  country String?
-  youtube String?
-  telegram String?
-  vk String?
-  twitter String?
-  instagram String?
+  city String? @db.VarChar(100)
+  country String? @db.VarChar(100)
+  youtube String? @db.VarChar(100)
+  telegram String? @db.VarChar(100)
+  vk String? @db.VarChar(100)
+  twitter String? @db.VarChar(100)
+  instagram String? @db.VarChar(100)
 
   role UserRole @default(REGULAR)
 
@@ -36,7 +36,7 @@ model User {
   accounts Account[]
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAT DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   score     Int      @default(0) // Баллы за угаданные бои
   votes     Vote[]   // Связь с голосами пользователя
@@ -56,13 +56,12 @@ model Account {
   expiresAt Int @map("expires_at")
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAT DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   user User? @relation(fields: [userId], references: [id])
   userId String? @map("user_id")
 
   @@map("accounts")
-  // User User[]
 }
 
 model Token {
@@ -85,7 +84,7 @@ model Poll {
   questionEn  String     @default("") // Английская версия вопроса
   status      PollStatus @default(OPEN)
   createdAt   DateTime   @default(now()) @map("created_at")
-  expiresAt   DateTime   @map("expires_in") // Когда закрывается голосование
+  expiresAt   DateTime   @map("expires_at") // Когда закрывается голосование
 
   tournament   Tournament? @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   tournamentId String?     @map("tournament_id")
@@ -93,25 +92,31 @@ model Poll {
   options     Option[]   // Варианты ответов
   votes       Vote[]     // Все голоса в этом опросе
   
-  winnerOptionId String? @map("winner_option_id") // ID победившего варианта
-  isPeopleChamp  Boolean  @default(false) @map("is_people_champ") // Флаг "Народный чемпион"
+  winnerOption   Option?   @relation("PollWinner", fields: [winnerOptionId], references: [id], onDelete: SetNull)
+  winnerOptionId String?   @map("winner_option_id") // ID победившего варианта
+  isPeopleChamp  Boolean   @default(false) @map("is_people_champ") // Флаг "Народный чемпион"
 
   @@map("polls")
+  @@index([tournamentId])
+  @@index([winnerOptionId])
+  @@index([expiresAt])
 }
 
 // Варианты ответа
 model Option {
-  id      String @id @default(uuid())
-  textRu  String @default("") // Имя бойца (русская версия)
-  textEn  String @default("") // Имя бойца (английская версия)
-  photoUrl String? // URL-адрес фотографии бойца (опционально)
+  id      String  @id @default(uuid())
+  textRu  String  @default("") @db.VarChar(200) // Имя бойца (русская версия)
+  textEn  String  @default("") @db.VarChar(200) // Имя бойца (английская версия)
+  photoUrl String? @db.VarChar(500) // URL-адрес фотографии бойца (опционально)
   
   poll    Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade)
   pollId  String @map("poll_id")
   
   votes   Vote[] // Кто проголосовал именно за этот вариант
+  winnerPolls Poll[] @relation("PollWinner")
 
   @@map("options")
+  @@index([pollId])
 }
 
 // Факт голосования (чтобы один юзер не голосовал дважды)
@@ -135,28 +140,31 @@ model Vote {
 
 model Tournament {
   id            String   @id @default(uuid())
-  nameRu        String   @default("") // Например: "UFC 300: Pereira vs Hill" (русская версия)
-  nameEn        String   @default("") // Английская версия названия
-  descriptionRu String?  // Краткое инфо (русская версия)
-  descriptionEn String?  // Краткое инфо (английская версия)
+  nameRu        String   @default("") @db.VarChar(200) // Например: "UFC 300: Pereira vs Hill" (русская версия)
+  nameEn        String   @default("") @db.VarChar(200) // Английская версия названия
+  descriptionRu String?  @db.VarChar(1000) // Краткое инфо (русская версия)
+  descriptionEn String?  @db.VarChar(1000) // Краткое инфо (английская версия)
   date          DateTime // Дата проведения
   createdAt     DateTime @default(now()) @map("created_at")
   
   polls         Poll[]   // Связь: один турнир — много боев/голосований
 
   @@map("tournaments")
+  @@index([date])
+  @@index([createdAt])
 }
 
 model News {
   id         String   @id @default(uuid())
-  titleRu    String   @default("") // Заголовок новости (русская версия)
-  titleEn    String   @default("") // Заголовок новости (английская версия)
-  contentRu  String   @default("") // Текст новости (русская версия)
-  contentEn  String   @default("") // Текст новости (английская версия)
-  imageUrl   String?  // URL изображения (опционально)
+  titleRu    String   @default("") @db.VarChar(200) // Заголовок новости (русская версия)
+  titleEn    String   @default("") @db.VarChar(200) // Заголовок новости (английская версия)
+  contentRu  String   @default("") @db.Text // Текст новости (русская версия)
+  contentEn  String   @default("") @db.Text // Текст новости (английская версия)
+  imageUrl   String?  @db.VarChar(500) // URL изображения (опционально)
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@map("news")
+  @@index([createdAt])
 }
 
 enum UserRole {

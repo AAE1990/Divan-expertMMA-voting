@@ -44,9 +44,10 @@ export class AuthService {
         await this.emailConfirmationService.sendVerificationToken(newUser.email, locale)
 
         return {
-            message:
-                'Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
-        }
+            message: locale === 'en'
+                ? 'You have successfully registered! Please check your email to verify your account.'
+                : 'Вы успешно зарегистрировались! Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
+        };
     }
 
     public async login(req: Request, dto: LoginDto, locale: string = 'en') {

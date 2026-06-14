@@ -20,14 +20,14 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   public async register(@Req() req: Request, @Body() dto: RegisterDto, @Query('locale') locale?: string) {
-    return this.authService.register(dto, locale)
+    return this.authService.register(dto, dto.locale)
   }
   
   @Recaptcha()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   public async login(@Req() req: Request, @Body() dto: LoginDto, @Query('locale') locale?: string) {
-    return this.authService.login(req, dto, locale)
+    return this.authService.login(req, dto, dto.locale)
   }
 
   @Get('/oauth/callback/:provider')
