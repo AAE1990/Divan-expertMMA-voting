@@ -358,5 +358,11 @@
     "newsPublishedSuccess": "News published successfully!",
     "creationFailedTournament": "Error when creating the tournament",
     "creationFailedNews": "Error when publishing news"
+  },
+  "errors": {
+    "auth": {
+      "not_authorized": "User is not authorized. Please log in to gain access.",
+      "forbidden": "Access denied. You do not have permission to view this resource."
+    }
   }
 }

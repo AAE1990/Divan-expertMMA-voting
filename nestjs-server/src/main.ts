@@ -1,11 +1,10 @@
 import { ValidationPipe } from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 import IORedis from 'ioredis'
-
 import { AppModule } from './app.module';
-import session from 'express-session';
+import * as session from 'express-session';
 import { ms, StringValue } from './libs/common/utils/ms.util';
 import { parseBoolean } from './libs/common/utils/parse-boolean.utils';
 import RedisStore from 'connect-redis';
@@ -19,7 +18,7 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const redis = new IORedis(config.getOrThrow('REDIS_URI'))
 
-  app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')))
+  app.use((cookieParser as any)(config.getOrThrow<string>('COOKIES_SECRET')));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -28,7 +27,7 @@ async function bootstrap() {
   )
 
   app.use(
-    session({
+    (session as any)({
       secret: config.getOrThrow<string>('SESSION_SECRET'),
       name: config.getOrThrow<string>('SESSION_NAME'),
       resave: true,

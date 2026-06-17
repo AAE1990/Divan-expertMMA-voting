@@ -12,6 +12,7 @@ import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.modu
 import { VotingModule } from './voting/voting.module';
 import { TournamentModule } from './tournament/tournament.module';
 import { NewsModule } from './news/news.module';
+import { validate } from './config/configuration';
 
 
 
@@ -19,7 +20,8 @@ import { NewsModule } from './news/news.module';
   imports: [
     ConfigModule.forRoot({
       ignoreEnvFile: !IS_DEV_ENV,
-      isGlobal: true
+      isGlobal: true,
+      validate,
     }),
     PrismaModule,
     AuthModule,
