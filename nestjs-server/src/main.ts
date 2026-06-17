@@ -1,11 +1,11 @@
 import { ValidationPipe } from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import IORedis from 'ioredis'
 
 import { AppModule } from './app.module';
-import * as session from 'express-session';
+import session from 'express-session';
 import { ms, StringValue } from './libs/common/utils/ms.util';
 import { parseBoolean } from './libs/common/utils/parse-boolean.utils';
 import RedisStore from 'connect-redis';
@@ -58,7 +58,6 @@ async function bootstrap() {
   })
 
   await app.listen(config.getOrThrow<number>('APPLICATION_PORT'));
-  // await app.listen(process.env.PORT ?? 3000);
 }
 
 bootstrap();

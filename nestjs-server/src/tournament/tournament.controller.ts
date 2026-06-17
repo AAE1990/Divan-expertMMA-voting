@@ -4,6 +4,7 @@ import { AuthGuard } from '@/auth/guards/auth.guard';
 import { RolesGuard } from '@/auth/guards/roles.guard';
 import { Roles } from '@/auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
+import { CreateTournamentDto } from './dto/create-tournament.dto';
 
 @Controller('tournaments')
 export class TournamentController {
@@ -12,7 +13,7 @@ export class TournamentController {
   @Post()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  create(@Body() dto: any) {
+  create(@Body() dto: CreateTournamentDto) {
     return this.tournamentService.create(dto);
   }
 

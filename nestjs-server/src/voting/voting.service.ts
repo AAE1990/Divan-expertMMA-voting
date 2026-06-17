@@ -94,7 +94,10 @@ export class VotingService {
 
   async vote(userId: string, dto: { pollId: string; optionId: string }) {
     if (!userId) {
-      throw new BadRequestException('Вы должны быть авторизованы');
+      throw new BadRequestException({
+        message: 'Вы должны быть авторизованы',
+        code: 'UNAUTHORIZED'
+      });
     }
 
     // Проверка: не голосовал ли юзер уже?
@@ -105,7 +108,10 @@ export class VotingService {
     });
 
     if (existingVote) {
-      throw new BadRequestException('Вы уже проголосовали в этом опросе');
+      throw new BadRequestException({
+        message: 'Вы уже проголосовали в этом опросе',
+        code: 'ALREADY_VOTED'
+      });
     }
 
     return this.prisma.vote.create({
@@ -150,9 +156,15 @@ export class VotingService {
       include: { votes: true }
     });
 
-    if (!poll) throw new NotFoundException('Голосование не найдено');
+    if (!poll) throw new NotFoundException({
+      message: 'Голосование не найдено',
+      code: 'POLL_NOT_FOUND'
+    });
     if (poll.status === 'FINISHED') {
-      throw new BadRequestException('Голосование уже было завершено ранее');
+      throw new BadRequestException({
+        message: 'Голосование уже было завершено ранее',
+        code: 'POLL_ALREADY_FINISHED'
+      });
     }
 
     // 2. Проверяем, принадлежит ли winnerOptionId этому опросу
@@ -161,7 +173,10 @@ export class VotingService {
     });
 
     if (!optionExists) {
-      throw new BadRequestException('Выбранный вариант не принадлежит этому голосованию');
+      throw new BadRequestException({
+        message: 'Выбранный вариант не принадлежит этому голосованию',
+        code: 'INVALID_WINNER_OPTION'
+      });
     }
 
     // 3. Запускаем транзакцию

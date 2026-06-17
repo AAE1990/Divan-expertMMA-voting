@@ -305,14 +305,14 @@ export class UserService {
             }>>`
                 SELECT
                     u.id,
-                    u."displayName" as "displayName",
+                    u."display_name" as "displayName",
                     u.picture,
                     COALESCE(SUM(CASE WHEN v.created_at >= ${startDate} AND p.winner_option_id = v.option_id THEN 1 ELSE 0 END), 0) as score,
                     ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(CASE WHEN v.created_at >= ${startDate} AND p.winner_option_id = v.option_id THEN 1 ELSE 0 END), 0) DESC, u.last_score_at ASC NULLS LAST) as rank
                 FROM users u
                 LEFT JOIN votes v ON u.id = v.user_id
                 LEFT JOIN polls p ON v.poll_id = p.id
-                GROUP BY u.id, u."displayName", u.picture, u.last_score_at
+                GROUP BY u.id, u."display_name", u.picture, u.last_score_at
                 ORDER BY score DESC, u.last_score_at ASC NULLS LAST
                 LIMIT ${limitNumber} OFFSET ${skip}
             `;
