@@ -25,7 +25,7 @@ export function SettingsForm() {
     const form = useForm<TypeSettingsSchema>({
         resolver: zodResolver(SettingsSchema),
         values: {
-            name: user?.displayName || '',
+            displayName: user?.displayName || '',
             email: user?.email || '',
             isTwoFactorEnabled: user?.isTwoFactorEnabled || false,
             bio: user?.bio || '',
@@ -94,7 +94,7 @@ export function SettingsForm() {
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                                         <FormField
                                             control={form.control}
-                                            name='name'
+                                            name='displayName'
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="text-xs uppercase font-bold text-muted-foreground">{t('Username')}</FormLabel>

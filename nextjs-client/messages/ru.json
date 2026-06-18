@@ -186,7 +186,10 @@
     "Bio placeholder": "Расскажите о себе...",
     "City placeholder": "Москва",
     "Country placeholder": "Россия",
-    "Social placeholder": "username"
+    "Social placeholder": "username",
+    "userNotFound": "Пользователь не найден",
+    "userNotFoundDescription": "Возможно, профиль был удалён или скрыт.",
+    "backToRating": "Вернуться к рейтингу"
   },
   "Leaderboard": {
     "title": "Топ прогнозистов",
@@ -215,7 +218,8 @@
     }
   },
   "Common": {
-    "loading": "Загрузка..."
+    "loading": "Загрузка...",
+    "serverError": "Ошибка со стороны сервера"
   },
   "Archive": {
     "title": "Архив турниров",

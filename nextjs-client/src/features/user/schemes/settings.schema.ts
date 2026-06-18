@@ -7,7 +7,7 @@ const vkInstagramRegex = /^[a-zA-Z0-9_.]*$/;
 const twitterRegex = /^[a-zA-Z0-9_]*$/;
 
 export const SettingsSchema = z.object({
-    name: z.string().min(1, {
+    displayName: z.string().min(1, {
         message: 'Введите имя'
     }),
     email: z.string({

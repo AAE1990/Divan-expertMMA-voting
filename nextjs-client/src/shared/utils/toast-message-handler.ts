@@ -25,6 +25,7 @@ export function toastMessageHandler(error: any, t?: (key: string) => string) {
             toast.error(errorMessage)
         }
     } else {
-        toast.error('Ошибка со стороны сервера')
+        const defaultMessage = t ? t('Common.serverError') : 'Server error'
+        toast.error(defaultMessage)
     }
 }

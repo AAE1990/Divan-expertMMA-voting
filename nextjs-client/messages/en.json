@@ -186,7 +186,10 @@
     "Bio placeholder": "Tell about yourself...",
     "City placeholder": "Moscow",
     "Country placeholder": "Russia",
-    "Social placeholder": "username"
+    "Social placeholder": "username",
+    "userNotFound": "User not found",
+    "userNotFoundDescription": "The profile may have been deleted or hidden.",
+    "backToRating": "Back to rating"
   },
   "Leaderboard": {
     "title": "Top Predictors",
@@ -215,7 +218,8 @@
     }
   },
   "Common": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "serverError": "Server error"
   },
   "Archive": {
     "title": "Tournament Archive",

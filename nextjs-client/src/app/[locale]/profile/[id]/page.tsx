@@ -9,7 +9,7 @@ import { Trophy, MapPin, Globe, Youtube, Send, MessageSquare, Twitter, Instagram
 import { PredictionsHistory } from "@/features/user/components/PredictionsHistory"
 import { Button } from "@/shared/components/ui/Button"
 import { useState } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useProfile } from "@/shared/hooks"
 
 export default function PublicProfilePage() {
@@ -38,10 +38,10 @@ export default function PublicProfilePage() {
     if (!user) {
         return (
             <div className="container mx-auto py-20 text-center">
-                <h1 className="text-2xl font-bold">Пользователь не найден</h1>
-                <p className="text-muted-foreground mt-2">Возможно, профиль был удалён или скрыт.</p>
+                <h1 className="text-2xl font-bold">{t('userNotFound')}</h1>
+                <p className="text-muted-foreground mt-2">{t('userNotFoundDescription')}</p>
                 <Link href="/rating">
-                    <Button className="mt-6">Вернуться к рейтингу</Button>
+                    <Button className="mt-6">{t('backToRating')}</Button>
                 </Link>
             </div>
         )

@@ -3,11 +3,12 @@
 import { useGetLatestNews } from "@/features/news/hooks/useGetLatestNews";
 import { Loading } from "@/shared/components/ui";
 import { Link } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export function NewsBlock() {
   const { data: news, isLoading, error } = useGetLatestNews();
   const t = useTranslations('NewsBlock');
+  const locale = useLocale();
 
   if (isLoading) {
     return (
@@ -25,7 +26,7 @@ export function NewsBlock() {
     );
   }
 
-  const formattedDate = new Date(news.createdAt).toLocaleDateString('ru-RU', {
+  const formattedDate = new Date(news.createdAt).toLocaleDateString(locale === 'en' ? 'en-US' : 'ru-RU', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
