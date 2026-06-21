@@ -100,6 +100,7 @@
     "passwordDigit": "At least one digit",
     "passwordSpecial": "At least one special character (@, #, $, %, etc.)"
   },
+  "two_factor_required": "Please check your email. A code is required for two-factor authentication.",
   "Voting": {
     "voteButton": "Vote",
     "yourChoice": "Your Choice",

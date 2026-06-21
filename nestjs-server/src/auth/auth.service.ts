@@ -83,7 +83,7 @@ export class AuthService {
 
                 return {
                     message:
-                        'Проверьте вашу почту. Требуетется код для двухфакторной авторизации'
+                        'two_factor_required'
                 }
             }
 

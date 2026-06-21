@@ -14,6 +14,7 @@ export function useLoginMutation(
     const router = useRouter()
     const queryClient = useQueryClient()
     const t = useTranslations("Auth")
+    const tGlobal = useTranslations();
 
     const { mutate: login, isPending: isLoadingLogin } = useMutation({
         mutationKey: ['login user'],
@@ -26,7 +27,7 @@ export function useLoginMutation(
         }) => authService.login(values, recaptcha),
         onSuccess(data: any) {
             if (data.message) {
-                toastMessageHandler(data)
+                toastMessageHandler(data, tGlobal)
                 setIsShowFactor(true)
             } else {
                 toast.success(t('successLogin'))
@@ -35,12 +36,12 @@ export function useLoginMutation(
                 router.push('/dashboard/settings')
             }
         },
-        onError(error: any) {
-            const code = error.code // Читаем проброшенный код из FetchError!
+        onError: (error: any) => {
+            const code = error.code
             if (code && typeof code === 'string') {
-                toast.error(t(code)) // Достает INVALID_CREDENTIALS / USER_NOT_FOUND из JSON
+                toast.error(t(code))
             } else {
-                toastMessageHandler(error)
+                toastMessageHandler(error, tGlobal) // <--- МЕНЯЕМ t НА tGlobal СЮДА!
             }
         }
     })
