@@ -135,7 +135,9 @@
     "pleaseSelectOption": "Please select a voting option",
     "live": "LIVE",
     "clickToVote": "Click to vote",
-    "loginToVoteAction": "Log In to Predict"
+    "loginToVoteAction": "Log In to Predict",
+    "title": "Tournament Line & Voting",
+    "subtitle": "Make your predictions for major UFC fights and earn points."
   },
   "PeopleChamp": {
     "title": "People's Champion",
