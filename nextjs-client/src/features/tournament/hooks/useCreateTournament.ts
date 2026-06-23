@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { tournamentService } from "../services/tournament.service";
 import { useTranslations } from "next-intl"
 import { toast } from "sonner";
+import { toastMessageHandler } from "@/shared/utils";
 
 export const useCreateTournament = () => {
   const t = useTranslations('Toasts')
@@ -14,7 +15,7 @@ export const useCreateTournament = () => {
       queryClient.invalidateQueries({ queryKey: ["tournaments"] });
     },
     onError: (error: any) => {
-      toast.error(error.message || (t("creationFailedTournament")));
+      toastMessageHandler(error, t);
     },
   });
 };

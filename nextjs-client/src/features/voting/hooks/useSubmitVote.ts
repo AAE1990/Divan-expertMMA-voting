@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { votingService } from "../services/voting.service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { toastMessageHandler } from "@/shared/utils";
 
 export const useSubmitVote = () => {
   const queryClient = useQueryClient();
@@ -21,7 +22,7 @@ export const useSubmitVote = () => {
     },
     onError: (error: any) => {
       // Выводим ошибку (например, "Вы уже голосовали" или "Голосование закрыто")
-      toast.error(error.message || t('voteFailed'));
+      toastMessageHandler(error, t);
     },
   });
 };

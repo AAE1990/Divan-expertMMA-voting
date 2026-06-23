@@ -4,6 +4,7 @@ import { TCreateNewsSchema } from "../schemes/news.schema";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { toastMessageHandler } from "@/shared/utils";
 
 export const useCreateNews = () => {
   const t = useTranslations('Toasts');
@@ -18,7 +19,7 @@ export const useCreateNews = () => {
       router.push("/admin/news");
     },
     onError: (error: any) => {
-      toast.error(error.message || (t("creationFailedNews")));
+      toastMessageHandler(error, t);
     },
   });
 };

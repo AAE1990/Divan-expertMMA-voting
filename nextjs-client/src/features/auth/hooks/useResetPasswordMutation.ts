@@ -29,7 +29,7 @@ export function useResetPasswordMutation() {
             if (code && typeof code === 'string') {
                 toast.error(t(code)) // Мгновенно подтянет идеальный английский из JSON!
             } else {
-                toastMessageHandler(error)
+                toastMessageHandler(error, t)
             }
         }
     })

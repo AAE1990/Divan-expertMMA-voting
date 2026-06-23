@@ -3,6 +3,7 @@ import { votingService, ICreatePollInput } from "../services/voting.service";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { toastMessageHandler } from "@/shared/utils";
 
 export const useCreatePoll = () => {
   const queryClient = useQueryClient();
@@ -19,7 +20,7 @@ export const useCreatePoll = () => {
       router.push("/voting");
     },
     onError: (error: any) => {
-      toast.error(error.message || t("pollCreateError"));
+      toastMessageHandler(error, t);
     },
   });
 };

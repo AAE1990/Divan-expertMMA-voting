@@ -3,6 +3,7 @@ import { useRouter } from "@/i18n/routing";
 import { verificationService } from "../services";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { toastMessageHandler } from "@/shared/utils";
 
 export function useVerificationMutation() {
     const router = useRouter()
@@ -22,7 +23,7 @@ export function useVerificationMutation() {
             if (code && typeof code === 'string') {
                 toast.error(t(code))
             } else {
-                toast.error(t('verificationError'))
+                toastMessageHandler(error, t)
             }
             router.push('/auth/login')
         }

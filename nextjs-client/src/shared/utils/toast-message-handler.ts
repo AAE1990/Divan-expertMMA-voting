@@ -6,7 +6,6 @@ export function toastMessageHandler(error: any, t?: (key: string) => string) {
     // 1. Вытаскиваем сообщение от бэкенда. Если его нет, берем системный error.message
     // Внутри toast-message-handler.ts на строке 7 убедись, что написано так:
     const backendMessage = error.message || error.response?.data?.message || error;
-    console.log("=== ЧТО ПРИШЛО С БЭКЕНДА ===", backendMessage);
 
     if (code && typeof code === 'string' && t) {
         // Если есть функция перевода, используем её

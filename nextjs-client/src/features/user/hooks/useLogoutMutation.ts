@@ -20,7 +20,7 @@ export function useLogoutMutation() {
             router.push('/auth/login')
         },
         onError(error) {
-            toastMessageHandler(error)
+            toastMessageHandler(error, t)
         }
     })
 

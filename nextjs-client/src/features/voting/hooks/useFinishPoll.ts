@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { votingService } from "../services/voting.service";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { toastMessageHandler } from "@/shared/utils";
 
 export const useFinishPoll = () => {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export const useFinishPoll = () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: any) => {
-      toast.error(error.message || t("pollFinishError"));
+      toastMessageHandler(error, t);
     },
   });
 };

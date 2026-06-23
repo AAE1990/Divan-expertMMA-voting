@@ -21,7 +21,7 @@ export function useUpdateProfileMutation() {
             if (code && typeof code === 'string') {
                 toast.error(t(code))
             } else {
-                toastMessageHandler(error)
+                toastMessageHandler(error, t)
             }
         }
     })
