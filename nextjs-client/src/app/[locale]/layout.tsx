@@ -1,3 +1,4 @@
+import YandexMetrika from "@/shared/components/analytics/YandexMetrika";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { getMessages } from 'next-intl/server';
@@ -37,6 +38,8 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Вставляем Метрику прямо на входе */}
+        <YandexMetrika /> 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <MainProvider>
             <div className="relative flex min-h-screen">
