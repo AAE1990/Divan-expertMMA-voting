@@ -36,7 +36,9 @@ export function NewsBlock() {
     <div className="w-full max-w-3xl mx-auto">
       <div className="p-8 rounded-2xl bg-secondary/5 border border-white/5 text-left space-y-4">
         <div className="flex justify-between items-start">
-          <h3 className="text-2xl font-black uppercase italic">{news.title}</h3>
+          <h3 className="text-2xl font-black uppercase italic">
+            {locale === 'en' ? news.titleEn : news.titleRu}
+          </h3>
           <span className="text-sm text-muted-foreground whitespace-nowrap">{formattedDate}</span>
         </div>
         {news.imageUrl && (
@@ -49,7 +51,7 @@ export function NewsBlock() {
           </div>
         )}
         <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
-          {news.content}
+          {locale === 'en' ? news.contentEn : news.contentRu}
         </div>
         <div className="pt-4 border-t border-white/5">
           <Link

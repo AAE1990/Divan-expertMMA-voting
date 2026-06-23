@@ -248,10 +248,10 @@
       "page": "Page",
       "of": "of",
       "back": "Back",
-      "next": "Next",
-      "newsTitle": "News",
-      "newsSubtitle": "Follow the latest events and tournament announcements."
-    }
+      "next": "Next"
+    },
+    "newsTitle": "News",
+    "newsSubtitle": "Follow the latest events and tournament announcements."
   },
   "Rules": {
     "title": "Site Rules",
