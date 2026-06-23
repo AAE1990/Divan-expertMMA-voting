@@ -248,7 +248,9 @@
       "page": "Page",
       "of": "of",
       "back": "Back",
-      "next": "Next"
+      "next": "Next",
+      "newsTitle": "News",
+      "newsSubtitle": "Follow the latest events and tournament announcements."
     }
   },
   "Rules": {
