@@ -36,3 +36,6 @@ full-authorization.postman_collection.json
 
 # план от Агента AI
 plans
+
+# Next.js auto-generated types
+next-env.d.ts

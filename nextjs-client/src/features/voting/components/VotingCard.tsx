@@ -121,15 +121,17 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         {renderFighterPhoto(option)}
         {/* Имя и индикаторы */}
         <div className="flex flex-col items-center justify-center w-full text-center">
-          <div className="flex items-center justify-between w-full mb-2">
+          <div className="flex flex-col items-center justify-center w-full space-y-1 mb-2">
             <span className={cn(
               "text-sm font-bold uppercase tracking-wide transition-colors",
               isUserChoice && "text-primary",
               isWinner && "text-green-600"
             )}>
               {locale === 'en' ? option.textEn : option.textRu}
-              {isUserChoice && " ✅"}
-              {isWinner && " 🏆"}
+              <span className="whitespace-nowrap">
+                {isUserChoice && " ✅"}
+                {isWinner && " 🏆"}
+              </span>
             </span>
             <span className={cn(
               "text-xs font-bold px-2 py-1 rounded",
@@ -170,7 +172,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           htmlFor={option.id}
           className="flex flex-col items-center w-full mt-2 cursor-pointer"
         >
-          <div className="flex items-center justify-center w-full mb-2">
+          <div className="flex flex-col items-center justify-center w-full space-y-2 mb-2">
             <div
               className={`shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all ${selectedValue === option.id
                 ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
@@ -230,11 +232,13 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     />
                   </div>
                 )}
-                <div className="flex justify-center gap-2 w-full mb-2 items-center">
+                <div className="flex flex-col items-center justify-center w-full space-y-1 mb-2">
                   <span className={cn("text-sm font-medium", isUserChoice && "text-primary font-bold", isWinner && "text-green-600 font-bold")}>
                     {locale === 'en' ? option.textEn : option.textRu}
-                    {isUserChoice && " ✅"}
-                    {isWinner && " 🏆"}
+                    <span className="whitespace-nowrap">
+                      {isUserChoice && " ✅"}
+                      {isWinner && " 🏆"}
+                    </span>
                   </span>
                   <span className={cn("text-xs font-bold px-2 py-1 rounded", isWinner ? "bg-green-100 text-green-800" : "bg-muted")}>
                     {percentage}%
@@ -362,7 +366,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           // 2. ПОЛЬЗОВАТЕЛЬ — АНОНИМ (Выводим красивую интерактивную кнопку!)
           <Button
             variant="outline"
-            className="w-full font-bold uppercase py-3 border-dashed border-primary/40 text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all"
+            className="w-full font-bold uppercase py-3 border-dashed border-primary/40 text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer"
             onClick={() => router.push(`/auth/login`)} // Улетает на логин!
           >
             {t('loginToVoteAction')}

@@ -74,15 +74,14 @@ export default function NewsPage() {
                     </div>
                   )}
                   <CardHeader>
-                    <div className="flex justify-between items-start gap-4 pl-2 pr-4">
-                      {/* Увеличили line-clamp до 3 строк для длинных заголовков */}
+                    <div className="w-full pl-2 pr-4">
                       <CardTitle className="text-xl font-black uppercase italic line-clamp-3">
                         {locale === 'en' ? news.titleEn : news.titleRu}
                       </CardTitle>
-                      <CalendarDays className="size-5 text-muted-foreground flex-shrink-0" />
                     </div>
 
-                    <CardDescription className="flex items-center gap-2 text-sm mt-1 pl-2 pr-4">
+                    <CardDescription className="flex items-center gap-1.5 text-xs text-muted-foreground pl-2 pr-4 mt-2">
+                      <CalendarDays className="size-4 flex-shrink-0 text-muted-foreground/70" />
                       <span>
                         {new Date(news.createdAt).toLocaleDateString('ru-RU', {
                           day: 'numeric',
@@ -95,7 +94,7 @@ export default function NewsPage() {
 
                   <div className="p-6 pt-0">
                     {/* Увеличили line-clamp до 12 строк для сочного описания */}
-                    <p className="text-muted-foreground leading-relaxed line-clamp-[12] text-left w-full">
+                    <p className="text-muted-foreground leading-relaxed line-clamp-[12] text-left w-full mt-3">
                       {locale === 'en' ? news.contentEn : news.contentRu}
                     </p>
                   </div>
