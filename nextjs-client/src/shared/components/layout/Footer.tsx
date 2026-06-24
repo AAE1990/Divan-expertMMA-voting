@@ -1,4 +1,4 @@
-import { Send, MessageCircle, Mail, Scale } from "lucide-react";
+import { Send, MessageCircle, Mail, Scale, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from 'next-intl';
 
@@ -36,6 +36,9 @@ export const Footer = () => {
             </Link>
             <Link href="/rules" className="hover:text-primary transition-colors flex items-center gap-2">
               <Scale className="size-4" /> {t('links.rules')}
+            </Link>
+            <Link href="/privacy" className="hover:text-primary transition-colors flex items-center gap-2">
+              <ShieldCheck className="size-4" /> {t('privacyPolicy')}
             </Link>
           </div>
         </div>

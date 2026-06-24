@@ -301,7 +301,8 @@
       "email": "Write to us",
       "rules": "Site Rules"
     },
-    "disclaimer": "This resource is created solely for entertainment and analytical purposes. We are not a bookmaker, do not accept money bets and do not conduct gambling. Predictions on the site are the personal opinion of community members."
+    "disclaimer": "This resource is created solely for entertainment and analytical purposes. We are not a bookmaker, do not accept money bets and do not conduct gambling. Predictions on the site are the personal opinion of community members.",
+    "privacyPolicy": "Privacy Policy"
   },
   "CookieBanner": {
     "message": "We use cookies to improve site performance. By staying on the site, you agree to our policy.",
