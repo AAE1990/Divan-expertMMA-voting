@@ -16,7 +16,7 @@ export const useCreateNews = () => {
     onSuccess: () => {
       toast.success(t('newsPublishedSuccess'));
       queryClient.invalidateQueries({ queryKey: ["news"] });
-      router.push("/admin/news");
+      router.push('/news');
     },
     onError: (error: any) => {
       toastMessageHandler(error, t);

@@ -12,12 +12,17 @@ export const useCreatePoll = () => {
 
   return useMutation({
     mutationFn: (data: ICreatePollInput) => votingService.createPoll(data),
-    onSuccess: () => {
+    onSuccess: (responseData, variables) => {
       toast.success(t("pollCreated"));
-      // Обновляем список, чтобы сразу увидеть новый бой
+
       queryClient.invalidateQueries({ queryKey: ["polls"] });
-      // Можно редиректнуть на страницу голосований
-      router.push("/voting");
+
+      // Проверяем: если чекбокс "isPeopleChamp" был нажат (равен true)
+      if (variables.isPeopleChamp) {
+        router.push("/people-champ"); // Перекидываем в Народного чемпиона
+      } else {
+        router.push("/voting"); // Иначе в обычные голосования
+      }
     },
     onError: (error: any) => {
       toastMessageHandler(error, t);
