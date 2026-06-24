@@ -255,10 +255,11 @@
   },
   "Rules": {
     "title": "Site Rules",
-    "updated": "Updated: May 15, 2026",
+    "updated": "Updated: June 26, 2026",
     "generalTitle": "General Provisions",
     "generalParagraph1": "Welcome to the fight prediction platform! Our service is created for the community of martial arts enthusiasts, where everyone can participate in voting, make predictions and compete in the rating.",
     "generalParagraph2": "By using our site, you agree to the rules below. The author of the service reserves the right to make changes to the rules, informing users by publishing an updated version on this page.",
+    "generalParagraph3": "Age Restriction (16+): This platform features content related to mixed martial arts (MMA), sports combat, and associated graphic material (such as blood or sports-related injuries). This website is intended solely for users who are 16 years of age or older. By registering an account, you confirm that you meet this requirement.",
     "respectfulTitle": "Respectful Communication",
     "respectfulItem1": "In our groups and social networks associated with the service, insults, discrimination, hate speech and trolling are prohibited.",
     "respectfulItem2": "Criticism must be constructive and respectful. Remember that there are real people behind the avatars.",

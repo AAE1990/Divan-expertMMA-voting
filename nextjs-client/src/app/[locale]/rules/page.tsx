@@ -32,6 +32,9 @@ export default function RulesPage() {
           <p>
             {t('generalParagraph2')}
           </p>
+          <p className="font-semibold text-muted-foreground/90 border-l-2 border-primary pl-3 italic">
+            {t('generalParagraph3')}
+          </p>
         </CardContent>
       </Card>
 
