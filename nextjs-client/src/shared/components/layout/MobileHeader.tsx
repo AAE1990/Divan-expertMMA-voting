@@ -7,7 +7,6 @@ import { Sidebar } from '@/shared/components/ui/Sidebar'
 import { ToggleTheme } from '@/shared/components/ui/ToggleTheme'
 import { AuthButtons } from '@/shared/components/ui/AuthButtons'
 import { LocaleSwitcher } from '@/shared/components/ui/LocaleSwitcher'
-import { cn } from '@/shared/utils/clsx'
 
 export const MobileHeader = () => {
   const [open, setOpen] = useState(false)

@@ -1,6 +1,5 @@
 import { Heading, Link, Body, Text, Tailwind } from "@react-email/components"
 import { Html } from "@react-email/html"
-import * as React from "react"
 
 interface ResetPasswordTemplateProps {
     domain: string;

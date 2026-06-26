@@ -2,9 +2,7 @@
 
 import { useGetNews } from "@/features/news/hooks/useGetNews";
 import { Card, CardHeader, CardTitle, CardDescription, Button, Skeleton } from "@/shared/components/ui";
-import { Loading } from "@/shared/components/ui";
 import { useProfile } from "@/shared/hooks";
-import { Link } from "@/i18n/routing";
 import { CalendarDays, ChevronLeft, ChevronRight, Newspaper } from "lucide-react";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";

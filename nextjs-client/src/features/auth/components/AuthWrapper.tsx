@@ -2,7 +2,6 @@ import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, Car
 import { Link } from "@/i18n/routing"
 import { type  PropsWithChildren } from "react"
 import { AuthSocial } from "./AuthSocial"
-import { cn } from "@/shared/utils/clsx"
 
 interface AuthWrapperProps {
     heading: string

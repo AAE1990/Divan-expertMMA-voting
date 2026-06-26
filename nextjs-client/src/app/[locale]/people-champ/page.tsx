@@ -1,7 +1,7 @@
 'use client'
 
 import { useProfile } from "@/shared/hooks"
-import { Card, CardHeader, CardTitle, CardDescription, Button, Skeleton, Loading } from "@/shared/components/ui"
+import { Button, Skeleton, Loading } from "@/shared/components/ui"
 import { Link } from "@/i18n/routing"
 import { Scale, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"

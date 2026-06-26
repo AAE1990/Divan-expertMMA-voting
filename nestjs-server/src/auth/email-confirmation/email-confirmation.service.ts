@@ -1,6 +1,6 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { BadRequestException, forwardRef, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
-import { TokenType, User } from '@prisma/client';
+import { TokenType } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfirmationDto } from './dto/confirmation.dto';
 import { Request } from 'express';

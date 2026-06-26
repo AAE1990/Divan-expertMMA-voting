@@ -14,7 +14,6 @@ import { useGetTournaments } from "@/features/tournament/hooks/useGetTournaments
 import { useCreateTournament } from "@/features/tournament/hooks/useCreateTournament"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select"
 import { useEffect } from "react"
-import Image from "next/image"
 import { useLocale, useTranslations } from "next-intl"
 
 export default function AdminVotingPage() {
