@@ -261,7 +261,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
         {/* Левый боец. До 1820px — на всю ширину w-full, на ультра — ровно половина ultra:w-[45%] */}
         <div className="w-full ultra:w-1/2 min-w-0">
-          {hasVoted
+          {hasVoted || isFinished || isExpired
             ? renderFighterResult(fighter1, true)
             : user
               ? renderFighterVoting(fighter1, true)
@@ -275,7 +275,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
         {/* Правый боец */}
         <div className="w-full ultra:w-1/2 min-w-0">
-          {hasVoted
+          {hasVoted || isFinished || isExpired
             ? renderFighterResult(fighter2, false)
             : user
               ? renderFighterVoting(fighter2, false)
@@ -308,7 +308,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
       <CardContent className="flex-1 px-4 sm:px-6">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
-        {user && !hasVoted && (
+        {user && !hasVoted && !isFinished && !isExpired &&(
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">
             <RadioGroup value={selectedValue} onValueChange={(v) => setValue("optionId", v)}>
               {poll.options.map(opt => (
