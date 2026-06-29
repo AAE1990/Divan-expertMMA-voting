@@ -50,11 +50,17 @@ async function bootstrap() {
     })
   )
 
-  app.enableCors({
-    origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
-    credentials: true,
-    exposedHeaders: ['set-cookie']
-  })
+app.enableCors({
+  origin: (origin, callback) => {
+    if (!origin || origin.includes('couch-expert-mma.com') || origin.includes('localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  exposedHeaders: ['set-cookie']
+});
 
   await app.listen(config.getOrThrow<number>('APPLICATION_PORT'));
 }
