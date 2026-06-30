@@ -14,6 +14,7 @@ async function bootstrap() {
     //Устанока уровней логирования
     logger: ['log', 'error', 'warn', 'debug', 'verbose'],
   });
+  (app.getHttpAdapter().getInstance() as any).set('trust proxy', 1);
 
   const config = app.get(ConfigService)
   const redis = new IORedis(config.getOrThrow('REDIS_URI'))
