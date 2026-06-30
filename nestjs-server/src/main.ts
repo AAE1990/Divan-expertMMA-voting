@@ -39,9 +39,7 @@ async function bootstrap() {
         httpOnly: parseBoolean(
           config.getOrThrow<string>('SESSION_HTTP_ONLY')
         ),
-        secure: parseBoolean(
-          config.getOrThrow<string>('SESSION_SECURE')
-        ),
+        secure: config.get('SESSION_SECURE') === 'true' || config.get('SESSION_SECURE') === true,
         sameSite: config.get<any>('SESSION_SAME_SITE') || 'lax'
       },
       store: new RedisStore({
