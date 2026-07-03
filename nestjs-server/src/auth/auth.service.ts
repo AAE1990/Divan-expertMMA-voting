@@ -118,20 +118,24 @@ export class AuthService {
 
         let user = account?.userId
             ? await this.userService.findById(account.userId) as any
-            : null
+            : null;
 
-        if (user) {
-            return this.saveSession(req, user as any)
+        // Если аккаунт провайдера не привязан, проверяем, существует ли пользователь с таким email
+        if (!user && profile.email) {
+            user = await this.userService.findByEmail(profile.email).catch(() => null);
         }
 
-        user = await this.userService.create(
-            profile.email,
-            '',
-            profile.name,
-            profile.picture,
-            AuthMethod[profile.provider.toUpperCase()],
-            true
-        ) as any
+        // Если пользователя нет вообще (ни по аккаунту, ни по email), создаем нового
+        if (!user) {
+            user = await this.userService.create(
+                profile.email,
+                '', // пароль пустой, так как вход через OAuth
+                profile.name,
+                profile.picture,
+                AuthMethod[profile.provider.toUpperCase()],
+                true
+            ) as any;
+        }
 
         if (!account) {
             await this.prismaService.account.create({
