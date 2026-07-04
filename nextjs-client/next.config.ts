@@ -17,7 +17,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "avatars.yandex.net"
-      }
+      },
+       {
+        protocol: 'https',
+        hostname: 'i.ibb.co', // Наш новый фотохостинг для бойцов и турниров
+      },
     ]
   },
 };
