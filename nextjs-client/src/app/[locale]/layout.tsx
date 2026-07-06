@@ -7,6 +7,7 @@ import "@/shared/styles/globals.css";
 import { MainProvider } from "@/shared/providers";
 import { CookieConsent, Footer, Sidebar } from "@/shared/components/ui";
 import { MobileHeader } from "@/shared/components/layout/MobileHeader";
+import ScrollToTop from "@/shared/components/ui/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +58,7 @@ export default async function RootLayout({
               </div>
             </div>
             <CookieConsent />
+            <ScrollToTop />
           </MainProvider>
         </NextIntlClientProvider>
       </body>
