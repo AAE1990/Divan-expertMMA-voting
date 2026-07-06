@@ -41,7 +41,7 @@ export default function ScrollToTop() {
       {/* Кнопка НАВЕРХ */}
       <button
         onClick={scrollToTop}
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 text-white shadow-xl transition-all hover:scale-110 active:scale-95 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-800 dark:border-zinc-700"
+        className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 text-white shadow-xl transition-all hover:scale-110 active:scale-95 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-800 dark:border-zinc-700 cursor-pointer"
         aria-label="Scroll to top"
       >
         <ChevronsUp className="h-5 w-5" />
@@ -50,7 +50,7 @@ export default function ScrollToTop() {
       {/* Кнопка ВНИЗ */}
       <button
         onClick={scrollToBottom}
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 text-white shadow-xl transition-all hover:scale-110 active:scale-95 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-800 dark:border-zinc-700"
+        className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-900 text-white shadow-xl transition-all hover:scale-110 active:scale-95 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-800 dark:border-zinc-700 cursor-pointer"
         aria-label="Scroll to bottom"
       >
         <ChevronsDown className="h-5 w-5" />
