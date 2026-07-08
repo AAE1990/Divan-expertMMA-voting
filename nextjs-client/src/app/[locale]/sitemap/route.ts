@@ -7,7 +7,7 @@ export async function GET() {
   let tournamentRoutes = '';
 
   try {
-    const response = await fetch('https://couch-expert-mma.com', {
+    const response = await fetch('https://api.couch-expert-mma.com/tournaments', {
       next: { revalidate: 3600 }
     });
 
