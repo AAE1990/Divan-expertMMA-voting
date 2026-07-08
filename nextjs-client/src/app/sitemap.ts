@@ -25,11 +25,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     if (response.ok) {
-      const tournaments = await response.json();
+      const data = await response.json(); // Теперь это объект с бэкенда
+      const tournamentsArray = data.tournaments || []; // Вытаскиваем сам массив турниров безопасности ради
 
-      // Генерируем ссылки вида /ru/voting?tournamentId=... и /en/voting?tournamentId=...
+      // Генерируем ссылки, перебирая именно массив tournamentsArray
       tournamentRoutes = locales.flatMap((locale) =>
-        tournaments.map((tournament: any) => ({
+        tournamentsArray.map((tournament: any) => ({
           url: `${baseUrl}/${locale}/voting?tournamentId=${tournament.id}`,
           lastModified: new Date(tournament.updatedAt || tournament.createdAt).toISOString(),
           changeFrequency: 'weekly' as const,
