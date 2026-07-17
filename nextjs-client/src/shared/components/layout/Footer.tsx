@@ -25,7 +25,7 @@ export const Footer = () => {
         <div className="space-y-4">
           <h3 className="text-sm font-bold uppercase tracking-widest">{t('communityTitle')}</h3>
           <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-            <Link href="https://t.me" className="hover:text-primary transition-colors flex items-center gap-2">
+            <Link href="https://t.me/couch_expert_mma" className="hover:text-primary transition-colors flex items-center gap-2">
               <Send className="size-4" /> {t('links.telegram')}
             </Link>
             <Link href="https://vk.com" className="hover:text-primary transition-colors flex items-center gap-2">
