@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const baseUrl = 'https://couch-expert-mma.com';
+  const baseUrl = 'https://www.couch-expert-mma.com';
   const locales = ['ru', 'en'];
 
   let tournamentRoutes = '';
