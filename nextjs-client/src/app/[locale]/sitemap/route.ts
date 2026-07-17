@@ -17,11 +17,12 @@ export async function GET() {
 
       tournamentRoutes = locales.flatMap((locale) =>
         tournamentsArray.map((t: any) => `
-  <url>
-    <loc>${baseUrl}/${locale}/voting?tournamentId=${t.id}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>`).join('')
+        <url>
+          <loc>${baseUrl}/${locale}/voting?tournamentId=${t.id}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.7</priority>
+        </url>
+      `).join('')
       ).join('');
     }
   } catch (e) {
