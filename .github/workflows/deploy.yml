@@ -23,7 +23,12 @@ jobs:
             # Переходим в корень сервера
             cd /root
             
-            # Если папки проекта еще нет на сервере, клонируем репозиторий
+            # На всякий случай устанавливаем git, если его нет в системе
+            if ! command -v git &> /dev/null; then
+              apt update && apt install git -y
+            fi
+            
+            # Если папки проекта еще нет на сервере, клонируем публичный репозиторий
             if [ ! -d "couch-expert-backend" ]; then
               git clone https://github.com{{ github.repository }}.git couch-expert-backend
               cd couch-expert-backend
@@ -37,3 +42,4 @@ jobs:
             # Перезапускаем сборку Docker контейнеров бэкенда
             docker compose down
             docker compose up -d --build
+            
