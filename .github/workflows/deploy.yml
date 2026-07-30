@@ -28,18 +28,18 @@ jobs:
               apt update && apt install git -y
             fi
             
-            # Если папки проекта еще нет на сервере, клонируем публичный репозиторий
+            # Чистое клонирование репозитория по твоей прямой ссылке
             if [ ! -d "couch-expert-backend" ]; then
-              git clone https://github.com{{ github.repository }}.git couch-expert-backend
-              cd couch-expert-backend
-            else
-              cd couch-expert-backend
-              # Сбрасываем локальные изменения и стягиваем свежий код
-              git fetch --all
-              git reset --hard origin/main
+              git clone https://github.com/AAE1990/Divan-expertMMA-voting.git couch-expert-backend
             fi
             
-            # Перезапускаем сборку Docker контейнеров бэкенда
+            # Переходим внутрь проекта
+            cd /root/couch-expert-backend
+            
+            # Стягиваем свежие изменения
+            git fetch --all
+            git reset --hard origin/main
+            
+            # Перезапускаем сборку Docker контейнеров
             docker compose down
             docker compose up -d --build
-            
