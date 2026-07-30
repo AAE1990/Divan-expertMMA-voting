@@ -1,0 +1,39 @@
+name: Deploy NestJS Backend to VPS
+
+on:
+  push:
+    branches:
+      - main  # Сценарий сработает, когда ты делаешь пуш в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Переходим в корень сервера
+            cd /root
+            
+            # Если папки проекта еще нет на сервере, клонируем репозиторий
+            if [ ! -d "couch-expert-backend" ]; then
+              git clone https://github.com{{ github.repository }}.git couch-expert-backend
+              cd couch-expert-backend
+            else
+              cd couch-expert-backend
+              # Сбрасываем локальные изменения и стягиваем свежий код
+              git fetch --all
+              git reset --hard origin/main
+            fi
+            
+            # Перезапускаем сборку Docker контейнеров бэкенда
+            docker compose down
+            docker compose up -d --build
