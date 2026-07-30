@@ -37,7 +37,8 @@ services:
     working_dir: /app
     volumes:
       - ./nestjs-server:/app
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - './etc/letsencrypt/archive/api.couch-expert-mma.com/privkey1.pem:/etc/letsencrypt/live/api.couch-expert-mma.com/privkey.pem:ro'
+      - './etc/letsencrypt/archive/api.couch-expert-mma.com/fullchain1.pem:/etc/letsencrypt/live/api.couch-expert-mma.com/fullchain.pem:ro'
     env_file:
       - ./nestjs-server/.env
     command: sh -c "npm install --legacy-peer-deps && npx prisma generate && npm run start:prod"
