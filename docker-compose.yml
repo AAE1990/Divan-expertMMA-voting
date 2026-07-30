@@ -39,6 +39,10 @@ services:
       - ./nestjs-server:/app
       - './etc/letsencrypt/archive/api.couch-expert-mma.com/privkey1.pem:/etc/letsencrypt/live/api.couch-expert-mma.com/privkey.pem:ro'
       - './etc/letsencrypt/archive/api.couch-expert-mma.com/fullchain1.pem:/etc/letsencrypt/live/api.couch-expert-mma.com/fullchain.pem:ro'
+    environment:
+      - PORT=4000
+      - DATABASE_URL=${MYSQL_URI}
+      - MYSQL_URI=${MYSQL_URI}
     env_file:
       - ./nestjs-server/.env
     command: sh -c "npm install --legacy-peer-deps && npx prisma generate && npm run start:prod"
@@ -47,6 +51,7 @@ services:
       - redis
     networks:
       - backend
+    #А мы и не написали environment в блоке backend, глянь. Я теперь здесь буду писать тебе сообщения :D
 
 volumes:
   postgres_data:
