@@ -51,7 +51,6 @@ services:
       - redis
     networks:
       - backend
-    #А мы и не написали environment в блоке backend, глянь. Я теперь здесь буду писать тебе сообщения :D
 
 volumes:
   postgres_data:
