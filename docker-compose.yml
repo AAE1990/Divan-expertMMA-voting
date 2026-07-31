@@ -45,7 +45,7 @@ services:
       - MYSQL_URI=${MYSQL_URI}
     env_file:
       - ./nestjs-server/.env
-    command: sh -c "npm install --legacy-peer-deps && npx prisma@6.2.1 generate && npm run build && npm run start:prod"
+    command: sh -c "npm install --legacy-peer-deps && npx prisma@6.2.1 generate && ./node_modules/.bin/nest start"
     depends_on:
       - db
       - redis
