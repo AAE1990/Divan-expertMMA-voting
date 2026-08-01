@@ -33,7 +33,7 @@ services:
     container_name: couch_expert_api
     restart: always
     ports:
-      - "443:4000"
+      - "80:4000"
     working_dir: /app
     volumes:
       - ./nestjs-server:/app
