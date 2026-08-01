@@ -8,28 +8,15 @@ import * as session from 'express-session';
 import { ms, StringValue } from './libs/common/utils/ms.util';
 import { parseBoolean } from './libs/common/utils/parse-boolean.utils';
 import RedisStore from 'connect-redis';
-import * as fs from 'fs';
 
 async function bootstrap() {
-  // Базовые опции логгера, которые у тебя уже были
+  // Базовые опции логгера
   const nestOptions: any = {
     logger: ['log', 'error', 'warn', 'debug', 'verbose'],
   };
 
-  // Пути к сертификатам, которые мы пробросили внутрь Docker-контейнера через volumes
-  const keyPath = '/etc/letsencrypt/live/api.couch-expert-mma.com/privkey.pem';
-  const certPath = '/etc/letsencrypt/live/api.couch-expert-mma.com/fullchain.pem';
-
-  // Если файлы сертификатов физически существуют, включаем безопасный HTTPS режим
-  if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
-    nestOptions.httpsOptions = {
-      key: fs.readFileSync(keyPath),
-      cert: fs.readFileSync(certPath),
-    };
-    console.log('🛡️ SSL Certificates found. Starting NestJS in secure HTTPS mode!');
-  } else {
-    console.log('⚠️ No SSL Certificates found. Starting NestJS in standard HTTP mode.');
-  }
+  // Создаем приложение БЕЗ SSL в стандартном HTTP режиме
+  console.log(' Starting NestJS in standard HTTP mode... ');
 
   // Создаем приложение с динамическими опциями
   const app = await NestFactory.create(AppModule, nestOptions);
