@@ -164,7 +164,13 @@ export class AuthService {
                     )
                 }
                 res.clearCookie(
-                    this.configService.getOrThrow<string>("SESSION_NAME")
+                    this.configService.getOrThrow<string>("SESSION_NAME"),
+                    {
+                        domain: ".couch-expert-mma.com", // Мой SESSION_DOMAIN
+                        path: "/",                       // Корень сайта
+                        secure: true,                    // Мой SESSION_SECURE
+                        httpOnly: true                   // Мой SESSION_HTTP_ONLY
+                    }
                 )
                 resolve()
             })
