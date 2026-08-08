@@ -58,12 +58,14 @@ services:
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=https://api.couch-expert-mma.com
+        - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
     ports:
       - "3000:3000" # Фронтенд будет слушать порт 3000 снаружи Docker
     restart: always
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://api.couch-expert-mma.com
+      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
 
 volumes:
   postgres_data:
