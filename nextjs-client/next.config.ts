@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  output: 'standalone', // <-- Это критически важно для Docker!
 };
 
 export default withNextIntl(nextConfig);
