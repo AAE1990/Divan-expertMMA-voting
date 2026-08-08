@@ -56,6 +56,8 @@ services:
     build:
       context: ./nextjs-client # путь к папке с Next.js
       dockerfile: Dockerfile
+      args:
+      - NEXT_PUBLIC_API_URL=https://api.couch-expert-mma.com
     ports:
       - "3000:3000" # Фронтенд будет слушать порт 3000 снаружи Docker
     restart: always
