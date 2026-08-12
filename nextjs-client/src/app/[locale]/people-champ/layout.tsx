@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
       title: `${champTitle} | ${siteBrand}`,
       description: champDesc,
       type: 'website',
-      url: 'https:// www. couch-expert-mma. com/' + locale + '/people-champ',
+      url: 'https://www.couch-expert-mma.com/' + locale + '/people-champ',
       siteName: siteBrand,
       locale: locale === 'ru' ? 'ru_RU' : 'en_US',
       images: [
