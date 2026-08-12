@@ -92,7 +92,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         </div>
         <div className="text-center">
           <div className="text-2xl md:text-3xl font-black tracking-tighter text-red-700 uppercase">VS</div>
-          <div className="text-[10px] md:text-xs font-semibold text-muted-foreground mt-1 uppercase tracking-widest">
+          <div className="text-[10px] md:text-xs font-semibold text-muted-foreground mt-1 uppercase tracking-widest whitespace-normal">
             {isFinished ? t('fightFinished') : isClosed ? t('votingEnded') : t('live')}
           </div>
           {!isFinished && !isClosed && (
