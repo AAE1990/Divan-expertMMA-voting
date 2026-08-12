@@ -113,56 +113,56 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const isWinner = !poll.isPeopleChamp && option.id === poll.winnerOptionId
 
     return (
-        <div className={cn(
-            "flex flex-col items-center justify-between h-full w-full p-3 md:p-4 border-2 rounded-xl transition-all cursor-pointer text-center"
-        )}>
-            {/* 1. Фото бойца всегда сверху */}
-            {renderFighterPhoto(option)}
+      <div className={cn(
+        "flex flex-col items-center justify-between h-full w-full p-3 md:p-4 border-2 rounded-xl transition-all cursor-pointer text-center"
+      )}>
+        {/* 1. Фото бойца всегда сверху */}
+        {renderFighterPhoto(option)}
 
-            {/* 2. Контейнер контента, который растягивается и толкает элементы */}
-            <div className="flex flex-col items-center justify-between flex-1 w-full text-center mt-3">
-                
-                {/* Обертка для имени и иконок, чтобы они держались вместе */}
-                <div className="flex flex-col items-center space-y-1 mb-2">
-                    <span className={cn(
-                        "text-sm font-bold uppercase tracking-wide transition-colors text-center block",
-                        isUserChoice && "text-primary",
-                        isWinner && "text-green-600"
-                    )}>
-                        {locale === 'en' ? option.textEn : option.textRu}
-                    </span >
-                    
-                    {(isUserChoice || isWinner) && (
-                        <div className="flex items-center justify-center gap-1 text-sm">
-                            {isUserChoice && <span>✅</span>}
-                            {isWinner && <span>🏆</span>}
-                        </div>
-                    )}
-                </div>
+        {/* 2. Контейнер контента, который растягивается и толкает элементы */}
+        <div className="flex flex-col items-center justify-between flex-1 w-full text-center mt-3">
 
-                {/* 3. Блок прогресс-бара и голосов всегда прижмется к самому низу */}
-                <div className="w-full mt-auto">
-                    <span className={cn(
-                        "text-xs font-bold px-2 py-1 rounded block mb-2 mx-auto w-max",
-                        isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
-                    )}>
-                        {percentage}%
-                    </span>
+          {/* Обертка для имени и иконок, чтобы они держались вместе */}
+          <div className="flex flex-col items-center space-y-1 mb-2">
+            <span className={cn(
+              "text-sm font-bold uppercase tracking-wide transition-colors text-center block",
+              isUserChoice && "text-primary",
+              isWinner && "text-green-600"
+            )}>
+              {locale === 'en' ? option.textEn : option.textRu}
+            </span >
 
-                    <Progress
-                        value={percentage}
-                        className={cn(
-                            "h-2 w-full",
-                            isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
-                        )}
-                    />
+            {(isUserChoice || isWinner) && (
+              <div className="flex items-center justify-center gap-1 text-sm">
+                {isUserChoice && <span>✅</span>}
+                {isWinner && <span>🏆</span>}
+              </div>
+            )}
+          </div>
 
-                    <p className="text-[10px] text-muted-foreground mt-1 italic">
-                        {t('totalVotes')} {option.votesCount}
-                    </p>
-                </div>
-            </div>
+          {/* 3. Блок прогресс-бара и голосов всегда прижмется к самому низу */}
+          <div className="w-full mt-auto">
+            <span className={cn(
+              "text-xs font-bold px-2 py-1 rounded block mb-2 mx-auto w-max",
+              isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
+            )}>
+              {percentage}%
+            </span>
+
+            <Progress
+              value={percentage}
+              className={cn(
+                "h-2 w-full",
+                isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
+              )}
+            />
+
+            <p className="text-[10px] text-muted-foreground mt-1 italic">
+              {t('totalVotes')} {option.votesCount}
+            </p>
+          </div>
         </div>
+      </div>
     )
   }
 
@@ -306,7 +306,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
         <div className="w-full flex flex-col items-center justify-center text-center">
-          <CardTitle className="text-lg md:text-xl text-center font-black uppercase tracking-wide w-full px-4">
+          <CardTitle className="text-lg md:text-xl text-center font-black uppercase tracking-wide w-full px-4 min-h-[3.5rem] md:min-h-[4rem] flex items-center justify-center">
             {locale === 'en' ? poll.questionEn : poll.questionRu}
           </CardTitle>
           <CardDescription className="text-center text-sm font-medium mt-1 text-muted-foreground/80">
@@ -314,7 +314,6 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           </CardDescription>
         </div>
       </CardHeader>
-
 
       <CardContent className="flex-1 px-4 sm:px-6">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
