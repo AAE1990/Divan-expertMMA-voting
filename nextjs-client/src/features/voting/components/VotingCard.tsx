@@ -113,49 +113,56 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const isWinner = !poll.isPeopleChamp && option.id === poll.winnerOptionId
 
     return (
-      <div className={cn(
-        "flex flex-col items-center justify-center w-full p-3 md:p-4 border-2 rounded-xl transition-all cursor-pointer text-center"
-      )}>
-        {/* Фото */}
-        {renderFighterPhoto(option)}
-        {/* Имя и индикаторы */}
-        <div className="flex flex-col items-center justify-center w-full text-center">
-          <div className="flex flex-col items-center justify-center w-full space-y-1 mb-2">
-            <span className={cn(
-              "text-sm font-bold uppercase tracking-wide transition-colors text-center block",
-              isUserChoice && "text-primary",
-              isWinner && "text-green-600"
-            )}>
-              {locale === 'en' ? option.textEn : option.textRu}
-            </span>
+        <div className={cn(
+            "flex flex-col items-center justify-between h-full w-full p-3 md:p-4 border-2 rounded-xl transition-all cursor-pointer text-center"
+        )}>
+            {/* 1. Фото бойца всегда сверху */}
+            {renderFighterPhoto(option)}
 
-            {/* Контейнер для иконок-индикаторов на новой строке */}
-            {(isUserChoice || isWinner) && (
-              <div className="flex items-center justify-center gap-1 mt-1 text-sm">
-                {isUserChoice && <span>{"  "}✅</span>}
-                {isWinner && <span>{"  "}🏆</span>}
-              </div>
-            )}
-            <span className={cn(
-              "text-xs font-bold px-2 py-1 rounded",
-              isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
-            )}>
-              {percentage}%
-            </span>
-          </div>
-          {/* Прогресс-бар */}
-          <Progress
-            value={percentage}
-            className={cn(
-              "h-2 w-full",
-              isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
-            )}
-          />
-          <p className="text-[10px] text-muted-foreground mt-1 italic">
-            {t('totalVotes')} {option.votesCount}
-          </p>
+            {/* 2. Контейнер контента, который растягивается и толкает элементы */}
+            <div className="flex flex-col items-center justify-between flex-1 w-full text-center mt-3">
+                
+                {/* Обертка для имени и иконок, чтобы они держались вместе */}
+                <div className="flex flex-col items-center space-y-1 mb-2">
+                    <span className={cn(
+                        "text-sm font-bold uppercase tracking-wide transition-colors text-center block",
+                        isUserChoice && "text-primary",
+                        isWinner && "text-green-600"
+                    )}>
+                        {locale === 'en' ? option.textEn : option.textRu}
+                    </span >
+                    
+                    {(isUserChoice || isWinner) && (
+                        <div className="flex items-center justify-center gap-1 text-sm">
+                            {isUserChoice && <span>✅</span>}
+                            {isWinner && <span>🏆</span>}
+                        </div>
+                    )}
+                </div>
+
+                {/* 3. Блок прогресс-бара и голосов всегда прижмется к самому низу */}
+                <div className="w-full mt-auto">
+                    <span className={cn(
+                        "text-xs font-bold px-2 py-1 rounded block mb-2 mx-auto w-max",
+                        isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
+                    )}>
+                        {percentage}%
+                    </span>
+
+                    <Progress
+                        value={percentage}
+                        className={cn(
+                            "h-2 w-full",
+                            isWinner ? "bg-green-500" : isUserChoice ? "bg-secondary" : "bg-muted"
+                        )}
+                    />
+
+                    <p className="text-[10px] text-muted-foreground mt-1 italic">
+                        {t('totalVotes')} {option.votesCount}
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
     )
   }
 
