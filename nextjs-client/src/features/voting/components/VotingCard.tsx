@@ -301,13 +301,13 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[120px] md:h-[150px] relative">
+      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[130px] md:h-[170px] relative">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
 
         <CardTitle className="w-full px-4">
-          <div className="text-lg md:text-xl text-center font-black uppercase tracking-wide line-clamp-3">
+          <div className="text-lg md:text-xl text-center font-black uppercase tracking-wide">
             {locale === 'en' ? poll.questionEn : poll.questionRu}
           </div>
         </CardTitle>
