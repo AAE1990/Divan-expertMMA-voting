@@ -363,7 +363,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
             <Button
               form={`form-${poll.id}`}
               type="submit"
-              className="w-full font-bold uppercase py-3 cursor-pointer"
+              className="w-full font-bold uppercase py-2 h-auto whitespace-normal cursor-pointer"
               disabled={isPending || poll.status === 'CLOSED' || isExpired}
             >
               {isExpired ? t('votingEnded') : isPending ? t('submitting') : t('makePrediction')}
