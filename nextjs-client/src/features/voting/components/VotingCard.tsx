@@ -301,7 +301,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[130px] md:h-[170px] relative">
+      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[110px] md:h-[190px] relative">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
