@@ -122,16 +122,20 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         <div className="flex flex-col items-center justify-center w-full text-center">
           <div className="flex flex-col items-center justify-center w-full space-y-1 mb-2">
             <span className={cn(
-              "text-sm font-bold uppercase tracking-wide transition-colors",
+              "text-sm font-bold uppercase tracking-wide transition-colors text-center block",
               isUserChoice && "text-primary",
               isWinner && "text-green-600"
             )}>
               {locale === 'en' ? option.textEn : option.textRu}
-              <span className="whitespace-nowrap">
-                {isUserChoice && " ✅"}
-                {isWinner && " 🏆"}
-              </span>
             </span>
+
+            {/* Контейнер для иконок-индикаторов на новой строке */}
+            {(isUserChoice || isWinner) && (
+              <div className="flex items-center justify-center gap-1 mt-1 text-sm">
+                {isUserChoice && <span>{"  "}✅</span>}
+                {isWinner && <span>{"  "}🏆</span>}
+              </div>
+            )}
             <span className={cn(
               "text-xs font-bold px-2 py-1 rounded",
               isWinner ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" : "bg-muted"
@@ -307,7 +311,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
       <CardContent className="flex-1 px-4 sm:px-6">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
-        {user && !hasVoted && !isFinished && !isExpired &&(
+        {user && !hasVoted && !isFinished && !isExpired && (
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">
             <RadioGroup value={selectedValue} onValueChange={(v) => setValue("optionId", v)}>
               {poll.options.map(opt => (
