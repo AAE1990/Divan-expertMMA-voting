@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { LogIn, UserPlus } from "lucide-react"
 import Cookies from "js-cookie"
 import { useTranslations } from "next-intl"
@@ -13,17 +14,35 @@ export function AuthButtons() {
     const { user, isLoading } = useProfile()
     const pathname = usePathname()
     const t = useTranslations("Auth")
+    
+    // Состояние для проверки, загрузился ли компонент в браузере
+    const [isMounted, setIsMounted] = useState(false)
 
-    // Синхронно проверяем наличие сессионной куки из браузера
-    const hasSessionCookie = !!Cookies.get('session')
+    // useEffect срабатывает ТОЛЬКО в браузере. Сервер этот код пропустит.
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
 
-    // 1. Если мы находимся на страницах авторизации — сразу скрываем кнопки
+    // 1. Если мы на страницах авторизации — сразу скрываем кнопки
     if (pathname?.startsWith("/auth")) {
         return null
     }
 
-    // 2. Если куки сессии вообще нет в браузере — пользователь ТОЧНО гость.
-    // Рендерим кнопки мгновенно, не дожидаясь сетевого ответа от бэкенда!
+    // 2. Пока компонент не примонтировался в браузере, показываем пустые скелетоны,
+    // чтобы у сервера и браузера был одинаковый стартовый HTML (защита от багов гидратации)
+    if (!isMounted) {
+        return (
+            <div className="flex items-center gap-2">
+                <Skeleton className="h-9 w-20" />
+                <Skeleton className="h-9 w-20" />
+            </div>
+        )
+    }
+
+    // Теперь мы на 100% в браузере и можем безопасно читать куку!
+    const hasSessionCookie = !!Cookies.get('session')
+
+    // 3. Если куки нет — пользователь точно гость, выводим кнопки БЕЗ задержек
     if (!hasSessionCookie) {
         return (
             <div className="flex items-center gap-2">
@@ -43,7 +62,7 @@ export function AuthButtons() {
         )
     }
 
-    // 3. Если кука есть, значит идет проверка сессии — показываем скелетоны
+    // 4. Если кука есть, значит юзер залогинен или сессия проверяется — ждем хук
     if (isLoading) {
         return (
             <div className="flex items-center gap-2">
@@ -53,7 +72,7 @@ export function AuthButtons() {
         )
     }
 
-    // 4. Если пользователь авторизован, не показываем кнопки
+    // 5. Если пользователь успешно авторизован, скрываем кнопки
     if (user) {
         return null
     }
