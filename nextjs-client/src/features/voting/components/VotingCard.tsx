@@ -301,20 +301,20 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-center text-center w-full pb-4 space-y-2">
+      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[120px] md:h-[150px] relative">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
-        <div className="w-full flex flex-col items-center justify-center text-center">
-          <CardTitle className="w-full px-4">
-            <div className="text-lg md:text-xl text-center font-black uppercase tracking-wide min-h-[4.5rem] md:min-h-[5rem] flex items-center justify-center">
-              {locale === 'en' ? poll.questionEn : poll.questionRu}
-            </div>
-          </CardTitle>
-          <CardDescription className="text-center text-sm font-medium mt-1 text-muted-foreground/80">
-            {isFinished ? t('fightFinished') : t('chooseWinner')}
-          </CardDescription>
-        </div>
+
+        <CardTitle className="w-full px-4">
+          <div className="text-lg md:text-xl text-center font-black uppercase tracking-wide line-clamp-3">
+            {locale === 'en' ? poll.questionEn : poll.questionRu}
+          </div>
+        </CardTitle>
+
+        <CardDescription className="text-center text-sm font-medium mt-1 text-muted-foreground/80">
+          {isFinished ? t('fightFinished') : t('chooseWinner')}
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 px-4 sm:px-6">
