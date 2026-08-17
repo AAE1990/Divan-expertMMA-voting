@@ -377,7 +377,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           // 2. ПОЛЬЗОВАТЕЛЬ — АНОНИМ (Выводим красивую интерактивную кнопку!)
           <Button
             variant="outline"
-            className="w-full font-bold uppercase py-3 border-dashed border-primary/40 text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer"
+            className="w-full font-bold uppercase py-2 h-auto whitespace-normal border-dashed border-primary/40 text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-pointer"
             onClick={() => router.push(`/auth/login`)} // Улетает на логин!
           >
             {t('loginToVoteAction')}
