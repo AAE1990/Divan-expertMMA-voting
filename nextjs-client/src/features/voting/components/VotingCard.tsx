@@ -242,7 +242,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     />
                   </div>
                 )}
-                <div className="flex flex-col items-center justify-center w-full space-y-1 mb-2">
+                <div className="flex flex-col items-center justify-between text-center w-full min-h-[90px] md:min-h-[120px] mb-2">
                   <span className={cn("text-sm font-medium", isUserChoice && "text-primary font-bold", isWinner && "text-green-600 font-bold")}>
                     {locale === 'en' ? option.textEn : option.textRu}
                     <span className="whitespace-nowrap">
@@ -301,7 +301,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[120px] md:h-[200px] relative">
+      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[150px] md:h-[160px] lg:h-[180px] relative">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
@@ -317,7 +317,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 px-4 sm:px-6">
+      <CardContent className="flex flex-col flex-grow justify-between px-1 py-4 sm:px-6">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
         {user && !hasVoted && !isFinished && !isExpired && (
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">
@@ -329,7 +329,10 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           </form>
         )}
 
-        {renderFightCardContent()}
+        {/* Контент бойцов оборачиваем в flex-grow контейнер с авто-выравниванием */}
+        <div className="flex flex-col justify-between flex-grow min-h-[450px]">
+          {renderFightCardContent()}
+        </div>
 
         {/* Панель админа */}
         {isAdmin && !isFinished && !poll.isPeopleChamp && (
