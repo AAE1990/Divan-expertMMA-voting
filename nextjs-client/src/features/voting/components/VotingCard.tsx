@@ -242,7 +242,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     />
                   </div>
                 )}
-                <div className="flex flex-col items-center justify-between text-center w-full min-h-[90px] md:min-h-[100px] mb-2">
+                <div className="flex flex-col items-center justify-between text-center w-full min-h-[90px] md:min-h-[120px] mb-2">
                   <span className={cn("text-sm font-medium", isUserChoice && "text-primary font-bold", isWinner && "text-green-600 font-bold")}>
                     {locale === 'en' ? option.textEn : option.textRu}
                     <span className="whitespace-nowrap">
