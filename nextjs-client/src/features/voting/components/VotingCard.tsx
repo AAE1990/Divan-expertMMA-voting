@@ -266,11 +266,11 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const [fighter1, fighter2] = poll.options
 
     return (
-      // По умолчанию flex-col (вертикально). На экранах от 1820px — ultra:flex-row (горизонтально)!
-      <div className="flex flex-col ultra:flex-row items-stretch justify-between gap-4 ultra:gap-2 w-full min-w-0">
+      // Добавили класс relative, чтобы зафиксировать центр
+      <div className="flex flex-col xl:flex-row items-stretch justify-between gap-4 ultra:gap-2 w-full min-w-0 relative">
 
-        {/* Левый боец. До 1820px — на всю ширину w-full, на ультра — ровно половина ultra:w-[45%] */}
-        <div className="w-full ultra:w-1/2 min-w-0">
+        {/* Левый/Верхний боец: на десктопе xl:pb-0 убирает нижний отступ */}
+        <div className="w-full xl:w-1/2 min-w-0 pb-12 xl:pb-0">
           {hasVoted || isFinished || isExpired
             ? renderFighterResult(fighter1, true)
             : user
@@ -278,13 +278,13 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
               : renderFighterAnonymous(fighter1, true)}
         </div>
 
-        {/* Центральный блок VS. Задаем ultra:mx-4, чтобы растолкать бойцов на больших мониторах! */}
-        <div className="flex justify-center items-center py-4 ultra:py-0 shrink-0 ultra:px-6 mx-auto">
+        {/* Центральный блок VS: висит по центру и в вертикальном, и в горизонтальном режиме */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-background py-1 px-2">
           {renderCenterBlock()}
         </div>
 
-        {/* Правый боец */}
-        <div className="w-full ultra:w-1/2 min-w-0">
+        {/* Правый/Нижний боец: на десктопе xl:pt-0 убирает верхний отступ */}
+        <div className="w-full xl:w-1/2 min-w-0 pt-12 xl:pt-0">
           {hasVoted || isFinished || isExpired
             ? renderFighterResult(fighter2, false)
             : user
@@ -301,7 +301,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-center text-center w-full pt-4 pb-2 h-[150px] md:h-[160px] lg:h-[180px] relative">
+      <CardHeader className="flex flex-col items-center justify-end text-center w-full pt-4 pb-2 h-[150px] md:h-[160px] lg:h-[180px] relative">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
@@ -329,8 +329,8 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           </form>
         )}
 
-        {/* Контент бойцов оборачиваем в flex-grow контейнер с авто-выравниванием */}
-        <div className="flex flex-col justify-between flex-grow min-h-[450px]">
+        {/* Контент бойцов: на мобильных min-h большой, на десктопе (xl) сжимается по контенту */}
+        <div className="flex flex-col justify-between flex-grow min-h-[450px] xl:min-h-0">
           {renderFightCardContent()}
         </div>
 
