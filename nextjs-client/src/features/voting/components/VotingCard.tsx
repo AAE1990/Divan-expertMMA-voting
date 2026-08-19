@@ -242,7 +242,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     />
                   </div>
                 )}
-                <div className="flex flex-col items-center justify-between text-center w-full min-h-[105px] mb-2">
+                <div className="flex flex-col items-center justify-between text-center w-full min-h-[125px] mb-2 shrink-0">
                   <span className={cn("text-sm font-medium", isUserChoice && "text-primary font-bold", isWinner && "text-green-600 font-bold")}>
                     {locale === 'en' ? option.textEn : option.textRu}
                     <span className="whitespace-nowrap">
@@ -266,30 +266,31 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const [fighter1, fighter2] = poll.options
 
     return (
-      // Добавили класс relative, чтобы зафиксировать центр
       <div className="flex flex-col xl:flex-row items-center xl:justify-between gap-4 ultra:gap-2 w-full min-w-0">
 
-    {/* Левый/Верхний боец */}
-    <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center">
-          {hasVoted || isFinished || isExpired
-            ? renderFighterResult(fighter1, true)
-            : user
-              ? renderFighterVoting(fighter1, true)
-              : renderFighterAnonymous(fighter1, true)}
+        {/* Левый/Верхний боец: добавили w-full */}
+        <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center text-center">
+          <div className="w-full flex flex-col items-center">
+            {hasVoted || isFinished || isExpired
+              ? renderFighterResult(fighter1, true)
+              : renderFighterVoting(fighter1, true)
+            }
+          </div>
         </div>
 
-    {/* Центральный блок VS — теперь он в общем потоке */}
-    <div className="w-full xl:w-[16%] flex flex-col items-center justify-center py-2 shrink-0">
+        {/* Центральный блок VS */}
+        <div className="w-full xl:w-[16%] flex flex-col items-center justify-center py-2 shrink-0">
           {renderCenterBlock()}
         </div>
 
-    {/* Правый/Нижний боец */}
-    <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center">
-          {hasVoted || isFinished || isExpired
-            ? renderFighterResult(fighter2, false)
-            : user
-              ? renderFighterVoting(fighter2, false)
-              : renderFighterAnonymous(fighter2, false)}
+        {/* Правый/Нижний боец: добавили w-full */}
+        <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center text-center">
+          <div className="w-full flex flex-col items-center">
+            {hasVoted || isFinished || isExpired
+              ? renderFighterResult(fighter2, false)
+              : renderFighterVoting(fighter2, false)
+            }
+          </div>
         </div>
 
       </div>
