@@ -242,7 +242,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
                     />
                   </div>
                 )}
-                <div className="flex flex-col items-center justify-between text-center w-full min-h-[90px] md:min-h-[120px] mb-2">
+                <div className="flex flex-col items-center justify-between text-center w-full min-h-[105px] mb-2">
                   <span className={cn("text-sm font-medium", isUserChoice && "text-primary font-bold", isWinner && "text-green-600 font-bold")}>
                     {locale === 'en' ? option.textEn : option.textRu}
                     <span className="whitespace-nowrap">
@@ -267,10 +267,10 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
     return (
       // Добавили класс relative, чтобы зафиксировать центр
-      <div className="flex flex-col xl:flex-row items-stretch justify-between gap-4 ultra:gap-2 w-full min-w-0 relative">
+      <div className="flex flex-col xl:flex-row items-center xl:justify-between gap-4 ultra:gap-2 w-full min-w-0">
 
-        {/* Левый/Верхний боец: на десктопе xl:pb-0 убирает нижний отступ */}
-        <div className="w-full xl:w-1/2 min-w-0 pb-12 xl:pb-0">
+    {/* Левый/Верхний боец */}
+    <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center">
           {hasVoted || isFinished || isExpired
             ? renderFighterResult(fighter1, true)
             : user
@@ -278,13 +278,13 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
               : renderFighterAnonymous(fighter1, true)}
         </div>
 
-        {/* Центральный блок VS: висит по центру и в вертикальном, и в горизонтальном режиме */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-background py-1 px-2">
+    {/* Центральный блок VS — теперь он в общем потоке */}
+    <div className="w-full xl:w-[16%] flex flex-col items-center justify-center py-2 shrink-0">
           {renderCenterBlock()}
         </div>
 
-        {/* Правый/Нижний боец: на десктопе xl:pt-0 убирает верхний отступ */}
-        <div className="w-full xl:w-1/2 min-w-0 pt-12 xl:pt-0">
+    {/* Правый/Нижний боец */}
+    <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center">
           {hasVoted || isFinished || isExpired
             ? renderFighterResult(fighter2, false)
             : user
@@ -330,7 +330,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         )}
 
         {/* Контент бойцов: на мобильных min-h большой, на десктопе (xl) сжимается по контенту */}
-        <div className="flex flex-col justify-between flex-grow min-h-[450px] xl:min-h-0">
+        <div className="w-full">
           {renderFightCardContent()}
         </div>
 
