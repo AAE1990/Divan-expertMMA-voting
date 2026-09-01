@@ -122,19 +122,19 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         {/* 2. Контейнер контента, который растягивается и толкает элементы */}
         <div className="flex flex-col items-center justify-between flex-1 w-full text-center mt-3">
 
-          {/* Обертка для имени и иконок, чтобы они держались вместе */}
-          <div className="flex flex-col items-center space-y-1 mb-2">
+          {/* обертка для имени и иконок: ЖЕСТКО задаем min-h, чтобы они держали высоту */}
+          <div className="flex flex-col items-center justify-center w-full min-h-[110px] md:min-h-[120px] mb-2 shrink-0">
             <span className={cn(
               "text-sm font-bold uppercase tracking-wide transition-colors text-center block",
               isUserChoice && "text-primary",
               isWinner && "text-green-600"
             )}>
               {locale === 'en' ? option.textEn : option.textRu}
-            </span >
+            </span>
 
             {(isUserChoice || isWinner) && (
-              <div className="flex items-center justify-center gap-1 text-sm">
-                {isUserChoice && <span>✅</span>}
+              <div className="flex items-center justify-center gap-1 text-sm mt-1">
+                {isUserChoice && <span>🗳️</span>}
                 {isWinner && <span>🏆</span>}
               </div>
             )}
@@ -302,7 +302,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-end text-center w-full pt-4 pb-2 h-[150px] md:h-[160px] lg:h-[180px] relative">
+      <CardHeader className="flex flex-col items-center justify-start text-center w-full pt-4 pb-2 h-[150px] md:h-[210px] lg:h-[200px] xl:h-[130px] relative shrink-0">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
