@@ -134,7 +134,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
             {(isUserChoice || isWinner) && (
               <div className="flex items-center justify-center gap-1 text-sm mt-1">
-                {isUserChoice && <span>🗳️</span>}
+                {isUserChoice && <span>✅</span>}
                 {isWinner && <span>🏆</span>}
               </div>
             )}
