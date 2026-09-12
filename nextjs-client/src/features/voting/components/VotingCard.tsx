@@ -172,7 +172,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       <div
         onClick={() => setValue("optionId", option.id)} // МАГИЯ ЗДЕСЬ! Клик по карточке выбирает бойца!
         className={cn(
-          "flex flex-col items-center justify-center w-full p-4 md:p-4 border-2 rounded-xl transition-all text-center",
+          "flex flex-col items-center justify-center h-full w-full max-w-[180px] md:max-w-[200px] p-2 md:p-4 border-2 rounded-xl transition-all text-center cursor-pointer",
           "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
           "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
           selectedValue === option.id && "border-primary ring-2 ring-primary/30"
@@ -182,19 +182,22 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
           htmlFor={option.id}
           className="flex flex-col items-center w-full mt-2 cursor-pointer"
         >
-          <div className="flex flex-col items-center justify-center w-full space-y-2 mb-2">
-            <div
-              className={`shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all ${selectedValue === option.id
-                ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
-                : "border-muted-foreground/30 bg-transparent"
-                }`}
-            >
-              {/* Маленькая точка внутри активного чекбокса */}
-              {selectedValue === option.id && <div className="size-2 rounded-full bg-white" />}
-            </div>
+          <div className="flex flex-col items-center justify-between w-full min-h-[85px] md:min-h-[95px] mb-2 shrink-0 pt-2 pb-1">
+
+            {/* 1. Имя бойца теперь сверху */}
             <span className="px-1 text-center w-full break-words line-clamp-2 font-black uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100 mx-3">
               {locale === 'en' ? option.textEn : option.textRu}
             </span>
+
+            {/* 2. Кружочек инпута теперь под именем */}
+            <div className={`shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all ${selectedValue === option.id
+                ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
+                : "border-muted-foreground/30 bg-transparent"
+              }`}>
+              {/* Маленькая точка внутри активного чекбокса */}
+              {selectedValue === option.id && <div className="size-2 rounded-full bg-white" />}
+            </div>
+
           </div>
           <span className="text-[10px] text-muted-foreground italic">{t('clickToVote')}</span>
         </Label>
@@ -265,44 +268,42 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
     const [fighter1, fighter2] = poll.options
 
-    return (
-      <div className="flex flex-col xl:flex-row items-center xl:justify-between gap-4 ultra:gap-2 w-full min-w-0">
+return (
+  // md:gap-2 и xl:gap-8 сделают карточку плотной на планшетах/мобилках, но свободной на десктопе
+  <div className="flex flex-col xl:flex-row items-center xl:justify-center gap-2 md:gap-3 xl:gap-8 ultra:gap-2 w-full min-w-0">
+    
+    {/* Левый/Верхний боец */}
+    <div className="w-full xl:w-auto min-w-0 flex flex-col items-center justify-center text-center">
+      {hasVoted || isFinished || isExpired
+        ? renderFighterResult(fighter1, true)
+        : renderFighterVoting(fighter1, true)
+      }
+    </div>
 
-        {/* Левый/Верхний боец: добавили w-full */}
-        <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center text-center">
-          <div className="w-full flex flex-col items-center">
-            {hasVoted || isFinished || isExpired
-              ? renderFighterResult(fighter1, true)
-              : renderFighterVoting(fighter1, true)
-            }
-          </div>
-        </div>
+    {/* Центральный блок VS — уменьшили вертикальные отступы py-1 */}
+    <div className="w-full xl:w-auto flex flex-col items-center justify-center py-1 shrink-0">
+      {renderCenterBlock()}
+    </div>
 
-        {/* Центральный блок VS */}
-        <div className="w-full xl:w-[16%] flex flex-col items-center justify-center py-2 shrink-0">
-          {renderCenterBlock()}
-        </div>
+    {/* Правый/Нижний боец */}
+    <div className="w-full xl:w-auto min-w-0 flex flex-col items-center justify-center text-center">
+      {hasVoted || isFinished || isExpired
+        ? renderFighterResult(fighter2, false)
+        : renderFighterVoting(fighter2, false)
+      }
+    </div>
 
-        {/* Правый/Нижний боец: добавили w-full */}
-        <div className="w-full xl:w-[42%] min-w-0 flex flex-col items-center justify-center text-center">
-          <div className="w-full flex flex-col items-center">
-            {hasVoted || isFinished || isExpired
-              ? renderFighterResult(fighter2, false)
-              : renderFighterVoting(fighter2, false)
-            }
-          </div>
-        </div>
-
-      </div>
-    )
+  </div>
+)
   }
 
   return (
     <Card className={cn(
-      "w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
+      //"w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
+      "w-full h-auto xl:h-full flex flex-col justify-between border-2 rounded-2xl p-4",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-start text-center w-full pt-4 pb-2 h-[150px] md:h-[210px] lg:h-[200px] xl:h-[130px] relative shrink-0">
+      <CardHeader className="flex flex-col items-center justify-start text-center w-full pt-4 pb-2 h-[140px] md:h-[160px] lg:h-[180px] xl:h-[120px] relative shrink-0">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
@@ -318,7 +319,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex flex-col flex-grow justify-between px-1 py-4 sm:px-6">
+      <CardContent className="flex flex-col xl:flex-grow items-center justify-start xl:justify-center p-0 gap-2 mt-2">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
         {user && !hasVoted && !isFinished && !isExpired && (
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">
@@ -331,7 +332,7 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
         )}
 
         {/* Контент бойцов: на мобильных min-h большой, на десктопе (xl) сжимается по контенту */}
-        <div className="w-full">
+        <div className="w-full py-2">
           {renderFightCardContent()}
         </div>
 
