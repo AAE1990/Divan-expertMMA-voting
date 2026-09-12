@@ -170,36 +170,42 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
   const renderFighterVoting = (option: any, isLeft: boolean) => {
     return (
       <div
-        onClick={() => setValue("optionId", option.id)} // МАГИЯ ЗДЕСЬ! Клик по карточке выбирает бойца!
+        onClick={() => setValue("optionId", option.id)}
         className={cn(
-          "flex flex-col items-center justify-center h-full w-full max-w-[180px] md:max-w-[200px] p-2 md:p-4 border-2 rounded-xl transition-all text-center cursor-pointer",
+          // Заменили max-w и h-full на четкую фиксированную ширину и высоту
+          "flex flex-col items-center justify-between w-[150px] sm:w-[170px] md:w-[185px] min-h-[290px] md:min-h-[320px] p-2 md:p-3 border-2 rounded-xl transition-all text-center cursor-pointer shadow-sm",
           "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
           "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
           selectedValue === option.id && "border-primary ring-2 ring-primary/30"
-        )}>
+        )}
+      >
+        {/* 1. Фотография бойца */}
         {renderFighterPhoto(option)}
+
+        {/* 2. Контейнер для клика и контента */}
         <Label
           htmlFor={option.id}
-          className="flex flex-col items-center w-full mt-2 cursor-pointer"
+          className="flex flex-col items-center justify-between w-full mt-2 cursor-pointer flex-grow"
         >
-          <div className="flex flex-col items-center justify-between w-full min-h-[85px] md:min-h-[95px] mb-2 shrink-0 pt-2 pb-1">
+          {/* Имя бойца — выровнено по центру, резервируем min-h */}
+          <span className="px-1 text-center w-full break-words line-clamp-2 font-black uppercase tracking-wider text-xs md:text-sm text-sky-900 dark:text-sky-100 min-h-[36px] flex items-center justify-center">
+            {locale === 'en' ? option.textEn : option.textRu}
+          </span>
 
-            {/* 1. Имя бойца теперь сверху */}
-            <span className="px-1 text-center w-full break-words line-clamp-2 font-black uppercase tracking-wider text-sm text-sky-900 dark:text-sky-100 mx-3">
-              {locale === 'en' ? option.textEn : option.textRu}
-            </span>
-
-            {/* 2. Кружочек инпута теперь под именем */}
-            <div className={`shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all ${selectedValue === option.id
-                ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
-                : "border-muted-foreground/30 bg-transparent"
-              }`}>
-              {/* Маленькая точка внутри активного чекбокса */}
-              {selectedValue === option.id && <div className="size-2 rounded-full bg-white" />}
-            </div>
-
+          {/* Кружочек инпута */}
+          <div className={cn(
+            "shrink-0 border-2 rounded-full size-5 flex items-center justify-center transition-all mt-2",
+            selectedValue === option.id
+              ? "border-primary bg-primary shadow-[0_0_8px_rgba(239,68,68,0.3)]"
+              : "border-muted-foreground/30 bg-transparent"
+          )}>
+            {selectedValue === option.id && <div className="size-2 rounded-full bg-white" />}
           </div>
-          <span className="text-[10px] text-muted-foreground italic">{t('clickToVote')}</span>
+
+          {/* Текст подсказки — теперь он внутри Label и аккуратно уменьшен */}
+          <span className="text-[9px] md:text-[10px] text-muted-foreground/60 italic text-center block mt-2 px-1 max-w-full break-words leading-tight">
+            {t('clickToVote')}
+          </span>
         </Label>
       </div>
     )
@@ -269,24 +275,24 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
     const [fighter1, fighter2] = poll.options
 
 return (
-  // md:gap-2 и xl:gap-8 сделают карточку плотной на планшетах/мобилках, но свободной на десктопе
-  <div className="flex flex-col xl:flex-row items-center xl:justify-center gap-2 md:gap-3 xl:gap-8 ultra:gap-2 w-full min-w-0">
+  // relative позволяет повесить VS строго по центру, а 2xl:px-4 раздвинет бойцов к краям, освобождая место для мечей
+  <div className="flex flex-col 2xl:flex-row items-center w-full min-w-0 relative 2xl:px-4">
     
-    {/* Левый/Верхний боец */}
-    <div className="w-full xl:w-auto min-w-0 flex flex-col items-center justify-center text-center">
+    {/* Левый/Верхний боец: занял ровно половину карточки на десктопе */}
+    <div className="w-full 2xl:w-1/2 min-w-0 flex flex-col items-center justify-center text-center shrink-0">
       {hasVoted || isFinished || isExpired
         ? renderFighterResult(fighter1, true)
         : renderFighterVoting(fighter1, true)
       }
     </div>
 
-    {/* Центральный блок VS — уменьшили вертикальные отступы py-1 */}
-    <div className="w-full xl:w-auto flex flex-col items-center justify-center py-1 shrink-0">
+    {/* Центральный блок VS: висит строго по центру, z-10 поднимает его над фотками */}
+    <div className="w-full 2xl:w-auto 2xl:absolute 2xl:left-1/2 2xl:top-1/2 2xl:-translate-x-1/2 2xl:-translate-y-1/2 flex flex-col items-center justify-center py-1 shrink-0 z-10 pointer-events-none">
       {renderCenterBlock()}
     </div>
 
-    {/* Правый/Нижний боец */}
-    <div className="w-full xl:w-auto min-w-0 flex flex-col items-center justify-center text-center">
+    {/* Правый/Нижний боец: занял ровно вторую половину карточки на десктопе */}
+    <div className="w-full 2xl:w-1/2 min-w-0 flex flex-col items-center justify-center text-center shrink-0">
       {hasVoted || isFinished || isExpired
         ? renderFighterResult(fighter2, false)
         : renderFighterVoting(fighter2, false)
@@ -300,10 +306,10 @@ return (
   return (
     <Card className={cn(
       //"w-full max-w-4xl mx-auto mb-6 flex flex-col h-full shadow-2xl border-2",
-      "w-full h-auto xl:h-full flex flex-col justify-between border-2 rounded-2xl p-4",
+      "w-full h-auto 2xl:h-full flex flex-col justify-between border-2 rounded-2xl p-4",
       isFinished && "border-yellow-500/50"
     )}>
-      <CardHeader className="flex flex-col items-center justify-start text-center w-full pt-4 pb-2 h-[140px] md:h-[160px] lg:h-[180px] xl:h-[120px] relative shrink-0">
+      <CardHeader className="flex flex-col items-center justify-start text-center w-full pt-4 pb-2 h-[140px] md:h-[160px] lg:h-[180px] 2xl:h-[120px] relative shrink-0">
         {isFinished && (
           <Trophy className="text-yellow-500 size-7 animate-bounce mb-1 flex-shrink-0" />
         )}
@@ -319,7 +325,7 @@ return (
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex flex-col xl:flex-grow items-center justify-start xl:justify-center p-0 gap-2 mt-2">
+      <CardContent className="flex flex-col 2xl:flex-grow items-center justify-center p-0 gap-4 mt-2 w-full">
         {/* Форма для голосования (скрытая, но нужна для сабмита) */}
         {user && !hasVoted && !isFinished && !isExpired && (
           <form onSubmit={handleSubmit(onSubmit)} id={`form-${poll.id}`} className="hidden">
