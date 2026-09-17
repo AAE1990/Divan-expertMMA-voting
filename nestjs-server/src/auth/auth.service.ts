@@ -23,16 +23,16 @@ export class AuthService {
     ) { }
 
     public async register(dto: RegisterDto, locale: string = 'en') {
-        const isExists = await this.userService.findByEmail(dto.email)
+        const isExists = await this.userService.findByEmail(dto.email);
 
         if (isExists) {
             throw new ConflictException({
                 message: 'Регистрация не удалась. Пользователь с таким email уже существует. Пожалуйста, используйте другой email или войдите в систему.',
                 code: 'EMAIL_ALREADY_IN_USE'
-            })
+            });
         }
 
-        const newUser = await this.userService.create(
+    /*    const newUser = await this.userService.create(
             dto.email,
             dto.password,
             dto.name,
@@ -47,6 +47,29 @@ export class AuthService {
             message: locale === 'en'
                 ? 'You have successfully registered! Please check your email to verify your account.'
                 : 'Вы успешно зарегистрировались! Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
+        }; */
+
+        const newUser = await this.userService.create(
+            dto.email,
+            dto.password,
+            dto.name,
+            null, // Передаем null вместо картинки (picture)
+            AuthMethod.CREDENTIALS,
+            true // <-- ВРЕМЕННЫЙ РЕЖИМ РЕКЛАМЫ: isVerified = true
+        );
+
+        // Оборачиваем отправку в try/catch, чтобы лимиты Resend не крашили регистрацию
+        try {
+            await this.emailConfirmationService.sendVerificationToken(newUser.email, locale);
+        } catch (error) {
+            // Просто логируем ошибку лимита Resend, но не мешаем пользователю
+            console.error("Resend Daily Limit Exceeded or Email Service Error:", error);
+        }
+
+        return {
+            message: locale === 'en'
+                ? "You have successfully registered! Welcome to the platform."
+                : "Вы успешно зарегистрировались! Добро пожаловать на платформу."
         };
     }
 
