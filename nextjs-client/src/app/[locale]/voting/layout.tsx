@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
       locale: locale === 'ru' ? 'ru_RU' : 'en_US',
       images: [
         {
-          url: 'https://www.couch-expert-mma.com/images/og-preview.png', // Твоя общая обложка из папки public/images
+          url: 'https://www.couch-expert-mma.com/og-preview.png', // Твоя общая обложка из папки public/images
           width: 1200,
           height: 630,
           alt: siteBrand,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Omit<LayoutProps, 'children'>
       card: 'summary_large_image',
       title: `${votingTitle} | ${siteBrand}`,
       description: votingDesc,
-      images: ['https://www.couch-expert-mma.com/images/og-preview.png'],
+      images: ['https://www.couch-expert-mma.com/og-preview.png'],
     },
   };
 }
