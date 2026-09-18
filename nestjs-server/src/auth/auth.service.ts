@@ -144,9 +144,9 @@ export class AuthService {
             : null;
 
         // Если аккаунт провайдера не привязан, проверяем, существует ли пользователь с таким email
-        if (!user && profile.email) {
-            user = await this.userService.findByEmail(profile.email).catch(() => null);
-        }
+        // if (!user && profile.email) {
+        //     user = await this.userService.findByEmail(profile.email).catch(() => null);
+        // }
 
         // Если пользователя нет вообще (ни по аккаунту, ни по email), создаем нового
         if (!user) {
