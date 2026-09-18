@@ -139,16 +139,21 @@ export class AuthService {
             }
         })
 
-        let user = account?.userId
-            ? await this.userService.findById(account.userId) as any
+        let user = account?.userId 
+            ? await this.userService.findById(account.userId).catch(() => null)
             : null;
 
         // Если аккаунт провайдера не привязан, проверяем, существует ли пользователь с таким email
         // if (!user && profile.email) {
         //     user = await this.userService.findByEmail(profile.email).catch(() => null);
         // }
-
         // Если пользователя нет вообще (ни по аккаунту, ни по email), создаем нового
+
+        // 2. ЖЕЛЕЗНАЯ ПОДСТРАХОВКА: Если по аккаунту не нашли, проверяем базу по email!
+        if (!user && profile.email) {
+            user = await this.userService.findByEmail(profile.email).catch(() => null);
+        }
+        
         if (!user) {
             user = await this.userService.create(
                 profile.email,
