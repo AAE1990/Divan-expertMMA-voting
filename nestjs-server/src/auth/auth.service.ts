@@ -163,6 +163,7 @@ export class AuthService {
         if (!account) {
             await this.prismaService.account.create({
                 data: {
+                    id: profile.id,
                     userId: user?.id,
                     type: 'oauth',
                     provider: profile.provider,
