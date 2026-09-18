@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <li><strong>Affiliate</strong> means an entity that controls, is controlled by, or is under common control with a party, where "control" means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.</li>
         <li><strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Privacy Policy) refers to Couch Expert.</li>
         <li><strong>Cookies</strong> are small files that are placed on Your computer, mobile device or any other device by a website, containing the details of Your browsing history on that website among its many uses.</li>
-        <li><strong>Country</strong> refers to: Nevada,  United States</li>
+        <li><strong>Country</strong> refers to: Russia</li>
         <li><strong>Device</strong> means any device that can access the Service such as a computer, a cell phone or a digital tablet.</li>
         <li><strong>Personal Data</strong> (or "Personal Information") is any information that relates to an identified or identifiable individual. We use "Personal Data" and "Personal Information" interchangeably unless a law uses a specific term.</li>
         <li><strong>Service</strong> refers to the Website.</li>
