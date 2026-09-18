@@ -17,6 +17,7 @@ export class GoogleProvider extends BaseOAuthService {
 
     public async extractUserInfo(data: GoogleProfile): Promise<TypeUserInfo> {
         return super.extractUserInfo({
+            id: data.sub, // <-- ИДЕНТИФИКАТОР GOOGLE!
             email: data.email,
             name: data.name,
             picture: data.picture
