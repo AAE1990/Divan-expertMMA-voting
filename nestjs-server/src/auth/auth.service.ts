@@ -134,7 +134,7 @@ export class AuthService {
 
         const account = await this.prismaService.account.findFirst({
             where: {
-                id: profile.id ? profile.id.toString() : undefined,
+                id: profile.id ? String(profile.id) : undefined,
                 provider: profile.provider
             }
         })
@@ -168,7 +168,7 @@ export class AuthService {
         if (!account) {
             await this.prismaService.account.create({
                 data: {
-                    id: profile.id.toString(), // <-- Принудительно делаем строкой!
+                    id: profile.id ? String(profile.id) : `yandex_${user?.id}`,
                     userId: user?.id,
                     type: 'oauth',
                     provider: profile.provider,
