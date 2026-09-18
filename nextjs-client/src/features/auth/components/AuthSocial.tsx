@@ -30,15 +30,15 @@ export function AuthSocial() {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-                <Button
+               {/* <Button
                     onClick={() => onClick('google')}
                     variant="outline"
                     className="w-full cursor-pointer flex items-center justify-center font-medium text-sm transition-colors hover:bg-white/5"
                     style={{ paddingLeft: '16px', paddingRight: '16px' }}
                 >
                     <FaGoogle className="mr-2 size-4 shrink-0 text-black dark:text-white" />
-                    <span>Google</span> {/* Короткий лаконичный текст */}
-                </Button>
+                    <span>Google</span> 
+                </Button> */}
 
                 <Button
                     onClick={() => onClick('yandex')}
@@ -47,8 +47,8 @@ export function AuthSocial() {
                     style={{ paddingLeft: '16px', paddingRight: '16px' }}
                 >
                     <FaYandex className="mr-2 size-4 shrink-0 text-red-500" />
-                    <span>Яндекс</span> {/* Короткий лаконичный текст */}
-                </Button>
+                    <span>Яндекс</span> 
+                </Button> 
             </div>
 
             {/* Исправленный адаптивный разделитель без использования фонового bg */}
