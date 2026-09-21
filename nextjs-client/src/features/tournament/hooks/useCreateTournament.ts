@@ -9,7 +9,20 @@ export const useCreateTournament = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) => tournamentService.create(data),
+    mutationFn: (data: any) => {
+      // Если дата окончания голосования заполнена
+      if (data.expiresAt) {
+        const localDate = new Date(data.expiresAt); // Считываем время из инпута (Екатеринбург)
+
+        // Вычитаем 5 часов часового пояса, чтобы получить чистый UTC (Гринвич)
+        localDate.setHours(localDate.getHours() - 5);
+
+        // Перезаписываем в объект отправки ISO-строку с буквой Z на конце
+        data.expiresAt = localDate.toISOString();
+      }
+
+      return tournamentService.create(data);
+    },
     onSuccess: () => {
       toast.success(t('tournamentCreatedSuccess'));
       queryClient.invalidateQueries({ queryKey: ["tournaments"] });
