@@ -20,6 +20,9 @@ export class MailService {
   }
 
   public async sendConfirmationEmail(email: string, token: string, locale: string = 'en') {
+    if (process.env.NODE_ENV === 'test') {
+      return true;
+    }
     const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN');
     const html = await render(ConfirmationTemplate({ domain, token, locale }));
     const subject = locale === 'en' ? 'Confirm your email' : 'Подтверждение почты';

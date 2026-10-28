@@ -20,8 +20,16 @@ import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service'
     }),
     GoogleRecaptchaModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: getRecaptchaonfig,
-      inject: [ConfigService]
+      useFactory: async (configService: ConfigService) => {
+        // ДОБАВЛЯЕМ AWAIT СЮДА:
+        const config = await getRecaptchaonfig(configService);
+        return {
+          ...config,
+          secretKey: config.secretKey || 'dummy-key',
+          skipIf: () => process.env.NODE_ENV === 'test',
+        };
+      },
+      inject: [ConfigService],
     }),
     forwardRef(() => EmailConfirmationModule),
   ],

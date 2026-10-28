@@ -12,7 +12,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+    "types": ["node", "jest"]
     },
     "incremental": true,
     "skipLibCheck": true,
@@ -22,6 +23,9 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "src/express-session.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
