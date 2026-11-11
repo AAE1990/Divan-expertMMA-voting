@@ -172,8 +172,8 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
       <div
         onClick={() => setValue("optionId", option.id)}
         className={cn(
-          // Заменили max-w и h-full на четкую фиксированную ширину и высоту
-          "flex flex-col items-center justify-between w-[150px] sm:w-[170px] md:w-[185px] min-h-[290px] md:min-h-[320px] p-2 md:p-3 border-2 rounded-xl transition-all text-center cursor-pointer shadow-sm",
+          // Заменили жесткие w-[150px]... на гибкое w-full, чтобы соблюдался зазор gap-28
+          "flex flex-col items-center justify-between w-full min-h-[290px] md:min-h-[320px] p-2 md:p-3 border-2 rounded-xl transition-all text-center cursor-pointer shadow-sm",
           "bg-gradient-to-b from-sky-50 to-white border-sky-200 hover:border-sky-400 hover:shadow-md",
           "dark:from-slate-900 dark:to-black dark:border-slate-800 dark:hover:border-slate-600",
           selectedValue === option.id && "border-primary ring-2 ring-primary/30"
