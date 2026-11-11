@@ -274,33 +274,33 @@ export const VotingCard = ({ poll }: VotingCardProps) => {
 
     const [fighter1, fighter2] = poll.options
 
-return (
-  // relative позволяет повесить VS строго по центру, а 2xl:px-4 раздвинет бойцов к краям, освобождая место для мечей
-  <div className="flex flex-col 2xl:flex-row items-center w-full min-w-0 relative 2xl:px-4">
-    
-    {/* Левый/Верхний боец: занял ровно половину карточки на десктопе */}
-    <div className="w-full 2xl:w-1/2 min-w-0 flex flex-col items-center justify-center text-center shrink-0">
-      {hasVoted || isFinished || isExpired
-        ? renderFighterResult(fighter1, true)
-        : renderFighterVoting(fighter1, true)
-      }
-    </div>
+    return (
+      // 2xl:gap-28 создает гарантированный коридор по центру для плашки VS и текста
+      <div className="flex flex-col 2xl:flex-row items-center 2xl:justify-between w-full min-w-0 relative 2xl:px-2 2xl:gap-28">
 
-    {/* Центральный блок VS: висит строго по центру, z-10 поднимает его над фотками */}
-    <div className="w-full 2xl:w-auto 2xl:absolute 2xl:left-1/2 2xl:top-1/2 2xl:-translate-x-1/2 2xl:-translate-y-1/2 flex flex-col items-center justify-center py-1 shrink-0 z-10 pointer-events-none">
-      {renderCenterBlock()}
-    </div>
+        {/* Левый/Верхний боец: прижат к левому краю */}
+        <div className="w-full 2xl:flex-1 min-w-0 flex flex-col items-center 2xl:items-start text-center">
+          {hasVoted || isFinished || isExpired
+            ? renderFighterResult(fighter1, true)
+            : renderFighterVoting(fighter1, true)
+          }
+        </div>
 
-    {/* Правый/Нижний боец: занял ровно вторую половину карточки на десктопе */}
-    <div className="w-full 2xl:w-1/2 min-w-0 flex flex-col items-center justify-center text-center shrink-0">
-      {hasVoted || isFinished || isExpired
-        ? renderFighterResult(fighter2, false)
-        : renderFighterVoting(fighter2, false)
-      }
-    </div>
+        {/* Центральный Блок VS: сидит строго в пустом коридоре по центру */}
+        <div className="w-full 2xl:w-auto 2xl:absolute 2xl:left-1/2 2xl:top-1/2 2xl:-translate-x-1/2 2xl:-translate-y-1/2 flex flex-col items-center justify-center py-2 2xl:py-0 shrink-0 z-10 pointer-events-none">
+          {renderCenterBlock()}
+        </div>
 
-  </div>
-)
+        {/* Правый/Нижний боец: прижат к правому краю */}
+        <div className="w-full 2xl:flex-1 min-w-0 flex flex-col items-center 2xl:items-end text-center">
+          {hasVoted || isFinished || isExpired
+            ? renderFighterResult(fighter2, false)
+            : renderFighterVoting(fighter2, false)
+          }
+        </div>
+
+      </div>
+    )
   }
 
   return (
