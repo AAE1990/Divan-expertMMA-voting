@@ -15,7 +15,7 @@ export const MobileHeader = () => {
     <>
       {/* Мобильная верхняя панель */}
       <div className="sticky top-0 z-50 flex md:hidden items-center justify-between w-full h-16 px-4 border-b bg-background shadow-sm">
-        <div className="flex items-center gap-4 pr-2">
+        <div className="flex items-center gap-2 sm:gap-4 pr-2 min-w-0">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <button
@@ -42,7 +42,7 @@ export const MobileHeader = () => {
           </Sheet>
           <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary truncate">Диванный эксперт</h1>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           <AuthButtons />
           <LocaleSwitcher />
           <ToggleTheme />

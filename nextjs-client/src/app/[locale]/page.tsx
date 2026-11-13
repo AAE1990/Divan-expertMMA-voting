@@ -13,7 +13,7 @@ export default function Home() {
       <section className="w-full py-20 px-4 border-b border-white/5 bg-gradient-to-b from-primary/10 to-transparent">
         <div className="max-w-5xl mx-auto text-center space-y-6">
           <div className="space-y-2">
-            <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter italic">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-black italic uppercase tracking-tighter break-words">
               {t('title')}
             </h1>
             <p className="text-xl md:text-2xl font-bold text-primary uppercase tracking-widest opacity-90">

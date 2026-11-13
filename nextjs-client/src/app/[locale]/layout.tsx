@@ -37,7 +37,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         {/* Вставляем Метрику прямо на входе */}
         <YandexMetrika /> 
@@ -49,9 +49,9 @@ export default async function RootLayout({
               </div>
 
               {/* Основной контейнер контента */}
-              <div className="flex-1 pl-0 md:pl-64 flex flex-col">
+              <div className="flex-1 min-w-0 pl-0 md:pl-64 flex flex-col">
                 <MobileHeader />
-                <main className="container mx-auto p-6 flex-1">
+                <main className="container mx-auto p-4 md:p-6 flex-1">
                   {children}
                 </main>
                 <Footer />
