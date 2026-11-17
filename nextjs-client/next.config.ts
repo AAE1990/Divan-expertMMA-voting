@@ -22,6 +22,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'i.ibb.co', // Наш новый фотохостинг для бойцов и турниров
       },
+      {
+        protocol: 'https',
+        hostname: 'www.couch-expert-mma.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'couch-expert-mma.com',
+      },
     ]
   },
   output: 'standalone', // <-- Это критически важно для Docker!
